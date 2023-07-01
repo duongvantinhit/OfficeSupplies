@@ -1,1 +1,104 @@
-/* You can add global styles to this file, and also import other style files */
+@import 'primeng/resources/themes/lara-light-blue/theme.css';
+@import 'primeng/resources/primeng.css';
+@import 'primeicons/primeicons.css';
+@import '../node_modules/primeflex/primeflex.scss';
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serifs;
+}
+
+.width {
+    margin: auto;
+    width: 1190px;
+    box-sizing: border-box;
+    max-width: 100%;
+    padding: 0 10px;
+}
+
+del {
+    text-decoration: line-through;
+    text-align: center;
+}
+
+.p-fieldset {
+    border-radius: 0 !important;
+}
+
+.office-supplies {
+    .p-galleria {
+        max-width: 100% !important;
+    }
+
+    .p-galleria-item {
+        img {
+            height: 500px !important;
+            object-fit: cover;
+        }
+    }
+
+    .grid-nogutter {
+        img {
+            height: 100px !important;
+            object-fit: cover;
+        }
+    }
+
+    .outstanding {
+        .p-divider-content {
+            .p-tag {
+                background-color: white !important;
+                font-size: 16px !important;
+                color: var(--text-color);
+                cursor: pointer;
+            }
+            .p-tag:hover {
+                color: #fd7e14;
+            }
+        }
+    }
+
+    .content {
+        .content-center,
+        .content-left {
+            .p-toggleable-content {
+                height: 590px;
+            }
+        }
+    }
+
+    .new-product {
+        .p-fieldset-content {
+            padding-left: 0;
+            padding-right: 0;
+            padding-bottom: 0;
+        }
+    }
+
+    .text-lg {
+        font-size: 16px !important;
+    }
+
+    .p-fieldset-legend {
+        padding: 0.5rem !important;
+        background-color: #fb7b46 !important;
+        span {
+            color: white;
+        }
+    }
+
+    .content {
+        .p-fieldset-content {
+            padding-left: 0;
+            padding-right: 0;
+            padding-bottom: 0;
+        }
+    }
+    .suggest {
+        .p-tag {
+            background-color: white;
+            font-size: 16px !important;
+            color: var(--text-color);
+        }
+    }
+}

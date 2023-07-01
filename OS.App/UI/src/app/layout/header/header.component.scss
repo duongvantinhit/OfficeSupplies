@@ -1,0 +1,144 @@
+.header-top {
+    height: 45px;
+    background-color: #252e4b;
+
+    ul {
+        list-style: none;
+        display: flex;
+        padding: 0;
+        margin: 0;
+        li {
+            cursor: pointer;
+            line-height: 45px;
+            color: #9eaaba;
+            margin-right: 20px;
+            font-size: 13px;
+            i {
+                margin-right: 5px;
+            }
+        }
+        li:hover {
+            color: white;
+        }
+    }
+}
+
+.header-center {
+    height: 87px;
+    padding: 10px;
+    box-sizing: border-box;
+    display: flex;
+    line-height: 40px;
+
+    .header-logo {
+        flex: 2;
+        display: flex;
+        .header-slogan {
+            width: 100%;
+        }
+        img {
+            height: 100%;
+        }
+        p {
+            font-size: 23px;
+            font-weight: 600;
+            font-family: cursive;
+            margin: 0;
+            color: var(--text-color);
+        }
+        span {
+            display: block;
+            font-size: 14px;
+            color: var(--text-color);
+        }
+    }
+
+    .header-category {
+        flex: 3;
+        ul {
+            display: flex;
+            list-style: none;
+            padding-left: 0;
+            li {
+                padding: 0 10px;
+                font-size: 14px;
+                font-weight: 600;
+                color: var(--text-color);
+                cursor: pointer;
+                i {
+                    padding-right: 5px;
+                }
+            }
+            li:hover {
+                color: #fd7e14;
+            }
+        }
+    }
+
+    .cart {
+        display: flex;
+        i {
+            cursor: pointer;
+            margin: auto;
+            color: #fd7e14;
+            padding-right: 5px;
+        }
+        p {
+            font-size: 14px;
+            color: var(--text-color);
+        }
+    }
+}
+
+.menu {
+    height: 55px;
+    display: flex;
+    background-color: #252e4b;
+    .menu-list {
+        display: flex;
+        color: white;
+        flex: 1;
+        h3 {
+            margin: auto;
+            padding: 0 10px;
+            font-size: 18px;
+        }
+        i {
+            margin: auto;
+            cursor: pointer;
+        }
+    }
+    .search {
+        flex: 3;
+        display: flex;
+        input {
+            margin: auto;
+            height: 40px;
+            flex: 1;
+            padding: 0 20px;
+            border: none;
+            font-size: 14px;
+            outline: none;
+        }
+        i {
+            margin: auto;
+            box-sizing: border-box;
+            background-color: white;
+            height: 40px;
+            border: none;
+            padding: 0 20px;
+            line-height: 40px;
+            cursor: pointer;
+        }
+    }
+    .contact {
+        flex: 1;
+        color: white;
+        text-align: center;
+        line-height: 55px;
+        font-size: 16px;
+        b:hover {
+            color: #fd7e14;
+        }
+    }
+}

@@ -44,6 +44,10 @@
         p {
             margin: 0;
             line-height: 30px;
+            width: 273px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     }
 }
@@ -126,6 +130,10 @@
                     margin: 0;
                     font-weight: bold;
                     color: black !important;
+                    width: 329px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
                 }
                 span {
                     display: inline-block;
@@ -161,18 +169,30 @@
 .suggest {
     padding-bottom: 20px;
     img {
-        height: 160px;
+        height: 180px;
         width: 100%;
+        object-fit: cover;
     }
     .suggest-product {
         display: flex;
         flex-wrap: wrap;
         .col-5 {
-            width: calc(25% - 10px);
+            width: calc(20% - 10px);
             cursor: pointer;
             display: inline-block;
-            border: 1px solid var(--surface-400);
+            background-color: white;
             margin: 5px;
+            padding: 0;
+        }
+
+        .tilte {
+            p {
+                width: 206px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                padding: 0 10px;
+            }
         }
     }
 }

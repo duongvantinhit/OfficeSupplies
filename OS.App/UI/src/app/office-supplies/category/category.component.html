@@ -1,0 +1,202 @@
+<div class="office-supplies">
+    <div class="list-category">
+        <div class="width">
+            <div class="grid flex justify-content-between">
+                <div class="col category-left">
+                    <div class="category">
+                        <p-fieldset class="">
+                            <ng-template pTemplate="header">
+                                <div class="flex text-primary">
+                                    <span class="pi pi-briefcase mr-2"></span>
+                                    <span class="font-bold text-lg">Danh mục sản phẩm</span>
+                                </div>
+                            </ng-template>
+                            <ul>
+                                <li>Giấy</li>
+                                <li>Bàn phím gaming</li>
+                                <li>Chuột gaming</li>
+                                <li>Màn hình laptop</li>
+                                <li>Máy in</li>
+                                <li>Lót chuột</li>
+                                <li>Bàn gỗ</li>
+                            </ul>
+                        </p-fieldset>
+                    </div>
+
+                    <div class="filter pt-2">
+                        <p-fieldset class="">
+                            <ng-template pTemplate="header">
+                                <div class="flex text-primary">
+                                    <span class="pi pi-filter mr-2"></span>
+                                    <span class="font-bold text-lg">Bộ lọc sản phẩm</span>
+                                </div>
+                            </ng-template>
+                            <ul>
+                                <li class="p-0">
+                                    <i class="pi pi-bitcoin text-yellow-500"></i>
+                                    <b>Giá bán</b>
+                                    <div class="py-2">
+                                        <div class="flex">
+                                            <div class="flex flex-column gap-3">
+                                                <div *ngFor="let category of categories" class="field-checkbox">
+                                                    <p-radioButton
+                                                        [inputId]="category.key"
+                                                        name="category"
+                                                        [value]="category"
+                                                        [(ngModel)]="selectedCategory"
+                                                    ></p-radioButton>
+                                                    <label [for]="category.key" class="ml-2">{{ category.name }}</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="p-0">
+                                    <i class="pi pi-car text-orange-500"></i>
+                                    <b>Đơn vị vận chuyển</b>
+                                    <ul class="py-2">
+                                        <li>
+                                            <div class="flex align-items-center gap-1">
+                                                <p-checkbox name="group1" value="10000" inputId="ny"></p-checkbox>
+                                                <label for="ny"> Giao hàng tiết kiệm </label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="flex align-items-center gap-1">
+                                                <p-checkbox name="group1" value="10000" inputId="ny"></p-checkbox>
+                                                <label for="ny"> Giao hàng nhanh ></label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="flex align-items-center gap-1">
+                                                <p-checkbox name="group1" value="10000" inputId="ny"></p-checkbox>
+                                                <label for="ny"> VN Post ></label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="flex align-items-center gap-1">
+                                                <p-checkbox name="group1" value="10000" inputId="ny"></p-checkbox>
+                                                <label for="ny"> Shoppe Express </label>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="p-0">
+                                    <i class="pi pi-map text-green-600"></i>
+                                    <b>Khu vực</b>
+                                    <ul class="py-2">
+                                        <li>
+                                            <div class="flex align-items-center gap-1">
+                                                <p-checkbox name="group1" value="10000" inputId="ny"></p-checkbox>
+                                                <label for="ny">Hồ Chí Minh</label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="flex align-items-center gap-1">
+                                                <p-checkbox name="group1" value="10000" inputId="ny"></p-checkbox>
+                                                <label for="ny"> Hà Nội</label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="flex align-items-center gap-1">
+                                                <p-checkbox name="group1" value="10000" inputId="ny"></p-checkbox>
+                                                <label for="ny"> Đà Nẳng</label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="flex align-items-center gap-1">
+                                                <p-checkbox name="group1" value="10000" inputId="ny"></p-checkbox>
+                                                <label for="ny"> Cần Thơ</label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="flex align-items-center gap-1">
+                                                <p-checkbox name="group1" value="10000" inputId="ny"></p-checkbox>
+                                                <label for="ny"> Cà Mau</label>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                            <div class="flex justify-content-center pt-2">
+                                <p-button label="Áp dụng"></p-button>
+                            </div>
+                        </p-fieldset>
+                    </div>
+                </div>
+                <div class="col category-right">
+                    <div class="pb-2 categogy-header flex justify-content-between border-bottom-1 border-400">
+                        <p>GIẤY IN</p>
+                        <div class="flex">
+                            <p-dropdown
+                                appendTo="body"
+                                styleClass="w-9rem"
+                                [options]="sortType"
+                                placeholder="Sắp xếp"
+                                [virtualScrollItemSize]="38"
+                            ></p-dropdown>
+                        </div>
+                    </div>
+
+                    <div class="category-content justify-content-between">
+                        <div class="col-3">
+                            <img src="../../assets/img/outstanding/keyboard.jpg" alt="" />
+                            <div class="tilte"><p>Bàn phím</p></div>
+                            <p><b>345666 VND</b></p>
+                        </div>
+                        <div class="col-3">
+                            <img src="../../assets/img/outstanding/mouse.webp" alt="" />
+                            <div class="tilte"><p>Chuột gaming</p></div>
+                            <p><b>345666 VND</b></p>
+                        </div>
+                        <div class="col-3">
+                            <img src="../../assets/img/outstanding/pc.jpeg" alt="" />
+                            <div class="tilte"><p>Màn hình laptop</p></div>
+                            <p><b>345666 VND</b></p>
+                        </div>
+                        <div class="col-3">
+                            <img src="../../assets/img/outstanding/mouse.webp" alt="" />
+                            <div class="tilte"><p>Chuột gaming</p></div>
+                            <p><b>345666 VND</b></p>
+                        </div>
+                        <div class="col-3">
+                            <img src="../../assets/img/outstanding/pc.jpeg" alt="" />
+                            <div class="tilte"><p>Màn hình laptop</p></div>
+                            <p><b>345666 VND</b></p>
+                        </div>
+                        <div class="col-3">
+                            <img src="../../assets/img/outstanding/mouse.webp" alt="" />
+                            <div class="tilte"><p>Chuột gaming</p></div>
+                            <p><b>345666 VND</b></p>
+                        </div>
+                        <div class="col-3">
+                            <img src="../../assets/img/outstanding/pc.jpeg" alt="" />
+                            <div class="tilte"><p>Màn hình laptop</p></div>
+                            <p><b>345666 VND</b></p>
+                        </div>
+                        <div class="col-3">
+                            <img src="../../assets/img/outstanding/mouse.webp" alt="" />
+                            <div class="tilte"><p>Chuột gaming</p></div>
+                            <p><b>345666 VND</b></p>
+                        </div>
+                        <div class="col-3">
+                            <img src="../../assets/img/outstanding/pc.jpeg" alt="" />
+                            <div class="tilte"><p>Màn hình laptop</p></div>
+                            <p><b>345666 VND</b></p>
+                        </div>
+                    </div>
+                    <div class="flex justify-content-center">
+                        <p-paginator
+                            (onPageChange)="onPageChange($event)"
+                            [first]="first"
+                            [rows]="rows"
+                            [totalRecords]="120"
+                            [rowsPerPageOptions]="[10, 20, 30]"
+                        ></p-paginator>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

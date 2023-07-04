@@ -7,9 +7,17 @@ import { PrimeNGModule } from '../shared/modules/primeng.module';
 import { OfficeSuppliesComponent } from '../office-supplies/office-supplies.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
+import { CategoryComponent } from '../office-supplies/category/category.component';
 
 @NgModule({
-    declarations: [LayoutComponent, DemoComponent, OfficeSuppliesComponent, HeaderComponent, FooterComponent],
+    declarations: [
+        LayoutComponent,
+        DemoComponent,
+        OfficeSuppliesComponent,
+        HeaderComponent,
+        FooterComponent,
+        CategoryComponent,
+    ],
 
     imports: [CommonModule, RouterModule, PrimeNGModule],
 

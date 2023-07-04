@@ -222,7 +222,10 @@
                             </div>
                         </ng-template>
                         <ul>
-                            <li><i class="pi pi-mobile text-red-700"></i>Hotline: 0989828277</li>
+                            <li>
+                                <i class="pi pi-mobile text-red-700"></i>Hotline:
+                                <a class="no-underline text-color" href="tel:0123456789">0989828527</a>
+                            </li>
                             <li><i class="pi pi-facebook text-cyan-500"></i>Dương Văn Tính</li>
                             <li><i class="pi pi-instagram text-purple-500"></i>Dương Văn Tính</li>
                             <li><i class="pi pi-twitter text-blue-400"></i>Dương Văn Tính</li>
@@ -370,24 +373,11 @@
                             <p><b>345666 VND</b></p>
                         </div>
                     </div>
-                    <div class="col-5">
-                        <img src="../../assets/img/outstanding/pc.jpeg" alt="" />
-                        <div class="tilte">
-                            <p>Màn hình laptop</p>
-                            <p><b>345666 VND</b></p>
-                        </div>
-                    </div>
                 </div>
             </div>
 
-            <div class="card flex justify-content-center">
-                <p-paginator
-                    (onPageChange)="onPageChange($event)"
-                    [first]="first"
-                    [rows]="rows"
-                    [totalRecords]="120"
-                    [rowsPerPageOptions]="[10, 20, 30]"
-                ></p-paginator>
+            <div class="card flex justify-content-center pb-4">
+                <button pButton pRipple label="Xem thêm"></button>
             </div>
         </body>
     </div>

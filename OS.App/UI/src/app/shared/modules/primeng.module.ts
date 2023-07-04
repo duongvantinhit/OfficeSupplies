@@ -7,6 +7,9 @@ import { GalleriaModule } from 'primeng/galleria';
 import { DividerModule } from 'primeng/divider';
 import { FieldsetModule } from 'primeng/fieldset';
 import { PaginatorModule } from 'primeng/paginator';
+import { MenuModule } from 'primeng/menu';
+import { OverlayModule } from 'primeng/overlay';
+import { DropdownModule } from 'primeng/dropdown';
 
 const modules = [
     ButtonModule,
@@ -17,6 +20,9 @@ const modules = [
     DividerModule,
     FieldsetModule,
     PaginatorModule,
+    MenuModule,
+    OverlayModule,
+    DropdownModule,
 ];
 
 @NgModule({

@@ -6,6 +6,7 @@
 body {
     margin: 0;
     font-family: Arial, Helvetica, sans-serifs;
+    background-color: #f5f5f5;
 }
 
 .width {
@@ -25,7 +26,39 @@ del {
     border-radius: 0 !important;
 }
 
+.p-fieldset-content {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.p-inputtext {
+    font-size: 15px !important;
+    padding: 0.65rem !important;
+}
+
+.p-dropdown-items {
+    li {
+        span {
+            font-size: 15px !important;
+        }
+    }
+}
+
+.p-button-label {
+    font-size: 15px !important;
+}
+
+.p-button {
+    padding: 0.55rem 1.25rem !important;
+}
+
+// .p-component {
+//     font-size: 15px !important;
+// }
+
 .office-supplies {
+    // page home
     .p-galleria {
         max-width: 100% !important;
     }
@@ -44,8 +77,84 @@ del {
         }
     }
 
+    .header-top {
+        .menu-account {
+            .p-element {
+                .ng-star-inserted {
+                    border-radius: 0px !important;
+                }
+            }
+            ul {
+                li {
+                    span {
+                        font-size: 13px !important;
+                        font-weight: 500;
+                    }
+                }
+            }
+            .p-overlay {
+                top: 0px !important;
+                padding-top: 45px;
+                left: 0 !important;
+            }
+        }
+    }
+
+    .header-center-content {
+        .search {
+            .p-input-icon-right {
+                width: 578px !important;
+                .p-inputtext {
+                    width: 100% !important;
+                }
+            }
+        }
+        .cart {
+            .p-overlay {
+                top: 0px !important;
+                padding-top: 50px;
+                right: 0 !important;
+                left: auto !important;
+                width: 400px;
+            }
+            // .p-button-label {
+            //     font-size: 15px;
+            // }
+            // .p-button {
+            //     padding: 0.65rem 1.25rem;
+            // }
+        }
+
+        .search {
+            .p-overlay {
+                top: 0px !important;
+                padding-top: 50px;
+                right: 0 !important;
+                left: 0 !important;
+            }
+        }
+    }
+
+    .header-category {
+        ul {
+            li {
+                span {
+                    font-size: 14px !important;
+                    font-weight: 500;
+                }
+            }
+            .p-overlay {
+                top: 0px !important;
+                padding-top: 50px;
+                right: 0 !important;
+                left: 0 !important;
+            }
+        }
+    }
+
     .outstanding {
         .p-divider-content {
+            background-color: #f5f5f5;
             .p-tag {
                 background-color: white !important;
                 font-size: 16px !important;
@@ -67,13 +176,13 @@ del {
         }
     }
 
-    .new-product {
-        .p-fieldset-content {
-            padding-left: 0;
-            padding-right: 0;
-            padding-bottom: 0;
-        }
-    }
+    // .new-product {
+    //     .p-fieldset-content {
+    //         padding-left: 0;
+    //         padding-right: 0;
+    //         padding-bottom: 0;
+    //     }
+    // }
 
     .text-lg {
         font-size: 16px !important;
@@ -87,18 +196,32 @@ del {
         }
     }
 
-    .content {
-        .p-fieldset-content {
-            padding-left: 0;
-            padding-right: 0;
-            padding-bottom: 0;
-        }
-    }
+    // .content {
+    //     .p-fieldset-content {
+    //         padding-left: 0;
+    //         padding-right: 0;
+    //         padding-bottom: 0;
+    //     }
+    // }
+
     .suggest {
         .p-tag {
             background-color: white;
             font-size: 16px !important;
             color: var(--text-color);
+        }
+
+        .p-divider-content {
+            background-color: #f5f5f5;
+        }
+    }
+
+    // page categogy
+    .list-category {
+        .field-checkbox {
+            margin-bottom: 0 !important;
+            padding-left: 30px;
+            font-size: 15px;
         }
     }
 }

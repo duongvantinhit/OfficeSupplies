@@ -1,0 +1,35 @@
+.contact {
+    margin: 10px 0;
+    color: var(--text-color);
+    .contact-left {
+        background-color: white;
+        flex: 1;
+    }
+
+    .contact-right {
+        background-color: white;
+        flex: 1;
+        ul {
+            list-style: none;
+            padding-left: 20px;
+            li {
+                i {
+                    padding-right: 10px;
+                    line-height: 30px;
+                    font-size: 15px;
+                }
+            }
+        }
+
+        h4 {
+            font-size: 20px !important;
+            font-weight: 400;
+            color: black;
+        }
+
+        p {
+            line-height: 24px;
+            font-size: 15px;
+        }
+    }
+}

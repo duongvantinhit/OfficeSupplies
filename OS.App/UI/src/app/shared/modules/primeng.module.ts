@@ -10,6 +10,8 @@ import { PaginatorModule } from 'primeng/paginator';
 import { MenuModule } from 'primeng/menu';
 import { OverlayModule } from 'primeng/overlay';
 import { DropdownModule } from 'primeng/dropdown';
+import { TableModule } from 'primeng/table';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 const modules = [
     ButtonModule,
@@ -23,6 +25,8 @@ const modules = [
     MenuModule,
     OverlayModule,
     DropdownModule,
+    TableModule,
+    InputNumberModule,
 ];
 
 @NgModule({

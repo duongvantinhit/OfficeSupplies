@@ -53,6 +53,17 @@ del {
     padding: 0.55rem 1.25rem !important;
 }
 
+.p-tag {
+    background-color: white !important;
+    font-size: 16px !important;
+    color: var(--text-color) !important;
+    cursor: pointer;
+}
+
+.p-inputnumber-input {
+    text-align: center;
+}
+
 // .p-component {
 //     font-size: 15px !important;
 // }
@@ -155,12 +166,12 @@ del {
     .outstanding {
         .p-divider-content {
             background-color: #f5f5f5;
-            .p-tag {
-                background-color: white !important;
-                font-size: 16px !important;
-                color: var(--text-color);
-                cursor: pointer;
-            }
+            // .p-tag {
+            //     background-color: white !important;
+            //     font-size: 16px !important;
+            //     color: var(--text-color);
+            //     cursor: pointer;
+            // }
             .p-tag:hover {
                 color: #fd7e14;
             }
@@ -205,11 +216,11 @@ del {
     // }
 
     .suggest {
-        .p-tag {
-            background-color: white;
-            font-size: 16px !important;
-            color: var(--text-color);
-        }
+        // .p-tag {
+        //     background-color: white;
+        //     font-size: 16px !important;
+        //     color: var(--text-color);
+        // }
 
         .p-divider-content {
             background-color: #f5f5f5;
@@ -222,6 +233,13 @@ del {
             margin-bottom: 0 !important;
             padding-left: 30px;
             font-size: 15px;
+        }
+    }
+
+    // page cart
+    .carts {
+        .p-inputnumber-input {
+            width: 50px !important;
         }
     }
 }

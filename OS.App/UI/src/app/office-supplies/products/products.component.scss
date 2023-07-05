@@ -1,0 +1,25 @@
+.products-content {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+
+    .col-3 {
+        width: calc(16.666% - 10px);
+        padding: 0;
+        background-color: white;
+        margin: 5px;
+        cursor: pointer;
+        p {
+            font-size: 15px;
+            font-weight: 500;
+            padding: 0 10px;
+            color: var(--text-color);
+        }
+
+        img {
+            height: 170px;
+            width: 100%;
+            object-fit: cover;
+        }
+    }
+}

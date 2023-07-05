@@ -1,0 +1,35 @@
+.carts {
+    margin-bottom: 20px;
+    h3 {
+        font-size: 20px;
+        color: var(--text-color);
+        i {
+            padding-right: 10px;
+            color: #fd7e14;
+        }
+    }
+
+    tr {
+        th {
+            font-size: 17px;
+        }
+    }
+
+    .cart-product {
+        img {
+            height: 100px;
+            width: 100px;
+        }
+        span {
+            padding: 10px;
+            p {
+                margin: 0;
+                line-height: 30px;
+            }
+            p:hover {
+                color: red;
+                cursor: pointer;
+            }
+        }
+    }
+}

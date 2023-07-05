@@ -2,21 +2,29 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LayoutComponent } from './layout.component';
 import { RouterModule } from '@angular/router';
-import { DemoComponent } from '../office-supplies/demo/demo.component';
 import { PrimeNGModule } from '../shared/modules/primeng.module';
 import { OfficeSuppliesComponent } from '../office-supplies/office-supplies.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { CategoryComponent } from '../office-supplies/category/category.component';
+import { ProductsComponent } from '../office-supplies/products/products.component';
+import { CartsComponent } from '../office-supplies/carts/carts.component';
+import { ProductDetailComponent } from '../office-supplies/product-details/product-detail.component';
+import { IntroduceComponent } from '../office-supplies/introduce/introduce.component';
+import { ContactComponent } from '../office-supplies/contact/contact.component';
 
 @NgModule({
     declarations: [
         LayoutComponent,
-        DemoComponent,
         OfficeSuppliesComponent,
         HeaderComponent,
         FooterComponent,
         CategoryComponent,
+        ProductsComponent,
+        CartsComponent,
+        ProductDetailComponent,
+        IntroduceComponent,
+        ContactComponent,
     ],
 
     imports: [CommonModule, RouterModule, PrimeNGModule],

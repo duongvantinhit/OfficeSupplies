@@ -23,7 +23,6 @@ export class CategoryComponent implements OnInit {
     ];
 
     first: number = 0;
-
     rows: number = 10;
 
     onPageChange(event: any) {

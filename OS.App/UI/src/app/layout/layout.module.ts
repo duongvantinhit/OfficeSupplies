@@ -12,6 +12,9 @@ import { CartsComponent } from '../office-supplies/carts/carts.component';
 import { ProductDetailComponent } from '../office-supplies/product-details/product-detail.component';
 import { IntroduceComponent } from '../office-supplies/introduce/introduce.component';
 import { ContactComponent } from '../office-supplies/contact/contact.component';
+import { LoginComponent } from '../pages/login/login.component';
+import { ForgotPasswordComponent } from '../pages/forgot-password/forgot-password.component';
+import { SignUpComponent } from '../pages/sign-up/sign-up.component';
 
 @NgModule({
     declarations: [
@@ -25,6 +28,9 @@ import { ContactComponent } from '../office-supplies/contact/contact.component';
         ProductDetailComponent,
         IntroduceComponent,
         ContactComponent,
+        LoginComponent,
+        ForgotPasswordComponent,
+        SignUpComponent,
     ],
 
     imports: [CommonModule, RouterModule, PrimeNGModule],

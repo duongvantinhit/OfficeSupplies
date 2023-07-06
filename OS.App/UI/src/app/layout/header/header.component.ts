@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'app-header',
@@ -14,11 +15,13 @@ export class HeaderComponent implements OnInit {
         {
             label: 'Đăng nhập',
             icon: 'pi pi-sign-in',
+            routerLink: 'login',
             command: () => {},
         },
         {
             label: 'Đăng ký',
             icon: 'pi pi-user-plus',
+            routerLink: 'sign-up',
             command: () => {},
         },
     ];

@@ -9,6 +9,9 @@ import { CartsComponent } from './office-supplies/carts/carts.component';
 import { ProductDetailComponent } from './office-supplies/product-details/product-detail.component';
 import { IntroduceComponent } from './office-supplies/introduce/introduce.component';
 import { ContactComponent } from './office-supplies/contact/contact.component';
+import { LoginComponent } from './pages/login/login.component';
+import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
+import { SignUpComponent } from './pages/sign-up/sign-up.component';
 
 const routes: Routes = [
     {
@@ -16,6 +19,9 @@ const routes: Routes = [
         component: LayoutComponent,
         children: [
             { path: '', component: OfficeSuppliesComponent },
+            { path: 'login', component: LoginComponent },
+            { path: 'sign-up', component: SignUpComponent },
+            { path: 'forgot-password', component: ForgotPasswordComponent },
             { path: 'category', component: CategoryComponent },
             { path: 'products', component: ProductsComponent },
             { path: 'cart', component: CartsComponent },

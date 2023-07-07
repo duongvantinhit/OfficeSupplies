@@ -3,7 +3,9 @@
         <div class="header-top">
             <div class="width">
                 <ul>
-                    <li><i class="pi pi-map" style="font-size: 0.8rem"></i>Theo dõi đơn hàng</li>
+                    <li routerLink="/order-status">
+                        <i class="pi pi-map" style="font-size: 0.8rem"></i>Theo dõi đơn hàng
+                    </li>
                     <li class="relative" (mouseenter)="accountVisible = true" (mouseleave)="accountVisible = false">
                         <i class="pi pi-user" style="font-size: 0.8rem"></i>Tài khoản
                         <div class="menu-account">
@@ -55,7 +57,9 @@
                             <li routerLink="/introduce">
                                 <i class="pi pi-info-circle" style="font-size: 1rem"></i>Giới thiệu
                             </li>
-                            <li><i class="pi pi-verified" style="font-size: 1rem"></i>Khuyến mãi</li>
+                            <li routerLink="/promotions">
+                                <i class="pi pi-verified" style="font-size: 1rem"></i>Khuyến mãi
+                            </li>
                             <li routerLink="/contact"><i class="pi pi-comment" style="font-size: 1rem"></i>Liên hệ</li>
                         </ul>
                     </div>

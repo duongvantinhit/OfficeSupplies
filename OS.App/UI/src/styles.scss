@@ -242,4 +242,11 @@ del {
             width: 50px !important;
         }
     }
+
+    //page order-status
+    .order-status {
+        .p-tabview-panel {
+            min-height: 300px;
+        }
+    }
 }

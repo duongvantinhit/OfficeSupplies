@@ -12,6 +12,7 @@ import { OverlayModule } from 'primeng/overlay';
 import { DropdownModule } from 'primeng/dropdown';
 import { TableModule } from 'primeng/table';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { TabViewModule } from 'primeng/tabview';
 
 const modules = [
     ButtonModule,
@@ -27,6 +28,7 @@ const modules = [
     DropdownModule,
     TableModule,
     InputNumberModule,
+    TabViewModule,
 ];
 
 @NgModule({

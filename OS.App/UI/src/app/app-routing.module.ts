@@ -12,6 +12,9 @@ import { ContactComponent } from './office-supplies/contact/contact.component';
 import { LoginComponent } from './pages/login/login.component';
 import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
 import { SignUpComponent } from './pages/sign-up/sign-up.component';
+import { PromotionsComponent } from './office-supplies/promotions/promotions.component';
+import { OrderStatusComponent } from './office-supplies/order-status/order-status.component';
+import { OrderDetailsComponent } from './office-supplies/order-details/order-details.component';
 
 const routes: Routes = [
     {
@@ -22,11 +25,14 @@ const routes: Routes = [
             { path: 'login', component: LoginComponent },
             { path: 'sign-up', component: SignUpComponent },
             { path: 'forgot-password', component: ForgotPasswordComponent },
+            { path: 'order-status', component: OrderStatusComponent },
+            { path: 'order-detail', component: OrderDetailsComponent },
             { path: 'category', component: CategoryComponent },
             { path: 'products', component: ProductsComponent },
             { path: 'cart', component: CartsComponent },
             { path: 'product/detail', component: ProductDetailComponent },
             { path: 'introduce', component: IntroduceComponent },
+            { path: 'promotions', component: PromotionsComponent },
             { path: 'contact', component: ContactComponent },
         ],
     },

@@ -15,6 +15,10 @@ import { ContactComponent } from '../office-supplies/contact/contact.component';
 import { LoginComponent } from '../pages/login/login.component';
 import { ForgotPasswordComponent } from '../pages/forgot-password/forgot-password.component';
 import { SignUpComponent } from '../pages/sign-up/sign-up.component';
+import { PromotionsComponent } from '../office-supplies/promotions/promotions.component';
+import { OrderStatusComponent } from '../office-supplies/order-status/order-status.component';
+import { NoOrdersComponent } from '../pages/no-orders/no-orders.component';
+import { OrderDetailsComponent } from '../office-supplies/order-details/order-details.component';
 
 @NgModule({
     declarations: [
@@ -31,6 +35,10 @@ import { SignUpComponent } from '../pages/sign-up/sign-up.component';
         LoginComponent,
         ForgotPasswordComponent,
         SignUpComponent,
+        PromotionsComponent,
+        OrderStatusComponent,
+        NoOrdersComponent,
+        OrderDetailsComponent,
     ],
 
     imports: [CommonModule, RouterModule, PrimeNGModule],

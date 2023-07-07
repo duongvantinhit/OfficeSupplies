@@ -1,0 +1,43 @@
+.promotion {
+    margin: 10px 0;
+    .voucher {
+        display: flex;
+        flex-wrap: wrap;
+        background-color: aqua;
+        color: var(--text-color);
+        .col3 {
+            width: calc(33.33% - 10px);
+            cursor: pointer;
+            display: inline-block;
+            background-color: white;
+            border-radius: 5px;
+            margin: 5px;
+            padding: 0;
+            height: 132px;
+            img {
+                padding: 20px;
+                border-right: 1px dashed black;
+            }
+            .voucher-content {
+                padding: 10px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                h4 {
+                    margin: 0;
+                    font-size: 18px;
+                    line-height: 24px;
+                }
+                span {
+                    font-size: 13px;
+                    line-height: 20px;
+                }
+                p {
+                    margin: 0;
+                    font-size: 13px;
+                    line-height: 20px;
+                }
+            }
+        }
+    }
+}

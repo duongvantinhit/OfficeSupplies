@@ -15,6 +15,17 @@ import { SignUpComponent } from './pages/sign-up/sign-up.component';
 import { PromotionsComponent } from './office-supplies/promotions/promotions.component';
 import { OrderStatusComponent } from './office-supplies/order-status/order-status.component';
 import { OrderDetailsComponent } from './office-supplies/order-details/order-details.component';
+import { UserInforComponent } from './office-supplies/user-infor/user-infor.component';
+import { ChangePasswordComponent } from './pages/change-password/change-password.component';
+import { AdminComponent } from './admin/admin.component';
+import { CrudProductComponent } from './admin/crud-product/crud-product.component';
+import { CrudCategoryComponent } from './admin/crud-category/crud-category.component';
+import { CrudPromotionComponent } from './admin/crud-promotion/crud-promotion.component';
+import { CategoriesAdminComponent } from './admin/categories-admin/categories-admin.component';
+import { ProductsAdminComponent } from './admin/products-admin/products-admin.component';
+import { PromotionsAdminComponent } from './admin/promotions-admin/promotions-admin.component';
+import { CreateUserComponent } from './admin/create-user/create-user.component';
+import { UsersComponent } from './admin/users/users.component';
 
 const routes: Routes = [
     {
@@ -25,6 +36,8 @@ const routes: Routes = [
             { path: 'login', component: LoginComponent },
             { path: 'sign-up', component: SignUpComponent },
             { path: 'forgot-password', component: ForgotPasswordComponent },
+            { path: 'change-password', component: ChangePasswordComponent },
+            { path: 'user-infor', component: UserInforComponent },
             { path: 'order-status', component: OrderStatusComponent },
             { path: 'order-detail', component: OrderDetailsComponent },
             { path: 'category', component: CategoryComponent },
@@ -34,6 +47,23 @@ const routes: Routes = [
             { path: 'introduce', component: IntroduceComponent },
             { path: 'promotions', component: PromotionsComponent },
             { path: 'contact', component: ContactComponent },
+        ],
+    },
+    {
+        path: 'admin',
+        component: AdminComponent,
+        children: [
+            { path: 'login', component: LoginComponent },
+            { path: 'add-category', component: CrudCategoryComponent },
+            { path: 'add-product', component: CrudProductComponent },
+            { path: 'add-promotion', component: CrudPromotionComponent },
+            { path: 'categories', component: CategoriesAdminComponent },
+            { path: 'products', component: ProductsAdminComponent },
+            { path: 'promotions', component: PromotionsAdminComponent },
+            { path: 'users', component: UsersComponent },
+            { path: 'create-user', component: CreateUserComponent },
+            { path: 'user-infor', component: UserInforComponent },
+            { path: 'change-password', component: ChangePasswordComponent },
         ],
     },
     { path: '404', component: PageNotFoundComponent },

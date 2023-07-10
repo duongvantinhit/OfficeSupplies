@@ -1,0 +1,16 @@
+.crud-promotion {
+    .promotion {
+        padding: 10px;
+        margin: auto;
+        width: 700px;
+        display: flex;
+        flex-wrap: wrap;
+
+        .col-2 {
+            width: 319px;
+            margin: 5px;
+            padding: 10px 0;
+            margin: auto;
+        }
+    }
+}

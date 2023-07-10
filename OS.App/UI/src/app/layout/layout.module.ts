@@ -19,6 +19,17 @@ import { PromotionsComponent } from '../office-supplies/promotions/promotions.co
 import { OrderStatusComponent } from '../office-supplies/order-status/order-status.component';
 import { NoOrdersComponent } from '../pages/no-orders/no-orders.component';
 import { OrderDetailsComponent } from '../office-supplies/order-details/order-details.component';
+import { UserInforComponent } from '../office-supplies/user-infor/user-infor.component';
+import { ChangePasswordComponent } from '../pages/change-password/change-password.component';
+import { AdminComponent } from '../admin/admin.component';
+import { CrudProductComponent } from '../admin/crud-product/crud-product.component';
+import { CrudCategoryComponent } from '../admin/crud-category/crud-category.component';
+import { CrudPromotionComponent } from '../admin/crud-promotion/crud-promotion.component';
+import { CategoriesAdminComponent } from '../admin/categories-admin/categories-admin.component';
+import { ProductsAdminComponent } from '../admin/products-admin/products-admin.component';
+import { PromotionsAdminComponent } from '../admin/promotions-admin/promotions-admin.component';
+import { CreateUserComponent } from '../admin/create-user/create-user.component';
+import { UsersComponent } from '../admin/users/users.component';
 
 @NgModule({
     declarations: [
@@ -39,6 +50,17 @@ import { OrderDetailsComponent } from '../office-supplies/order-details/order-de
         OrderStatusComponent,
         NoOrdersComponent,
         OrderDetailsComponent,
+        UserInforComponent,
+        ChangePasswordComponent,
+        AdminComponent,
+        CrudProductComponent,
+        CrudCategoryComponent,
+        CrudPromotionComponent,
+        CategoriesAdminComponent,
+        ProductsAdminComponent,
+        PromotionsAdminComponent,
+        CreateUserComponent,
+        UsersComponent,
     ],
 
     imports: [CommonModule, RouterModule, PrimeNGModule],

@@ -1,0 +1,30 @@
+.categories-admin {
+    .categories {
+        display: flex;
+        flex-wrap: wrap;
+        color: var(--text-color);
+        .col-3 {
+            width: calc(25% - 10px);
+            cursor: pointer;
+            display: inline-block;
+            background-color: white;
+            margin: 5px;
+            padding: 0;
+            box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.5);
+            img {
+                height: 200px;
+                width: 100%;
+                object-fit: cover;
+            }
+            p {
+                width: 178px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+        .col-3:hover {
+            opacity: 0.9;
+        }
+    }
+}

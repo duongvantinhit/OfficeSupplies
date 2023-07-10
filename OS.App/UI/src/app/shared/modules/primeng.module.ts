@@ -13,6 +13,13 @@ import { DropdownModule } from 'primeng/dropdown';
 import { TableModule } from 'primeng/table';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { TabViewModule } from 'primeng/tabview';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { PasswordModule } from 'primeng/password';
+import { InputMaskModule } from 'primeng/inputmask';
+import { PanelMenuModule } from 'primeng/panelmenu';
+import { AvatarModule } from 'primeng/avatar';
+import { FileUploadModule } from 'primeng/fileupload';
+import { CalendarModule } from 'primeng/calendar';
 
 const modules = [
     ButtonModule,
@@ -29,6 +36,13 @@ const modules = [
     TableModule,
     InputNumberModule,
     TabViewModule,
+    InputTextareaModule,
+    PasswordModule,
+    InputMaskModule,
+    PanelMenuModule,
+    AvatarModule,
+    FileUploadModule,
+    CalendarModule,
 ];
 
 @NgModule({

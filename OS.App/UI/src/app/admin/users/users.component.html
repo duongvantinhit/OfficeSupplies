@@ -1,0 +1,29 @@
+<div class="office-supplies-admin">
+    <div class="create-user">
+        <div class="title">
+            <h2><i class="pi pi-stop-circle"></i>Danh sách người dùng</h2>
+        </div>
+        <div class="users">
+            <p-table [value]="products" [tableStyle]="{ 'min-width': '50rem' }">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Họ</th>
+                        <th>Tên</th>
+                        <th>Số điện thoại</th>
+                        <th>Email</th>
+                        <th>Địa chỉ</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-product>
+                    <tr>
+                        <td>{{ product.firstname }}</td>
+                        <td>{{ product.lastname }}</td>
+                        <td>{{ product.phoneNumber }}</td>
+                        <td>{{ product.email }}</td>
+                        <td>{{ product.address }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

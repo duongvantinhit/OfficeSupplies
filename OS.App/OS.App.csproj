@@ -21,4 +21,8 @@
     <ProjectReference Include="..\OS.Core.Infrastructure\OS.Core.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Uploads\" />
+  </ItemGroup>
+
 </Project>

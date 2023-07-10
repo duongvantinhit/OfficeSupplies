@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
+import { AdminService } from './services/admin.service';
 
 @Component({
     selector: 'app-admin',
@@ -7,10 +8,14 @@ import { NavigationEnd, Router } from '@angular/router';
     styleUrls: ['./admin.component.scss'],
 })
 export class AdminComponent implements OnInit {
-    constructor(private _router: Router) {}
-    ngOnInit(): void {}
+    constructor(private _router: Router, private _apiServices: AdminService) {}
+    ngOnInit(): void {
+        // this._apiServices.getDataAll('/categories').subscribe((res) => {
+        //     console.log(res);
+        // });
+    }
 
-    items = [
+    function = [
         {
             label: 'Danh mục',
             icon: 'pi pi-fw pi-box',

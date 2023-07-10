@@ -297,4 +297,23 @@ del {
             }
         }
     }
+
+    .crud-category {
+        .category {
+            .p-fileupload-buttonbar {
+                display: flex;
+                padding: 1rem;
+            }
+            .p-fileupload-choose {
+                margin: auto;
+            }
+            .p-fileupload-content {
+                width: 319px;
+                padding: 1rem 1rem !important;
+            }
+            .ng-star-inserted {
+                text-align: center;
+            }
+        }
+    }
 }

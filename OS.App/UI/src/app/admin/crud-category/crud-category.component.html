@@ -9,16 +9,19 @@
                 <input type="text" class="w-full" pInputText placeholder="Nhập tên danh mục" />
             </div>
 
-            <div class="col-2 border-1 border-400 border-dashed border-round-md">
-                <div class="card flex justify-content-center m-auto">
+            <div class="col-2">
+                <div class="flex justify-content-center">
                     <p-fileUpload
-                        mode="basic"
                         chooseLabel="Chọn ảnh"
-                        name="demo[]"
-                        url="https://www.primefaces.org/cdn/api/upload.php"
                         accept="image/*"
-                        (onUpload)="onUpload($event)"
-                    ></p-fileUpload>
+                        [showUploadButton]="false"
+                        [showCancelButton]="false"
+                        (onSelect)="onFileSelected($event)"
+                    >
+                        <ng-template pTemplate="file">
+                            <div>{{ img }}</div>
+                        </ng-template>
+                    </p-fileUpload>
                 </div>
             </div>
 
@@ -28,8 +31,10 @@
             </div>
 
             <div class="card flex justify-content-center p-2">
-                <p-button label="Tạo"></p-button>
+                <p-button (onClick)="onSubmit()" label="Tạo"></p-button>
             </div>
         </div>
     </div>
 </div>
+
+<img src="{{ img }}" alt="" />

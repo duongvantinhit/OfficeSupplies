@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using OS.Core.Infrastructure.Database;
 
 var builder = WebApplication.CreateBuilder(args);
+const string AllowSpecificOrigins = "CorsApi";
 
 // Add services to the container.
 
@@ -18,7 +20,29 @@ builder.Services.AddDbContext<OsDbContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("OfficeSupplies"));
 });
 
+builder.Services.AddCors(opt =>
+{
+    opt.AddPolicy(name: AllowSpecificOrigins, policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .WithExposedHeaders("Content-Disposition");
+    });
+});
+
+
+
 var app = builder.Build();
+
+app.UseStaticFiles();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "Uploads")),
+    RequestPath = "/Uploads"
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -27,10 +51,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors(AllowSpecificOrigins);
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
+
 
 app.Run();

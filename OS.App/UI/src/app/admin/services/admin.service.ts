@@ -15,6 +15,12 @@ export class AdminService extends BaseApiService {
         this._behaviorSubject.next(msg);
     }
 
+    public pageInfor = new BehaviorSubject<any>(null);
+    public getPageInfor = this.pageInfor.asObservable();
+    public sendPageInfor(msg: any) {
+        this.pageInfor.next(msg);
+    }
+
     constructor(http: HttpClient, notiService: NotificationService) {
         super(http, notiService);
         this.baseUrl = EndpointUri.OfficeSupplies;

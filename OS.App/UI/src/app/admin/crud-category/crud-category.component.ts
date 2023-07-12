@@ -29,6 +29,7 @@ export class CrudCategoryComponent implements OnInit {
     categoryId: any;
     pageType: any;
     pageTilte: any;
+    pageNumber: any;
 
     ngOnInit() {
         this.categoryForm = this._fb.group({
@@ -41,19 +42,18 @@ export class CrudCategoryComponent implements OnInit {
         let route = this._actRoute.snapshot.queryParams;
         this.categoryId = route['id'];
         this.pageType = route['type'];
+        this.pageNumber = route['page'];
 
         this.pageType === 'edit' ? (this.pageTilte = 'Chỉnh sửa danh mục') : (this.pageTilte = 'Thêm danh mục');
 
         if (this.pageType) {
             this._apiServices.getData('/categories', this.categoryId).subscribe((res) => {
-                console.log(res);
                 this.setValue(res.data);
             });
         }
     }
 
     setValue(data: any): void {
-        console.log(data.categoryName);
         this.categoryForm.patchValue({
             categoryName: data.categoryName,
             categoryDescription: data.categoryDescription,
@@ -111,5 +111,6 @@ export class CrudCategoryComponent implements OnInit {
 
     goBack() {
         this._location.back();
+        this._apiServices.sendPageInfor(this.pageNumber);
     }
 }

@@ -1,0 +1,34 @@
+<div class="office-supplies">
+    <div class="flex py-5">
+        <div class="sign-up">
+            <h3>Đăng ký</h3>
+            <p>Bạn đã có tài khoản, đăng nhập <span routerLink="/login">Tại đây</span></p>
+
+            <div class="flex">
+                <input class="w-12rem block m-3" type="text" pInputText placeholder="Họ" />
+                <input class="w-12rem block m-3" type="text" pInputText placeholder="Tên" />
+            </div>
+
+            <div class="flex">
+                <p-inputMask class="w-12rem block m-3" mask="(999) 999-9999" placeholder="(999) 999-9999"></p-inputMask>
+                <input class="w-12rem block m-3" type="text" pInputText placeholder="Tên đăng nhập" />
+            </div>
+
+            <div class="flex">
+                <div class="card flex justify-content-center block m-3">
+                    <p-password styleClass="" [toggleMask]="true" placeholder="Mật khẩu"></p-password>
+                </div>
+
+                <div class="card flex justify-content-center block m-3">
+                    <p-password styleClass="" [toggleMask]="true" placeholder="Nhập lại mật khẩu"></p-password>
+                </div>
+            </div>
+
+            <input class="w-26rem email block m-3" type="email" pInputText placeholder="Email" />
+            <div class="card flex justify-content-center">
+                <textarea class="w-423 address" rows="3" pInputTextarea placeholder="Địa chỉ"></textarea>
+            </div>
+            <p-button styleClass="m-3 " label="Đăng ký"></p-button>
+        </div>
+    </div>
+</div>

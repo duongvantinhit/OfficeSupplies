@@ -1,0 +1,199 @@
+.introduce {
+    padding: 15px 0px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.outstanding {
+    cursor: pointer;
+    padding-bottom: 10px;
+    img {
+        height: 170px;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .tilte {
+        background-color: #252e4b;
+        color: white;
+        height: 40px;
+        position: absolute;
+        top: 85%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 0 10px;
+        box-shadow: 2px 2px 5px 1px #fd7e14;
+        p {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        p:hover {
+            color: #fd7e14;
+        }
+    }
+}
+
+.new-product {
+    padding: 10px 0;
+    img {
+        height: 170px;
+        width: 100%;
+        object-fit: cover;
+    }
+    .tilte {
+        p {
+            margin: 0;
+            line-height: 30px;
+            width: 273px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+}
+
+.content {
+    display: flex;
+    padding: 10px 0;
+    justify-content: space-between !important;
+    .content-left {
+        height: 650px;
+        box-sizing: border-box;
+        flex: 1;
+        cursor: pointer;
+        .product {
+            .product-left {
+                img {
+                    height: 85px;
+                    width: 100px;
+                    margin-right: 10px;
+                    object-fit: cover;
+                }
+            }
+            .product-right {
+                font-size: 14px;
+                line-height: 30px;
+                p {
+                    margin: 0;
+                    font-weight: 500;
+                    width: 100%;
+                    color: var(--text-color);
+                    width: 145px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+                b {
+                    del {
+                        font-size: 12px;
+                        font-weight: 400;
+                        color: #898989;
+                    }
+                }
+            }
+        }
+
+        .product > .flex:last-child {
+            border-bottom: none !important;
+        }
+    }
+    .content-center {
+        flex: 2;
+        padding: 0 10px;
+        cursor: pointer;
+        box-sizing: border-box;
+        .top-product {
+            .top-product-left {
+                img {
+                    height: 170px;
+                    width: 190px;
+                    object-fit: cover;
+                    margin-right: 10px;
+                }
+                .position {
+                    position: absolute;
+                    background-color: #fd7e14;
+                    color: white;
+                    opacity: 0.8;
+                    top: 10px;
+                    left: 10px;
+                    display: flex;
+                    font-size: 20px;
+                    padding: 10px;
+                    border-radius: 10px;
+                }
+            }
+            .top-product-right {
+                line-height: 30px;
+                font-size: 14px;
+                p {
+                    margin: 0;
+                    font-weight: bold;
+                    color: black !important;
+                    width: 329px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+                span {
+                    display: inline-block;
+                    line-height: 22px;
+                }
+            }
+        }
+        .top-product {
+            .flex:last-child {
+                border-bottom: none !important;
+            }
+        }
+    }
+    .content-right {
+        flex: 1;
+        flex-direction: row;
+        height: 645px;
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            li {
+                line-height: 32px;
+                font-size: 15px;
+                i {
+                    padding-right: 10px;
+                }
+            }
+        }
+    }
+}
+
+.suggest {
+    padding-bottom: 20px;
+    img {
+        height: 180px;
+        width: 100%;
+        object-fit: cover;
+    }
+    .suggest-product {
+        display: flex;
+        flex-wrap: wrap;
+        .col-5 {
+            width: calc(20% - 10px);
+            cursor: pointer;
+            display: inline-block;
+            background-color: white;
+            margin: 5px;
+            padding: 0;
+            box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.5);
+        }
+
+        .tilte {
+            p {
+                width: 206px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                padding: 0 10px;
+            }
+        }
+    }
+}

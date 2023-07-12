@@ -1,0 +1,18 @@
+.page-not-found {
+    margin: auto;
+    text-align: center;
+    h1 {
+        font-size: 150px;
+        box-shadow: 0px 5px 5px -5px #e9912c;
+    }
+    h2 {
+        font-size: 50px;
+    }
+    p {
+        font-size: 20px;
+        span {
+            color: blue;
+            cursor: pointer;
+        }
+    }
+}

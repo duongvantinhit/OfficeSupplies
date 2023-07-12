@@ -1,0 +1,13 @@
+.crud-category {
+    .category {
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+
+        .col-2 {
+            margin: auto;
+            width: 319px;
+            padding: 10px 0;
+        }
+    }
+}

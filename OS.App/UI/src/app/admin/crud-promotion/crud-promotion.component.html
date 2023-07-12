@@ -1,0 +1,48 @@
+<div class="office-supplies-admin">
+    <div class="crud-promotion">
+        <div class="title">
+            <h2><i class="pi pi-stop-circle"></i>Thêm mã khuyến mãi</h2>
+        </div>
+        <div class="flex">
+            <div class="promotion">
+                <div class="col-2">
+                    <span class="font-bold block mb-2">Tên mã khuyến mãi</span>
+                    <input type="text" class="w-full" pInputText placeholder="Nhập tên mã khuyến mãi" />
+                </div>
+
+                <div class="col-2" style="margin-left: 15px">
+                    <span class="font-bold block mb-2">Phần trăm khuyến mãi</span>
+                    <input type="text" class="w-full" pInputText placeholder="Nhập phần trăm khuyến mãi" />
+                </div>
+
+                <div class="col-2">
+                    <span class="font-bold block mb-2">Thời gian áp dụng</span>
+                    <p-calendar styleClass="w-full" [showIcon]="true" placeholder="Chọn thời gian áp dụng"></p-calendar>
+                </div>
+
+                <div class="col-2">
+                    <span class="font-bold block mb-2">Thời gian kết thúc</span>
+                    <p-calendar
+                        styleClass="w-full"
+                        [showIcon]="true"
+                        placeholder="Chọn thời gian kết thúc"
+                    ></p-calendar>
+                </div>
+
+                <div class="col-2">
+                    <span class="font-bold block mb-2">Mô tả</span>
+                    <textarea
+                        rows="5"
+                        class="w-full"
+                        cols="30"
+                        pInputTextarea
+                        placeholder="Nhập mô tả mã giảm giá"
+                    ></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="card flex justify-content-center p-2">
+            <p-button label="Tạo"></p-button>
+        </div>
+    </div>
+</div>

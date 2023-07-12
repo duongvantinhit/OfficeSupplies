@@ -1,0 +1,16 @@
+.no-order {
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    img {
+        height: 100px;
+        width: 100px;
+        margin: auto;
+        opacity: 0.8;
+    }
+    p {
+        height: 100px;
+        text-align: center;
+    }
+}

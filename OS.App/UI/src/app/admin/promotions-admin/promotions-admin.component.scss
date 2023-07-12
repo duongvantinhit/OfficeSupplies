@@ -1,0 +1,42 @@
+.promotions-admin {
+    .promotions {
+        display: flex;
+        flex-wrap: wrap;
+        color: var(--text-color);
+        .col-2 {
+            width: calc(50% - 10px);
+            cursor: pointer;
+            display: flex;
+            background-color: white;
+            border-radius: 5px;
+            margin: 5px;
+            padding: 0;
+            height: 132px;
+            img {
+                padding: 20px;
+                border-right: 1px dashed black;
+            }
+            .voucher-content {
+                padding: 10px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                width: 100%;
+                h4 {
+                    margin: 0;
+                    font-size: 18px;
+                    line-height: 24px;
+                }
+                span {
+                    font-size: 13px;
+                    line-height: 20px;
+                }
+                p {
+                    margin: 0;
+                    font-size: 13px;
+                    line-height: 20px;
+                }
+            }
+        }
+    }
+}

@@ -40,6 +40,12 @@ export class BaseApiService {
             .pipe(retry(environment.requestRetry), catchError(this.handleError));
     }
 
+    delete(url: string, options?: any): Observable<any> {
+        return this.http
+            .delete(this.baseUrl + url, options)
+            .pipe(retry(environment.requestRetry), catchError(this.handleError));
+    }
+
     download(url: string): Observable<any> {
         return this.http
             .get(this.baseUrl + url, {

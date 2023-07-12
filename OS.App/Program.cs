@@ -31,8 +31,6 @@ builder.Services.AddCors(opt =>
     });
 });
 
-
-
 var app = builder.Build();
 
 app.UseStaticFiles();
@@ -40,8 +38,8 @@ app.UseStaticFiles();
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(
-        Path.Combine(Directory.GetCurrentDirectory(), "Uploads")),
-    RequestPath = "/Uploads"
+        Path.Combine(Directory.GetCurrentDirectory(), "Images")),
+    RequestPath = "/Images"
 });
 
 // Configure the HTTP request pipeline.

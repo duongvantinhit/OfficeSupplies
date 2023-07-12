@@ -6,12 +6,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LayoutModule } from './layout/layout.module';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { NotificationService } from './shared/services/notification.service';
 
 @NgModule({
     declarations: [AppComponent, PageNotFoundComponent],
     imports: [BrowserModule, AppRoutingModule, LayoutModule, BrowserAnimationsModule],
-    providers: [MessageService],
+    providers: [MessageService, NotificationService, ConfirmationService],
     bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -55,7 +55,7 @@ const routes: Routes = [
         children: [
             { path: '', component: CategoriesAdminComponent },
             { path: 'login', component: LoginComponent },
-            { path: 'add-category', component: CrudCategoryComponent },
+            { path: 'category', component: CrudCategoryComponent },
             { path: 'add-product', component: CrudProductComponent },
             { path: 'add-promotion', component: CrudPromotionComponent },
             { path: 'categories', component: CategoriesAdminComponent },

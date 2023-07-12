@@ -20,6 +20,8 @@ import { PanelMenuModule } from 'primeng/panelmenu';
 import { AvatarModule } from 'primeng/avatar';
 import { FileUploadModule } from 'primeng/fileupload';
 import { CalendarModule } from 'primeng/calendar';
+import { ToastModule } from 'primeng/toast';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 const modules = [
     ButtonModule,
@@ -43,6 +45,8 @@ const modules = [
     AvatarModule,
     FileUploadModule,
     CalendarModule,
+    ToastModule,
+    ConfirmDialogModule,
 ];
 
 @NgModule({

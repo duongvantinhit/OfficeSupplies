@@ -1,40 +1,59 @@
 <div class="office-supplies-admin">
     <div class="crud-category">
-        <div class="title">
-            <h2><i class="pi pi-stop-circle"></i>Thêm danh mục</h2>
+        <div class="flex title">
+            <div class="tilte-left" (click)="goBack()" *ngIf="pageType === 'edit'">
+                <p-button icon="pi pi-arrow-left"></p-button>
+            </div>
+            <div class="tilte-right">
+                <h2>{{ pageTilte }}</h2>
+            </div>
         </div>
+
         <div class="category">
-            <div class="col-2">
-                <span class="font-bold block mb-2">Tên danh mục</span>
-                <input type="text" class="w-full" pInputText placeholder="Nhập tên danh mục" />
-            </div>
-
-            <div class="col-2">
-                <div class="flex justify-content-center">
-                    <p-fileUpload
-                        chooseLabel="Chọn ảnh"
-                        accept="image/*"
-                        [showUploadButton]="false"
-                        [showCancelButton]="false"
-                        (onSelect)="onFileSelected($event)"
-                    >
-                        <ng-template pTemplate="file">
-                            <div>{{ img }}</div>
-                        </ng-template>
-                    </p-fileUpload>
+            <form [formGroup]="categoryForm">
+                <div class="col-2">
+                    <span class="font-bold block mb-2">Tên danh mục</span>
+                    <input
+                        type="text"
+                        class="w-full"
+                        pInputText
+                        placeholder="Nhập tên danh mục"
+                        formControlName="categoryName"
+                    />
                 </div>
-            </div>
 
-            <div class="col-2">
-                <span class="font-bold block mb-2">Mô tả</span>
-                <textarea rows="5" class="w-full" cols="30" pInputTextarea placeholder="Nhập mô tả danh mục"></textarea>
-            </div>
+                <div class="col-2">
+                    <div class="flex justify-content-center">
+                        <p-fileUpload
+                            chooseLabel="Chọn ảnh"
+                            accept="image/*"
+                            [showUploadButton]="false"
+                            [showCancelButton]="false"
+                            (onSelect)="onFileSelected($event)"
+                        >
+                            <ng-template pTemplate="file">
+                                <div>{{ imgName }}</div>
+                            </ng-template>
+                        </p-fileUpload>
+                    </div>
+                </div>
 
-            <div class="card flex justify-content-center p-2">
-                <p-button (onClick)="onSubmit()" label="Tạo"></p-button>
-            </div>
+                <div class="col-2">
+                    <span class="font-bold block mb-2">Mô tả</span>
+                    <textarea
+                        rows="5"
+                        class="w-full"
+                        cols="30"
+                        pInputTextarea
+                        placeholder="Nhập mô tả danh mục"
+                        formControlName="categoryDescription"
+                    ></textarea>
+                </div>
+
+                <div class="card flex justify-content-center p-2">
+                    <p-button (onClick)="onSubmit()" label="Tạo"></p-button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
-
-<img src="{{ img }}" alt="" />

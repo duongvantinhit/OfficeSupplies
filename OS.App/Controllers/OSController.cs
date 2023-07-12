@@ -4,6 +4,8 @@ using OS.Core.Application;
 using OS.Core.Application.Dtos;
 using OS.Core.Domain.OfficeSupplies;
 using OS.Core.Infrastructure.Database;
+using System.Text.RegularExpressions;
+using UA.Core.Application.SeedWork;
 
 namespace OS.App.Controllers
 {
@@ -17,6 +19,7 @@ namespace OS.App.Controllers
             _context = context;
         }
 
+        #region httpGET
         [HttpGet("users")]
         public async Task<IActionResult> GetAllUsers()
         {
@@ -32,7 +35,7 @@ namespace OS.App.Controllers
         }
 
         [HttpGet("categories")]
-        public async Task<IActionResult> GetAllCategories()
+        public async Task<IActionResult> GetAllCategories([FromQuery] ApiRequest request)
         {
             var res = new ApiResult<IEnumerable<Categories>>
             {
@@ -41,20 +44,52 @@ namespace OS.App.Controllers
             };
 
             var query = _context.Categories.AsNoTracking();
-            res.Data = await query.ToListAsync();
+
+            res.TotalRows = query.Count();
+            int skip = request.PageSize * (request.PageIndex - 1);
+            res.Data = query.Skip(skip).Take(request.PageSize);
             return Ok(res);
         }
 
-
-        [HttpPost("upload")]
-        public async Task<IActionResult> Upload([FromQuery] IFormFile file)
+        [HttpGet("categories/{id}")]
+        public async Task<IActionResult> GetCategory(int id)
         {
+            var res = new ApiResult<Categories>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var query = _context.Categories.AsNoTracking()
+                .Where(x => x.Id == id);
+
+            res.TotalRows = query.Count();
+            res.Data = await query.FirstOrDefaultAsync();
+            return Ok(res);
+        }
+
+        #endregion httpGET
+
+        #region httpPOST
+        [HttpPost("categories")]
+        public async Task<IActionResult> Upload([FromForm] UpLoadImageDto model)
+        {
+            var res = new ApiResult<IEnumerable<Categories>>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
             try
             {
+                IFormFile file = model.File!;
+
                 if (file != null && file.Length > 0)
                 {
                     var fileName = Path.GetFileName(file.FileName);
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", fileName);
+                    fileName = Regex.Replace(fileName, @"[^\w\.]", "");
+
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Images", fileName);
 
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {
@@ -62,28 +97,55 @@ namespace OS.App.Controllers
                     }
 
                     var baseUrl = $"{Request.Scheme}://{Request.Host}{Request.PathBase}";
-                    var imageUrl = $"{baseUrl}/Uploads/{fileName}";
+                    var imageUrl = $"{baseUrl}/Images/{fileName}";
 
-                    var imageInfo = new ImageInfo
+                    Categories createCategy = new()
                     {
-                        FileName = fileName,
-                        Url = imageUrl,
-                        Size = file.Length,
-                        ContentType = file.ContentType
+                        CategoryName = model.CategoryName,
+                        ImageURL = imageUrl,
+                        CategoryDescription = model.CategoryDescription,
+                        CreatedByUserId = model.CreatedByUserId,
+                        CreatedDate = model.CreatedDate.ToLocalTime(),
                     };
 
-                    return Ok(imageInfo);
+                    _context.Add(createCategy);
+                    await _context.SaveChangesAsync();
+                    res.Message = AppConsts.MSG_CREATED_SUCCESSFULL;
                 }
                 else
                 {
-                    return BadRequest("No file was uploaded.");
+                    res.Message = AppConsts.MSG_FIND_NOT_FOUND_DATA;
                 }
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex}");
+                res.Successed = false;
+                res.Message = ex.Message;
+                res.ResponseCode = StatusCodes.Status500InternalServerError;
             }
+            return Ok(res);
+        }
+        #endregion httpPOST
+
+        #region httpDelete
+        [HttpDelete("categories/{id}")]
+        public async Task<IActionResult> DeleteCategogy(int id)
+        {
+            var res = new ApiResult<IEnumerable<Categories>>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            Categories category = _context.Categories.Find(id)!;
+            _context.Categories.Remove(category);
+            await _context.SaveChangesAsync();
+
+            res.Message = AppConsts.MSG_UPDATED_SUCCESSFULL;
+            return Ok(res);
         }
 
+
+        #endregion httpDelete
     }
 }

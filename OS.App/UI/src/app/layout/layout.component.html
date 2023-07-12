@@ -3,3 +3,14 @@
     <router-outlet></router-outlet>
     <app-footer></app-footer>
 </div>
+
+<p-toast [baseZIndex]="9999" position="top-center"></p-toast>
+<p-toast key="ua-toast" [baseZIndex]="9999" position="top-center">
+    <ng-template let-message pTemplate="message">
+        <div class="p-flex p-flex-column" style="flex: 1">
+            <h6 class="p-toast-summary mb-1">{{ message.summary }}</h6>
+            <p class="p-toast-detail" [innerHTML]="message.detail"></p>
+        </div>
+    </ng-template>
+</p-toast>
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>

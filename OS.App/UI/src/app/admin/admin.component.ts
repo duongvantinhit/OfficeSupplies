@@ -28,7 +28,7 @@ export class AdminComponent implements OnInit {
                 {
                     label: 'Thêm danh mục',
                     icon: 'pi pi-fw pi-plus',
-                    routerLink: '/admin/add-category',
+                    routerLink: '/admin/category',
                 },
             ],
         },

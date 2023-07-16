@@ -50,8 +50,12 @@
                     ></textarea>
                 </div>
 
-                <div class="card flex justify-content-center p-2">
-                    <p-button (onClick)="onSubmit()" label="Tạo"></p-button>
+                <div class="card flex justify-content-center p-2" *ngIf="pageType != 'edit'">
+                    <p-button (onClick)="create()" label="Tạo"></p-button>
+                </div>
+
+                <div class="card flex justify-content-center p-2" *ngIf="pageType === 'edit'">
+                    <p-button (onClick)="edit()" label="Lưu"></p-button>
                 </div>
             </form>
         </div>

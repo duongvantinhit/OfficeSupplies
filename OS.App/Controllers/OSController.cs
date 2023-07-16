@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OS.Core.Application;
 using OS.Core.Application.Dtos;
@@ -11,6 +12,7 @@ namespace OS.App.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class OSController : ControllerBase
     {
         private readonly OsDbContext _context;
@@ -44,10 +46,11 @@ namespace OS.App.Controllers
             };
 
             var query = _context.Categories.AsNoTracking();
+            var sortedDatas = await query.OrderBy(post => post.CategoryName).ToListAsync();
 
-            res.TotalRows = query.Count();
+            res.TotalRows = sortedDatas.Count;
             int skip = request.PageSize * (request.PageIndex - 1);
-            res.Data = query.Skip(skip).Take(request.PageSize);
+            res.Data = sortedDatas.Skip(skip).Take(request.PageSize);
             return Ok(res);
         }
 
@@ -72,7 +75,7 @@ namespace OS.App.Controllers
 
         #region httpPOST
         [HttpPost("categories")]
-        public async Task<IActionResult> Upload([FromForm] UpLoadImageDto model)
+        public async Task<IActionResult> Upload([FromForm] CreateCategoryDto model)
         {
             var res = new ApiResult<IEnumerable<Categories>>
             {
@@ -127,7 +130,7 @@ namespace OS.App.Controllers
         }
         #endregion httpPOST
 
-        #region httpDelete
+        #region httpDELETE
         [HttpDelete("categories/{id}")]
         public async Task<IActionResult> DeleteCategogy(int id)
         {
@@ -146,6 +149,67 @@ namespace OS.App.Controllers
         }
 
 
-        #endregion httpDelete
+        #endregion httpDELETE
+
+        #region httpPUT
+        [HttpPut("categories/{id}")]
+        public async Task<IActionResult> UpdateCategory([FromForm] UpdateCategoryDto categoryDto,int id)
+        {
+            var res = new ApiResult<bool>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            IFormFile file = categoryDto.File!;
+
+            var category = await _context.Categories.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+
+            if(category == null || categoryDto == null)
+            {
+                res.Message = AppConsts.MSG_FIND_NOT_FOUND_DATA;
+                return Ok(res);
+            }
+
+            if (file != null && file.Length > 0)
+            {
+                var fileName = Path.GetFileName(file.FileName);
+                fileName = Regex.Replace(fileName, @"[^\w\.]", "");
+
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Images", fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                var baseUrl = $"{Request.Scheme}://{Request.Host}{Request.PathBase}";
+                var imageUrl = $"{baseUrl}/Images/{fileName}";
+
+                category.ImageURL = imageUrl;
+            }
+
+            category.CategoryName = categoryDto.CategoryName;
+            category.CategoryDescription = categoryDto.CategoryDescription;
+            category.CreatedByUserId = categoryDto.CreatedByUserId;
+            category.ModifiedDate = categoryDto.ModifiedDate;
+
+            try
+            {
+                _context.Update(category);
+                await _context.SaveChangesAsync();
+                res.Message = AppConsts.MSG_UPDATED_SUCCESSFULL;
+            }
+            catch (Exception ex)
+            {
+                res.Successed = false;
+                res.Message = ex.Message;
+                res.ResponseCode = StatusCodes.Status500InternalServerError;
+            }
+
+            return Ok(res);
+        }
+
+        #endregion
     }
 }

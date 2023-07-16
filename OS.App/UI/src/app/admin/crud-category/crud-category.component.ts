@@ -31,19 +31,11 @@ export class CrudCategoryComponent implements OnInit {
     pageTilte: any;
     pageNumber: any;
 
-    ngOnInit() {
-        this.categoryForm = this._fb.group({
-            categoryName: ['', [Validators.required]],
-            categoryDescription: ['', [Validators.required]],
-            createdByUserId: ['1', [Validators.required]],
-            createdDate: [new Date(), [Validators.required]],
-        });
-
+    ngOnInit(): void {
         let route = this._actRoute.snapshot.queryParams;
         this.categoryId = route['id'];
         this.pageType = route['type'];
         this.pageNumber = route['page'];
-
         this.pageType === 'edit' ? (this.pageTilte = 'Chỉnh sửa danh mục') : (this.pageTilte = 'Thêm danh mục');
 
         if (this.pageType) {
@@ -51,6 +43,13 @@ export class CrudCategoryComponent implements OnInit {
                 this.setValue(res.data);
             });
         }
+
+        this.categoryForm = this._fb.group({
+            categoryName: ['', [Validators.required]],
+            categoryDescription: ['', [Validators.required]],
+            createdByUserId: ['1', [Validators.required]],
+            createdDate: [new Date(), [Validators.required]],
+        });
     }
 
     setValue(data: any): void {
@@ -72,19 +71,19 @@ export class CrudCategoryComponent implements OnInit {
             errorMessages.push(AppMessages.PLEASE_ENTER('Mô tả danh mục', Notice.messageEnter));
         }
 
-        if (!this.uploadImg) {
+        if (!this.uploadImg && this.pageType != 'edit') {
             errorMessages.push(AppMessages.PLEASE_ENTER('Hình ảnh', Notice.messageChoose));
         }
 
         return errorMessages;
     }
 
-    onFileSelected(event: any) {
+    onFileSelected(event: any): void {
         this.uploadImg = event.originalEvent.target.files[0];
         this.imgName = this.uploadImg.name;
     }
 
-    onSubmit() {
+    create(): void {
         const formUploadImg: FormData = new FormData();
         let errorMessages = this.lineLeadFormValidate();
 
@@ -109,7 +108,35 @@ export class CrudCategoryComponent implements OnInit {
         });
     }
 
-    goBack() {
+    edit(): void {
+        const formUploadImg: FormData = new FormData();
+        let errorMessages = this.lineLeadFormValidate();
+
+        if (errorMessages.length > 0) {
+            this._notiService.error(errorMessages.join('<br/>'), 'ua-toast');
+            return;
+        }
+
+        if (this.uploadImg) {
+            formUploadImg.append('file', this.uploadImg, this.uploadImg.name);
+        }
+
+        formUploadImg.append('CategoryName', this.categoryForm.controls.categoryName.value);
+        formUploadImg.append('CategoryDescription', this.categoryForm.controls.categoryDescription.value);
+        formUploadImg.append('createdByUserId', this.categoryForm.controls.createdByUserId.value);
+        formUploadImg.append('ModifiedDate', new Date().toISOString());
+
+        this._apiServices.putData('/categories', formUploadImg, this.categoryId).subscribe((res) => {
+            if (res.successed) {
+                this._notiService.success(Notice.addSuccced, '', 'Thành công');
+                this.ngOnInit();
+            } else {
+                this._notiService.error(Notice.addFail);
+            }
+        });
+    }
+
+    goBack(): void {
         this._location.back();
         this._apiServices.sendPageInfor(this.pageNumber);
     }

@@ -12,7 +12,7 @@ export class CategoriesAdminComponent implements OnInit {
 
     first = 0;
     totalRecords: number = 0;
-    getPageNumber: any;
+    getPageNumber = 1;
     setPageNumber: any;
     categories: any;
 
@@ -26,15 +26,10 @@ export class CategoriesAdminComponent implements OnInit {
             pageSize: event ? event.rows : 8,
         };
 
-        if (!event) {
-            this.first = 0;
-        } else {
-            this.getPageNumber = event.first / event.rows + 1;
-        }
+        event ? (this.getPageNumber = event.first / event.rows + 1) : (this.first = 0);
 
         this._apiServices.getPageInfor.subscribe((res) => {
             this.setPageNumber = res;
-            console.log(res);
         });
 
         if (!event && this.setPageNumber) {
@@ -42,6 +37,7 @@ export class CategoriesAdminComponent implements OnInit {
                 pageIndex: this.setPageNumber,
                 pageSize: event ? event.rows : 8,
             };
+
             this._apiServices.loadPages(loadPageForm, '/categories').subscribe((res) => {
                 this.totalRecords = res?.totalRows;
                 this.categories = res.data;
@@ -64,7 +60,6 @@ export class CategoriesAdminComponent implements OnInit {
     }
 
     editCategory(id: any) {
-        console.log(this.getPageNumber);
         this._router.navigate(['/admin/category'], {
             queryParams: { id: id, type: 'edit', page: this.getPageNumber },
         });

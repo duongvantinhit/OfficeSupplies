@@ -9,7 +9,7 @@ namespace OS.Core.Domain.OfficeSupplies
         public string? CategoryName { get; set; }
         public string? ImageURL { get; set; }
         public string? CategoryDescription { get; set; }
-        public int CreatedByUserId { get; set; }
+        public string? CreatedByUserId { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
     }

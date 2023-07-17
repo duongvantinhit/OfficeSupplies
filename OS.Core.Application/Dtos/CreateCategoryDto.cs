@@ -8,7 +8,7 @@ namespace OS.Core.Application.Dtos
         public string? CategoryName { get; set; }
         public string? ImageURL { get; set; }
         public string? CategoryDescription { get; set; }
-        public int CreatedByUserId { get; set; }   
+        public string CreatedByUserId { get; set; }   
         public IFormFile? File { get; set; }
     }
 

@@ -27,6 +27,7 @@ import { PromotionsAdminComponent } from './admin/promotions-admin/promotions-ad
 import { CreateUserComponent } from './admin/create-user/create-user.component';
 import { UsersComponent } from './admin/users/users.component';
 import { AuthGuard } from './shared/guards/AuthGuard';
+import { RoleGuard } from './shared/guards/RoleGuard';
 
 const routes: Routes = [
     {
@@ -35,7 +36,6 @@ const routes: Routes = [
         canActivate: [AuthGuard],
         children: [
             { path: '', component: OfficeSuppliesComponent },
-            { path: 'login', component: LoginComponent },
             { path: 'sign-up', component: SignUpComponent },
             { path: 'forgot-password', component: ForgotPasswordComponent },
             { path: 'change-password', component: ChangePasswordComponent },
@@ -54,9 +54,9 @@ const routes: Routes = [
     {
         path: 'admin',
         component: AdminComponent,
+        canActivate: [RoleGuard],
         children: [
             { path: '', component: CategoriesAdminComponent },
-            { path: 'login', component: LoginComponent },
             { path: 'category', component: CrudCategoryComponent },
             { path: 'add-product', component: CrudProductComponent },
             { path: 'add-promotion', component: CrudPromotionComponent },
@@ -69,6 +69,7 @@ const routes: Routes = [
             { path: 'change-password', component: ChangePasswordComponent },
         ],
     },
+    { path: 'login', component: LoginComponent },
     { path: '404', component: PageNotFoundComponent },
     { path: '**', redirectTo: '/404', pathMatch: 'full' },
 ];

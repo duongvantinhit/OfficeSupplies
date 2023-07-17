@@ -3,4 +3,6 @@ export class Notice {
     static readonly messageChoose = 'Vui lòng chọn';
     static readonly addSuccced = 'Thêm thành công';
     static readonly addFail = 'Thêm thất bại';
+    static readonly loginSucceed = 'Đăng nhập thành công';
+    static readonly loginFail = 'Đăng nhập thất bại';
 }

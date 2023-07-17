@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { AuthService } from 'src/auth/services/auth.service';
 
 @Component({
     selector: 'app-header',
@@ -7,24 +8,50 @@ import { RouterLink } from '@angular/router';
     styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-    constructor() {}
+    constructor(private _authServices: AuthService) {}
 
-    ngOnInit() {}
+    login = false;
+    accountMenu: any;
+    cartVisible: boolean = false;
+    accountVisible: boolean = false;
+    categoryVisible: boolean = false;
 
-    accountMenu = [
-        {
-            label: 'Đăng nhập',
-            icon: 'pi pi-sign-in',
-            routerLink: 'login',
-            command: () => {},
-        },
-        {
-            label: 'Đăng ký',
-            icon: 'pi pi-user-plus',
-            routerLink: 'sign-up',
-            command: () => {},
-        },
-    ];
+    ngOnInit() {
+        this.login = this._authServices.isLoggedIn();
+        if (!this.login) {
+            this.accountMenu = [
+                {
+                    label: 'Đăng nhập',
+                    icon: 'pi pi-sign-in',
+                    routerLink: 'login',
+                    command: () => {},
+                },
+                {
+                    label: 'Đăng ký',
+                    icon: 'pi pi-user-plus',
+                    routerLink: 'sign-up',
+                    command: () => {},
+                },
+            ];
+        } else {
+            this.accountMenu = [
+                {
+                    label: 'Đăng xuất',
+                    icon: 'pi pi-sign-in',
+                    routerLink: 'login',
+                    command: () => {
+                        this._authServices.logout();
+                    },
+                },
+                {
+                    label: 'Thông tin tài khoản',
+                    icon: 'pi pi-user-plus',
+                    routerLink: 'user-infor',
+                    command: () => {},
+                },
+            ];
+        }
+    }
 
     categoryMenu = [
         {
@@ -52,8 +79,4 @@ export class HeaderComponent implements OnInit {
             command: () => {},
         },
     ];
-
-    cartVisible: boolean = false;
-    accountVisible: boolean = false;
-    categoryVisible: boolean = false;
 }

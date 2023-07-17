@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using OS.Core.Application.Dtos;
 using OS.Core.Domain.OfficeSupplies;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -25,40 +26,168 @@ namespace OS.Core.Domain.Reponsitories
             this.roleManager = roleManager;
         }
 
+        /* public async Task<TokenDto> SigInAsync(Sigin model)
+         {
+             var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
+             if (!result.Succeeded)
+             {
+                 return await Task.FromResult<TokenDto>(null);
+             }
+
+             var user = await userManager.FindByEmailAsync(model.Email);
+             var roles = await userManager.GetRolesAsync(user);
+
+             var authClaims = new List<Claim>
+                 {
+                    new Claim(ClaimTypes.Email, model.Email!),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    *//*new Claim(ClaimTypes.Role, string.Join(",", roles)),*//*
+                    new Claim("role", string.Join(",", roles))
+                 };
+
+             var authenKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]));
+
+             var token = new JwtSecurityToken(
+                 issuer: configuration["JWT:ValidIssuer"],
+                 audience: configuration["JWT:ValidAudience"],
+                 expires: DateTime.Now.AddMinutes(1),
+                 claims: authClaims,
+                 signingCredentials: new SigningCredentials(authenKey, SecurityAlgorithms.HmacSha512Signature)
+             );
+
+             var tokenDto = new TokenDto
+             {
+                 Token = new JwtSecurityTokenHandler().WriteToken(token)
+             };
+
+             return await Task.FromResult(tokenDto);
+         }*/
+
         public async Task<TokenDto> SigInAsync(Sigin model)
         {
             var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
             if (!result.Succeeded)
             {
-                return await Task.FromResult<TokenDto>(null);
+                return null!;
             }
 
             var user = await userManager.FindByEmailAsync(model.Email);
             var roles = await userManager.GetRolesAsync(user);
 
+            // Tạo mới accessToken và refreshToken
             var authClaims = new List<Claim>
-                {
-                   new Claim(ClaimTypes.Email, model.Email!),
-                   new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                   new Claim(ClaimTypes.Role, string.Join(",", roles))
-                };
+            {
+                /*new Claim(ClaimTypes.Email, model.Email!),*/
+                new Claim("email", model.Email!),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("role", string.Join(",", roles))
+            };
 
             var authenKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]));
 
-            var token = new JwtSecurityToken(
+            var accessToken = new JwtSecurityToken(
                 issuer: configuration["JWT:ValidIssuer"],
                 audience: configuration["JWT:ValidAudience"],
-                expires: DateTime.Now.AddMinutes(20),
+                expires: DateTime.UtcNow.AddMinutes(1),
                 claims: authClaims,
-                signingCredentials: new SigningCredentials(authenKey, SecurityAlgorithms.HmacSha512Signature)
+                signingCredentials: new SigningCredentials(authenKey, SecurityAlgorithms.HmacSha256Signature)
             );
 
-            var tokenDto = new TokenDto
+            var accessTokenString = new JwtSecurityTokenHandler().WriteToken(accessToken);
+
+            var refreshToken = new JwtSecurityToken(
+                issuer: configuration["JWT:ValidIssuer"],
+                audience: configuration["JWT:ValidAudience"],
+                expires: DateTime.UtcNow.AddDays(7),
+                claims: authClaims,
+                signingCredentials: new SigningCredentials(authenKey, SecurityAlgorithms.HmacSha256Signature)
+            );
+
+            var refreshTokenString = new JwtSecurityTokenHandler().WriteToken(refreshToken);
+
+            // Lưu trữ accessToken và refreshToken vào Identity
+            await userManager.RemoveAuthenticationTokenAsync(user, "Bearer", "access_token");
+            await userManager.RemoveAuthenticationTokenAsync(user, "Bearer", "refresh_token");
+            await userManager.SetAuthenticationTokenAsync(user, "Bearer", "access_token", accessTokenString);
+            await userManager.SetAuthenticationTokenAsync(user, "Bearer", "refresh_token", refreshTokenString);
+
+            return new TokenDto
             {
-                Token = new JwtSecurityTokenHandler().WriteToken(token)
+                AccessToken = accessTokenString,
+                RefreshToken = refreshTokenString
+            };
+        }
+
+        public async Task<TokenDto> RefreshTokenAsync(string email, string refreshToken)
+        {
+            var user = await userManager.FindByEmailAsync(email);
+            var roles = await userManager.GetRolesAsync(user);
+            if (user == null)
+            {
+                return null!;
+            }
+
+            // Lấy accessToken từ Identity
+            var accessToken = await userManager.GetAuthenticationTokenAsync(user, "Bearer", "access_token");
+
+            // Kiểm tra refreshToken có hợp lệ hay không
+            var refreshTokenHandler = new JwtSecurityTokenHandler();
+            var refreshTokenJwt = refreshTokenHandler.ReadJwtToken(refreshToken);
+
+            if (refreshTokenJwt == null || refreshTokenJwt.ValidTo < DateTime.UtcNow)
+            {
+                return null!;
+            }
+
+            // Kiểm tra xem refreshToken có trùng với refreshToken được lưu trữ trong Identity hay không
+            var storedRefreshToken = await userManager.GetAuthenticationTokenAsync(user, "Bearer", "refresh_token");
+            if (storedRefreshToken != refreshToken)
+            {
+                return null!;
+            }
+
+            // Tạo mới accessToken và refreshToken
+            var authClaims = new List<Claim>
+            {
+                 /* new Claim(ClaimTypes.Email, model.Email!),*/
+                new Claim("email", user.Email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("role", string.Join(",", roles))
             };
 
-            return await Task.FromResult(tokenDto);
+            var authenKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]));
+
+            var newAccessToken = new JwtSecurityToken(
+                issuer: configuration["JWT:ValidIssuer"],
+                audience: configuration["JWT:ValidAudience"],
+                expires: DateTime.UtcNow.AddMinutes(1),
+                claims: authClaims,
+                signingCredentials: new SigningCredentials(authenKey, SecurityAlgorithms.HmacSha256Signature)
+            );
+
+            var newAccessTokenString = new JwtSecurityTokenHandler().WriteToken(newAccessToken);
+
+            var newRefreshToken = new JwtSecurityToken(
+                issuer: configuration["JWT:ValidIssuer"],
+                audience: configuration["JWT:ValidAudience"],
+                expires: DateTime.Now.AddDays(7),
+                claims: authClaims,
+                signingCredentials: new SigningCredentials(authenKey, SecurityAlgorithms.HmacSha256Signature)
+            );
+
+            var newRefreshTokenString = new JwtSecurityTokenHandler().WriteToken(newRefreshToken);
+
+            // Lưu trữ accessToken và refreshToken mới vào Identity
+            await userManager.RemoveAuthenticationTokenAsync(user, "Bearer", "access_token");
+            await userManager.RemoveAuthenticationTokenAsync(user, "Bearer", "refresh_token");
+            await userManager.SetAuthenticationTokenAsync(user, "Bearer", "access_token", newAccessTokenString);
+            await userManager.SetAuthenticationTokenAsync(user, "Bearer", "refresh_token", newRefreshTokenString);
+
+            return new TokenDto
+            {
+                AccessToken = newAccessTokenString,
+                RefreshToken = newRefreshTokenString
+            };
         }
 
         public async Task<IdentityResult> SignUpAsync(Sigup model)

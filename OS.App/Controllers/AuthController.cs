@@ -42,6 +42,31 @@ namespace OS.App.Controllers
             return Ok(res);
         }
 
+        [HttpPost("refreshtoken")]
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequestDto model)
+        {
+            var res = new ApiResult<TokenDto>
+            {
+                Successed = false,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+            var tokenDto = await accountRepo.RefreshTokenAsync(model.Email!, model.RefreshToken!);
+
+            if (tokenDto == null)
+            {
+                res.ResponseCode = StatusCodes.Status401Unauthorized;
+            }
+            else
+            {
+                res.Successed = true;
+                res.Message = AppConsts.MSG_CREATED_SUCCESSFULL;
+                res.Data = tokenDto;
+            }
+
+            return Ok(res);
+        }
+
+
         [HttpPost("SigIn")]
         public async Task<IActionResult> SigIn(Sigin sigin)
         {
@@ -55,7 +80,7 @@ namespace OS.App.Controllers
 
             if (result == null)
             {
-                return Unauthorized();
+                res.ResponseCode = StatusCodes.Status401Unauthorized;
             }
             else
             {

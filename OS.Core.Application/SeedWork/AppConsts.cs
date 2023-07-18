@@ -11,5 +11,7 @@
         public const string MSG_EMAIL_EXISTED = "The Email Address entered already exists in the system";
         public const string MSG_SEASON_EXISTED = "The Season entered already exists in the system";
         public const string MSG_LOAD_FAILED = "Load failed";
+        public const string MSG_LOAD_SUCCESSFULL = "Load successfully";
+        public const string MSG_LOGIN_SUCCESSFULL = "Login successfully";
     }
 }

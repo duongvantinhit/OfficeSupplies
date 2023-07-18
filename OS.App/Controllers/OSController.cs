@@ -22,19 +22,6 @@ namespace OS.App.Controllers
         }
 
         #region httpGET
-        [HttpGet("users")]
-        public async Task<IActionResult> GetAllUsers()
-        {
-            var res = new ApiResult<IEnumerable<Users>>
-            {
-                Successed = true,
-                ResponseCode = StatusCodes.Status200OK,
-            };
-
-            var query = _context.Users.AsNoTracking();
-            res.Data = await query.ToListAsync();
-            return Ok(res);
-        }
 
         [HttpGet("categories")]
         public async Task<IActionResult> GetAllCategories([FromQuery] ApiRequest request)

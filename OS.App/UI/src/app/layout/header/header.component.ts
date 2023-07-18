@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthService } from 'src/auth/services/auth.service';
 
@@ -6,9 +6,10 @@ import { AuthService } from 'src/auth/services/auth.service';
     selector: 'app-header',
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent implements OnInit {
-    constructor(private _authServices: AuthService) {}
+    constructor(private _authServices: AuthService, private cdr: ChangeDetectorRef) {}
 
     login = false;
     accountMenu: any;
@@ -79,4 +80,30 @@ export class HeaderComponent implements OnInit {
             command: () => {},
         },
     ];
+
+    onMouseEnter(type: any) {
+        switch (type) {
+            case 'category':
+                this.categoryVisible = true;
+                this.cdr.detectChanges();
+                break;
+            case 'cart':
+                this.cartVisible = true;
+                this.cdr.detectChanges();
+                break;
+        }
+    }
+
+    onMouseLeave(type: any) {
+        switch (type) {
+            case 'category':
+                this.categoryVisible = false;
+                this.cdr.detectChanges();
+                break;
+            case 'cart':
+                this.cartVisible = false;
+                this.cdr.detectChanges();
+                break;
+        }
+    }
 }

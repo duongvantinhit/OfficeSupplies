@@ -36,9 +36,6 @@ const routes: Routes = [
         canActivate: [AuthGuard],
         children: [
             { path: '', component: OfficeSuppliesComponent },
-            { path: 'sign-up', component: SignUpComponent },
-            { path: 'forgot-password', component: ForgotPasswordComponent },
-            { path: 'change-password', component: ChangePasswordComponent },
             { path: 'user-infor', component: UserInforComponent },
             { path: 'order-status', component: OrderStatusComponent },
             { path: 'order-detail', component: OrderDetailsComponent },
@@ -54,7 +51,7 @@ const routes: Routes = [
     {
         path: 'admin',
         component: AdminComponent,
-        canActivate: [RoleGuard],
+        canActivate: [AuthGuard, RoleGuard],
         children: [
             { path: '', component: CategoriesAdminComponent },
             { path: 'category', component: CrudCategoryComponent },
@@ -70,6 +67,9 @@ const routes: Routes = [
         ],
     },
     { path: 'login', component: LoginComponent },
+    { path: 'sign-up', component: SignUpComponent },
+    { path: 'forgot-password', component: ForgotPasswordComponent },
+    { path: 'change-password', component: ChangePasswordComponent },
     { path: '404', component: PageNotFoundComponent },
     { path: '**', redirectTo: '/404', pathMatch: 'full' },
 ];

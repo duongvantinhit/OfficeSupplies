@@ -11,14 +11,14 @@ import { NotificationService } from './shared/services/notification.service';
 import { AuthGuard } from './shared/guards/AuthGuard';
 import { AuthService } from 'src/auth/services/auth.service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AuthInterceptor } from 'src/auth/auth.interceptor';
 import { TokenInterceptor } from 'src/auth/token.interceptor';
+import { ToastModule } from 'primeng/toast';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @NgModule({
     declarations: [AppComponent, PageNotFoundComponent],
-    imports: [BrowserModule, AppRoutingModule, LayoutModule, BrowserAnimationsModule],
+    imports: [BrowserModule, AppRoutingModule, LayoutModule, BrowserAnimationsModule, ToastModule, ConfirmDialogModule],
     providers: [
-        //{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
         MessageService,
         NotificationService,

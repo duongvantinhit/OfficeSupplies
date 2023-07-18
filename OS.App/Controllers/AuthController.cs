@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OS.Core.Application;
 using OS.Core.Application.Dtos;
-using OS.Core.Domain.OfficeSupplies;
 using OS.Core.Domain.Reponsitories;
 using UA.Core.Application.SeedWork;
 
@@ -32,7 +31,7 @@ namespace OS.App.Controllers
             if (result.Succeeded)
             {
                 res.Successed = true;
-                res.Message = AppConsts.MSG_CREATED_SUCCESSFULL;
+                res.Message = AppConsts.MSG_LOGIN_SUCCESSFULL;
             }
             else
             {
@@ -59,7 +58,6 @@ namespace OS.App.Controllers
             else
             {
                 res.Successed = true;
-                res.Message = AppConsts.MSG_CREATED_SUCCESSFULL;
                 res.Data = tokenDto;
             }
 
@@ -85,7 +83,6 @@ namespace OS.App.Controllers
             else
             {
                 res.Successed = true;
-                res.Message = AppConsts.MSG_CREATED_SUCCESSFULL;
                 res.Data = result;
             }
             return Ok(res);
@@ -121,5 +118,28 @@ namespace OS.App.Controllers
             }
         }
 
+        [HttpGet("{userId}")]
+        public async Task<ActionResult<UserDto>> GetUser(string userId)
+        {
+            var res = new ApiResult<UserDto>
+            {
+                Successed = false,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var userDto = await accountRepo.GetUserAsync(userId);
+
+            if (userDto == null)
+            {
+                res.Message = AppConsts.MSG_FIND_NOT_FOUND_DATA;
+            }
+            else
+            {
+                res.Successed = true;
+                res.Data = userDto;
+            }
+
+            return Ok(res);
+        }
     }
 }

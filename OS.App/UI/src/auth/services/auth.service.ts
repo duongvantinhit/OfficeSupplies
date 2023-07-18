@@ -83,7 +83,7 @@ export class AuthService extends BaseApiService {
 
                 this.refreshTokenTimeout = setTimeout(() => {
                     this.refreshToken().subscribe();
-                }, expiresIn - 40000); // refresh token trước 1 phút khi access token hết hạn
+                }, expiresIn - 40000);
             }),
         );
     }

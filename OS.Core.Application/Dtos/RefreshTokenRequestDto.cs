@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OS.Core.Application.Dtos
+﻿namespace OS.Core.Application.Dtos
 {
     public class RefreshTokenRequestDto
     {

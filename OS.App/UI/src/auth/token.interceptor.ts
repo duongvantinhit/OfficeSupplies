@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
 import { catchError, filter, map, switchMap, take } from 'rxjs/operators';
 import { AuthService } from './services/auth.service';
-import { decodeToken } from 'src/app/shared/helpers/jwt.helper';
 import { Router } from '@angular/router';
 
 @Injectable()

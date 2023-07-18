@@ -36,14 +36,3 @@
         </div>
     </div>
 </div>
-
-<p-toast [baseZIndex]="9999" position="top-right"></p-toast>
-<p-toast key="ua-toast" [baseZIndex]="9999" position="top-right">
-    <ng-template let-message pTemplate="message">
-        <div class="p-flex p-flex-column" style="flex: 1">
-            <h6 class="p-toast-summary mb-1 m-0 font-bold text-base text-color">{{ message.summary }}</h6>
-            <p class="p-toast-detail text-base" [innerHTML]="message.detail"></p>
-        </div>
-    </ng-template>
-</p-toast>
-<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using OS.Core.Application.Dtos;
+using OS.Core.Domain.OfficeSupplies;
 
 namespace OS.Core.Domain.Reponsitories
 {
@@ -10,5 +11,6 @@ namespace OS.Core.Domain.Reponsitories
         public Task<TokenDto> RefreshTokenAsync(string email, string refreshToken);
         public Task<IdentityResult> CreateRoleAsync(string roleName);
         public Task<IdentityResult> AssignUserRoleAsync(string userId, string roleName);
+        public Task<UserDto> GetUserAsync(string userId);
     }
 }

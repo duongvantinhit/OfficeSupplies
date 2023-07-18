@@ -11,7 +11,7 @@
 
             <div class="flex">
                 <p-inputMask class="w-12rem block m-3" mask="(999) 999-9999" placeholder="(999) 999-9999"></p-inputMask>
-                <input class="w-12rem block m-3" type="text" pInputText placeholder="Tên đăng nhập" />
+                <input class="w-12rem block m-3" type="email" pInputText placeholder="Email" />
             </div>
 
             <div class="flex">
@@ -20,11 +20,15 @@
                 </div>
 
                 <div class="card flex justify-content-center block m-3">
-                    <p-password styleClass="" [toggleMask]="true" placeholder="Nhập lại mật khẩu"></p-password>
+                    <p-password
+                        styleClass=""
+                        [toggleMask]="true"
+                        [feedback]="false"
+                        placeholder="Nhập lại mật khẩu"
+                    ></p-password>
                 </div>
             </div>
 
-            <input class="w-26rem email block m-3" type="email" pInputText placeholder="Email" />
             <div class="card flex justify-content-center">
                 <textarea class="w-423 address" rows="3" pInputTextarea placeholder="Địa chỉ"></textarea>
             </div>

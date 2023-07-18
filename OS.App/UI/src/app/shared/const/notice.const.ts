@@ -6,4 +6,5 @@ export class Notice {
     static readonly loginSucceed = 'Đăng nhập thành công';
     static readonly loginFail = 'Đăng nhập thất bại';
     static readonly err = 'Có lỗi xảy ra vui lòng tải lại trang';
+    static readonly loadFail = 'Tải không thành công';
 }

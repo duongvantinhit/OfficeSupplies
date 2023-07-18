@@ -8,6 +8,8 @@ namespace OS.Core.Domain.Reponsitories
     {
         public Task<IdentityResult> SignUpAsync(Sigup model);
         public Task<TokenDto> SigInAsync(Sigin model);
+        public Task<string> GenerateAccessTokenAsync(string email, ApplicationUser user);
+        public Task<string> GenerateRefreshTokenAsync();
         public Task<TokenDto> RefreshTokenAsync(string email, string refreshToken);
         public Task<IdentityResult> CreateRoleAsync(string roleName);
         public Task<IdentityResult> AssignUserRoleAsync(string userId, string roleName);

@@ -19,6 +19,10 @@ export class AuthService extends BaseApiService {
         return this.post(url, requestBody);
     }
 
+    getData(url: any, param: any): Observable<any> {
+        return this.get(`${url}/` + param);
+    }
+
     logout(): void {
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');

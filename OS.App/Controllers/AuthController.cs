@@ -49,6 +49,7 @@ namespace OS.App.Controllers
                 Successed = false,
                 ResponseCode = StatusCodes.Status200OK,
             };
+
             var tokenDto = await accountRepo.RefreshTokenAsync(model.Email!, model.RefreshToken!);
 
             if (tokenDto == null)
@@ -118,7 +119,7 @@ namespace OS.App.Controllers
             }
         }
 
-        [HttpGet("{userId}")]
+        [HttpGet("infor/{userId}")]
         public async Task<ActionResult<UserDto>> GetUser(string userId)
         {
             var res = new ApiResult<UserDto>

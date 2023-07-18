@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using OS.Core.Application.Dtos;
@@ -29,42 +28,15 @@ namespace OS.Core.Domain.Reponsitories
         public async Task<TokenDto> SigInAsync(Sigin model)
         {
             var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
+
             if (!result.Succeeded)
             {
                 return null!;
             }
 
             var user = await userManager.FindByEmailAsync(model.Email);
-            var roles = await userManager.GetRolesAsync(user);
-            var authClaims = new List<Claim>
-            {
-                new Claim("email", model.Email!),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim("role", string.Join(",", roles)),
-                new Claim("id", user.Id.ToString())
-            };
-
-            var authenKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]));
-
-            var accessToken = new JwtSecurityToken(
-                issuer: configuration["JWT:ValidIssuer"],
-                audience: configuration["JWT:ValidAudience"],
-                expires: DateTime.UtcNow.AddMinutes(1),
-                claims: authClaims,
-                signingCredentials: new SigningCredentials(authenKey, SecurityAlgorithms.HmacSha256Signature)
-            );
-
-            var accessTokenString = new JwtSecurityTokenHandler().WriteToken(accessToken);
-
-            var refreshToken = new JwtSecurityToken(
-                issuer: configuration["JWT:ValidIssuer"],
-                audience: configuration["JWT:ValidAudience"],
-                expires: DateTime.UtcNow.AddDays(7),
-                claims: authClaims,
-                signingCredentials: new SigningCredentials(authenKey, SecurityAlgorithms.HmacSha256Signature)
-            );
-
-            var refreshTokenString = new JwtSecurityTokenHandler().WriteToken(refreshToken);
+            var accessTokenString = await GenerateAccessTokenAsync(model.Email!, user);
+            var refreshTokenString = await GenerateRefreshTokenAsync();
 
             await userManager.RemoveAuthenticationTokenAsync(user, "Bearer", "access_token");
             await userManager.RemoveAuthenticationTokenAsync(user, "Bearer", "refresh_token");
@@ -81,56 +53,36 @@ namespace OS.Core.Domain.Reponsitories
         public async Task<TokenDto> RefreshTokenAsync(string email, string refreshToken)
         {
             var user = await userManager.FindByEmailAsync(email);
-            var roles = await userManager.GetRolesAsync(user);
+
             if (user == null)
             {
                 return null!;
             }
 
-            var accessToken = await userManager.GetAuthenticationTokenAsync(user, "Bearer", "access_token");
             var refreshTokenHandler = new JwtSecurityTokenHandler();
-            var refreshTokenJwt = refreshTokenHandler.ReadJwtToken(refreshToken);
 
-            if (refreshTokenJwt == null || refreshTokenJwt.ValidTo < DateTime.UtcNow)
+            try
+            {
+                var refreshTokenJwt = refreshTokenHandler.ReadJwtToken(refreshToken);
+                if (refreshTokenJwt == null || refreshTokenJwt.ValidTo < DateTime.UtcNow)
+                {
+                    return null!;
+                }
+            }
+            catch(Exception)
             {
                 return null!;
-            }
+            };
 
             var storedRefreshToken = await userManager.GetAuthenticationTokenAsync(user, "Bearer", "refresh_token");
+
             if (storedRefreshToken != refreshToken)
             {
                 return null!;
             }
 
-            var authClaims = new List<Claim>
-            {
-                new Claim("email", user.Email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim("role", string.Join(",", roles)),
-                new Claim("id", user.Id.ToString())
-            };
-
-            var authenKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]));
-
-            var newAccessToken = new JwtSecurityToken(
-                issuer: configuration["JWT:ValidIssuer"],
-                audience: configuration["JWT:ValidAudience"],
-                expires: DateTime.UtcNow.AddMinutes(1),
-                claims: authClaims,
-                signingCredentials: new SigningCredentials(authenKey, SecurityAlgorithms.HmacSha256Signature)
-            );
-
-            var newAccessTokenString = new JwtSecurityTokenHandler().WriteToken(newAccessToken);
-
-            var newRefreshToken = new JwtSecurityToken(
-                issuer: configuration["JWT:ValidIssuer"],
-                audience: configuration["JWT:ValidAudience"],
-                expires: DateTime.Now.AddDays(7),
-                claims: authClaims,
-                signingCredentials: new SigningCredentials(authenKey, SecurityAlgorithms.HmacSha256Signature)
-            );
-
-            var newRefreshTokenString = new JwtSecurityTokenHandler().WriteToken(newRefreshToken);
+            var newAccessTokenString = await GenerateAccessTokenAsync(email, user);
+            var newRefreshTokenString = await GenerateRefreshTokenAsync();
 
             await userManager.RemoveAuthenticationTokenAsync(user, "Bearer", "access_token");
             await userManager.RemoveAuthenticationTokenAsync(user, "Bearer", "refresh_token");
@@ -142,6 +94,38 @@ namespace OS.Core.Domain.Reponsitories
                 AccessToken = newAccessTokenString,
                 RefreshToken = newRefreshTokenString
             };
+        }
+
+        public async Task<string> GenerateAccessTokenAsync(string email, ApplicationUser user)
+        {
+            var roles = await userManager.GetRolesAsync(user);
+            var authClaims = new List<Claim>
+            {
+                new Claim("email",email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("role", string.Join(",", roles)),
+                new Claim("id", user.Id.ToString())
+            };
+
+            var authenKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]));
+            var Token = new JwtSecurityToken(
+                issuer: configuration["JWT:ValidIssuer"],
+                audience: configuration["JWT:ValidAudience"],
+                expires: DateTime.UtcNow.AddMinutes(1),
+                claims: authClaims,
+                signingCredentials: new SigningCredentials(authenKey, SecurityAlgorithms.HmacSha256Signature)
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(Token);
+        }
+
+        public async Task<string> GenerateRefreshTokenAsync()
+        {
+            var refreshToken = new JwtSecurityToken(
+                expires: DateTime.UtcNow.AddDays(7)
+            );
+
+            return await Task.FromResult(new JwtSecurityTokenHandler().WriteToken(refreshToken));
         }
 
         public async Task<IdentityResult> SignUpAsync(Sigup model)

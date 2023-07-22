@@ -12,33 +12,15 @@ export class NotificationService {
             this.messageService.add({
                 key: key,
                 severity: 'error',
-                summary: 'UA-ERROR',
+                summary: 'OS-ERROR',
                 detail: message,
                 life: 5000,
+                icon: 'pi pi-times-circle',
             });
         } else {
             this.messageService.add({
                 severity: 'error',
-                summary: 'UA-ERROR',
-                detail: message,
-                life: 5000,
-            });
-        }
-    }
-
-    errorMobile(message: string, key: string = ''): void {
-        if (key) {
-            this.messageService.add({
-                key: key,
-                severity: 'error',
-                summary: 'UA-Lỗi',
-                detail: message,
-                life: 5000,
-            });
-        } else {
-            this.messageService.add({
-                severity: 'error',
-                summary: 'UA-Lỗi',
+                summary: 'OS-ERROR',
                 detail: message,
                 life: 5000,
             });
@@ -50,14 +32,14 @@ export class NotificationService {
             this.messageService.add({
                 key: key,
                 severity: 'warn',
-                summary: 'UA-Warn',
+                summary: 'OS-WARN',
                 detail: message,
                 life: 5000,
             });
         } else {
             this.messageService.add({
                 severity: 'warn',
-                summary: 'UA-Warn',
+                summary: 'OS-WARN',
                 detail: message,
                 life: 5000,
             });
@@ -93,32 +75,6 @@ export class NotificationService {
             });
         }
     }
-
-    // errorWithFocusControl(form: FormGroup, message: string, key: string = '') {
-    // 	this.focusErrorControl(form);
-    // 	this.error(message, key);
-    // }
-
-    // errorWithFocusControls(forms: FormGroup[], message: string, key: string = '') {
-    // 	forms.forEach(form => {
-    // 		this.focusErrorControl(form);
-    // 	});
-    // 	this.error(message, key);
-    // }
-
-    // warnWithFocusControl(form: FormGroup, message: string, key: string = '') {
-    // 	this.focusErrorControl(form);
-    // 	this.warn(message, key);
-    // }
-
-    // focusErrorControl(form: FormGroup):void{
-    // 	for (let k in form.controls) {
-    // 		let ctr = form.controls[k];
-    // 		if (ctr && ctr.invalid) {
-    // 			ctr.markAsDirty();
-    // 		}
-    // 	}
-    // }
 
     setDirtyControl(form: any): void {
         if (form) {

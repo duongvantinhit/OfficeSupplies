@@ -17,6 +17,7 @@ export class BaseApiService {
         this.httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
             }),
         };
     }
@@ -37,6 +38,12 @@ export class BaseApiService {
     put(url: string, data?: any, options?: any): Observable<any> {
         return this.http
             .put(this.baseUrl + url, data, options)
+            .pipe(retry(environment.requestRetry), catchError(this.handleError));
+    }
+
+    delete(url: string, options?: any): Observable<any> {
+        return this.http
+            .delete(this.baseUrl + url, options)
             .pipe(retry(environment.requestRetry), catchError(this.handleError));
     }
 

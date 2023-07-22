@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { AdminService } from './services/admin.service';
+import { AuthService } from 'src/auth/services/auth.service';
 
 @Component({
     selector: 'app-admin',
@@ -8,12 +9,8 @@ import { AdminService } from './services/admin.service';
     styleUrls: ['./admin.component.scss'],
 })
 export class AdminComponent implements OnInit {
-    constructor(private _router: Router, private _apiServices: AdminService) {}
-    ngOnInit(): void {
-        // this._apiServices.getDataAll('/categories').subscribe((res) => {
-        //     console.log(res);
-        // });
-    }
+    constructor(private _router: Router, private _apiServices: AdminService, private _authService: AuthService) {}
+    ngOnInit(): void {}
 
     function = [
         {
@@ -28,7 +25,7 @@ export class AdminComponent implements OnInit {
                 {
                     label: 'Thêm danh mục',
                     icon: 'pi pi-fw pi-plus',
-                    routerLink: '/admin/add-category',
+                    routerLink: '/admin/category',
                 },
             ],
         },
@@ -139,7 +136,10 @@ export class AdminComponent implements OnInit {
                 {
                     label: 'Đăng xuất',
                     icon: 'pi pi-fw pi-sign-out',
-                    routerLink: '/admin',
+                    routerLink: '/login',
+                    command: () => {
+                        this._authService.logout();
+                    },
                 },
             ],
         },

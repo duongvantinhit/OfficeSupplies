@@ -30,6 +30,8 @@ import { ProductsAdminComponent } from '../admin/products-admin/products-admin.c
 import { PromotionsAdminComponent } from '../admin/promotions-admin/promotions-admin.component';
 import { CreateUserComponent } from '../admin/create-user/create-user.component';
 import { UsersComponent } from '../admin/users/users.component';
+import { DialogService } from 'primeng/dynamicdialog';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
     declarations: [
@@ -63,7 +65,9 @@ import { UsersComponent } from '../admin/users/users.component';
         UsersComponent,
     ],
 
-    imports: [CommonModule, RouterModule, PrimeNGModule],
+    imports: [CommonModule, RouterModule, PrimeNGModule, FormsModule, ReactiveFormsModule],
+
+    providers: [DialogService],
 
     exports: [LayoutComponent],
 })

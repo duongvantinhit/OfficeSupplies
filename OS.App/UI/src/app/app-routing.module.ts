@@ -26,17 +26,16 @@ import { ProductsAdminComponent } from './admin/products-admin/products-admin.co
 import { PromotionsAdminComponent } from './admin/promotions-admin/promotions-admin.component';
 import { CreateUserComponent } from './admin/create-user/create-user.component';
 import { UsersComponent } from './admin/users/users.component';
+import { AuthGuard } from './shared/guards/AuthGuard';
+import { RoleGuard } from './shared/guards/RoleGuard';
 
 const routes: Routes = [
     {
         path: '',
         component: LayoutComponent,
+        canActivate: [AuthGuard],
         children: [
             { path: '', component: OfficeSuppliesComponent },
-            { path: 'login', component: LoginComponent },
-            { path: 'sign-up', component: SignUpComponent },
-            { path: 'forgot-password', component: ForgotPasswordComponent },
-            { path: 'change-password', component: ChangePasswordComponent },
             { path: 'user-infor', component: UserInforComponent },
             { path: 'order-status', component: OrderStatusComponent },
             { path: 'order-detail', component: OrderDetailsComponent },
@@ -52,10 +51,10 @@ const routes: Routes = [
     {
         path: 'admin',
         component: AdminComponent,
+        canActivate: [AuthGuard, RoleGuard],
         children: [
             { path: '', component: CategoriesAdminComponent },
-            { path: 'login', component: LoginComponent },
-            { path: 'add-category', component: CrudCategoryComponent },
+            { path: 'category', component: CrudCategoryComponent },
             { path: 'add-product', component: CrudProductComponent },
             { path: 'add-promotion', component: CrudPromotionComponent },
             { path: 'categories', component: CategoriesAdminComponent },
@@ -67,6 +66,10 @@ const routes: Routes = [
             { path: 'change-password', component: ChangePasswordComponent },
         ],
     },
+    { path: 'login', component: LoginComponent },
+    { path: 'sign-up', component: SignUpComponent },
+    { path: 'forgot-password', component: ForgotPasswordComponent },
+    { path: 'change-password', component: ChangePasswordComponent },
     { path: '404', component: PageNotFoundComponent },
     { path: '**', redirectTo: '/404', pathMatch: 'full' },
 ];

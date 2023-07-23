@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from '../services/admin.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
+import { AppMessages } from 'src/app/shared/const/messages.const';
+import { ConfirmationService } from 'primeng/api';
+import { NotificationService } from 'src/app/shared/services/notification.service';
+import { Notice } from 'src/app/shared/const/notice.const';
 
 @Component({
     selector: 'app-categories-admin',
@@ -8,7 +12,12 @@ import { ActivatedRoute, Router } from '@angular/router';
     styleUrls: ['./categories-admin.component.scss'],
 })
 export class CategoriesAdminComponent implements OnInit {
-    constructor(private _apiServices: AdminService, private _router: Router) {}
+    constructor(
+        private _apiServices: AdminService,
+        private _router: Router,
+        private _confirmationService: ConfirmationService,
+        private _notiService: NotificationService,
+    ) {}
 
     first = 0;
     totalRecords: number = 0;
@@ -54,8 +63,17 @@ export class CategoriesAdminComponent implements OnInit {
 
     deleteCategory(id: any, event: any) {
         event.stopPropagation();
-        this._apiServices.deleteData('/categories', id).subscribe((res) => {
-            this.ngOnInit();
+
+        this._confirmationService.confirm({
+            message: AppMessages.C_M_1,
+            header: 'Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this._apiServices.deleteData('/categories', id).subscribe((res) => {
+                    this.ngOnInit();
+                    this._notiService.success(Notice.deleteSuccessed, '', 'Thành công');
+                });
+            },
         });
     }
 

@@ -2,7 +2,7 @@
 
 namespace OS.Core.Application.Dtos
 {
-    public class Sigup
+    public class SignUp
     {
         [Required]
         public string? FirstName { get; set; }

@@ -47,7 +47,7 @@ export class CrudCategoryComponent implements OnInit {
         this.categoryForm = this._fb.group({
             categoryName: ['', [Validators.required]],
             categoryDescription: ['', [Validators.required]],
-            createdByUserId: ['69eedddd-930e-49de-963f-512fcd798ae6', [Validators.required]],
+            createdByUserId: ['042f4f70-8fcc-4f41-9080-baab63f8099e', [Validators.required]],
             createdDate: [new Date(), [Validators.required]],
         });
     }
@@ -60,7 +60,7 @@ export class CrudCategoryComponent implements OnInit {
         this.imgName = data.imageURL;
     }
 
-    private lineLeadFormValidate(): any[] {
+    private formValidate(): any[] {
         const errorMessages = [];
 
         if (!this.categoryForm.controls?.categoryName?.valid) {
@@ -85,7 +85,7 @@ export class CrudCategoryComponent implements OnInit {
 
     create(): void {
         const formUploadImg: FormData = new FormData();
-        let errorMessages = this.lineLeadFormValidate();
+        let errorMessages = this.formValidate();
 
         if (errorMessages.length > 0) {
             this._notiService.error(errorMessages.join('<br/>'), 'ua-toast');
@@ -100,7 +100,7 @@ export class CrudCategoryComponent implements OnInit {
 
         this._apiServices.postData('/categories', formUploadImg).subscribe((res) => {
             if (res.successed) {
-                this._notiService.success(Notice.addSuccced, '', 'Thành công');
+                this._notiService.success(Notice.addSuccessed, '', 'Thành công');
                 this.ngOnInit();
             } else {
                 this._notiService.error(Notice.addFail);
@@ -110,7 +110,7 @@ export class CrudCategoryComponent implements OnInit {
 
     edit(): void {
         const formUploadImg: FormData = new FormData();
-        let errorMessages = this.lineLeadFormValidate();
+        let errorMessages = this.formValidate();
 
         if (errorMessages.length > 0) {
             this._notiService.error(errorMessages.join('<br/>'), 'ua-toast');
@@ -128,7 +128,7 @@ export class CrudCategoryComponent implements OnInit {
 
         this._apiServices.putData('/categories', formUploadImg, this.categoryId).subscribe((res) => {
             if (res.successed) {
-                this._notiService.success(Notice.addSuccced, '', 'Thành công');
+                this._notiService.success(Notice.saveSuccessed, '', 'Thành công');
                 this.ngOnInit();
             } else {
                 this._notiService.error(Notice.addFail);

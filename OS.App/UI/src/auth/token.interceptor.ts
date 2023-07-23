@@ -8,19 +8,14 @@ import { Router } from '@angular/router';
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
     constructor(private _authService: AuthService, private _router: Router) {}
-
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        const accessToken = this._authService.getAccessToken();
-        if (accessToken) {
-            request = request.clone({
-                setHeaders: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            });
-        }
+        request = request.clone({
+            withCredentials: true,
+        });
 
         return next.handle(request).pipe(
             catchError((error) => {
+                console.log(error);
                 if (error.status === 401 && !request.url.includes('/refresh-token')) {
                     return this._authService.refreshToken().pipe(
                         catchError((error) => {
@@ -34,12 +29,6 @@ export class TokenInterceptor implements HttpInterceptor {
                         }),
 
                         switchMap(() => {
-                            const newAccessToken = this._authService.getAccessToken();
-                            request = request.clone({
-                                setHeaders: {
-                                    Authorization: `Bearer ${newAccessToken}`,
-                                },
-                            });
                             return next.handle(request);
                         }),
                     );

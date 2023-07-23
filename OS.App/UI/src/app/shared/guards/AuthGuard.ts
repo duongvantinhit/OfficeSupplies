@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from 'src/auth/services/auth.service';
-import { decodeToken } from '../helpers/jwt.helper';
 
 @Injectable({
     providedIn: 'root',

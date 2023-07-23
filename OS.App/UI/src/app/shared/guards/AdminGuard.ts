@@ -1,18 +1,16 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from 'src/auth/services/auth.service';
-import { decodeToken } from '../helpers/jwt.helper';
 
 @Injectable({
     providedIn: 'root',
 })
-export class RoleGuard {
+export class AdminGuard {
     constructor(private _authServices: AuthService) {}
-
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
         let roles = this._authServices.currentUser().roles;
-        if (roles.indexOf('admin') !== -1 || roles.indexOf('employee') !== -1) {
+        if (roles.indexOf('admin') !== -1) {
             return true;
         } else {
             return false;

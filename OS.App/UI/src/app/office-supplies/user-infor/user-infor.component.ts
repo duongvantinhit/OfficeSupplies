@@ -22,19 +22,10 @@ export class UserInforComponent implements OnInit {
 
     userInforForm: any;
     loading = false;
+    currentUser: any;
 
     ngOnInit() {
-        let token = this._authServices.getAccessToken();
-        let decode = decodeToken(token!);
-        let id = decode.id;
-
-        this._authServices.getData('/infor', id).subscribe((res) => {
-            if (res.successed) {
-                this.setValue(res.data);
-            } else {
-                this._notiService.error(Notice.loadFail);
-            }
-        });
+        this.currentUser = this._authServices.currentUser();
 
         this.userInforForm = this._fb.group({
             firstName: ['', [Validators.required]],
@@ -42,6 +33,8 @@ export class UserInforComponent implements OnInit {
             email: ['', [Validators.required, Validators.email]],
             phoneNumber: ['', [Validators.required]],
         });
+
+        this.setValue(this.currentUser);
     }
 
     setValue(data: any): void {

@@ -28,6 +28,7 @@ import { CreateUserComponent } from './admin/create-user/create-user.component';
 import { UsersComponent } from './admin/users/users.component';
 import { AuthGuard } from './shared/guards/AuthGuard';
 import { RoleGuard } from './shared/guards/RoleGuard';
+import { AdminGuard } from './shared/guards/AdminGuard';
 
 const routes: Routes = [
     {
@@ -37,6 +38,7 @@ const routes: Routes = [
         children: [
             { path: '', component: OfficeSuppliesComponent },
             { path: 'user-infor', component: UserInforComponent },
+            { path: 'change-password', component: ChangePasswordComponent },
             { path: 'order-status', component: OrderStatusComponent },
             { path: 'order-detail', component: OrderDetailsComponent },
             { path: 'category', component: CategoryComponent },
@@ -61,7 +63,7 @@ const routes: Routes = [
             { path: 'products', component: ProductsAdminComponent },
             { path: 'promotions', component: PromotionsAdminComponent },
             { path: 'users', component: UsersComponent },
-            { path: 'create-user', component: CreateUserComponent },
+            { path: 'create-user', component: CreateUserComponent, canActivate: [AdminGuard] },
             { path: 'user-infor', component: UserInforComponent },
             { path: 'change-password', component: ChangePasswordComponent },
         ],
@@ -69,7 +71,6 @@ const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'sign-up', component: SignUpComponent },
     { path: 'forgot-password', component: ForgotPasswordComponent },
-    { path: 'change-password', component: ChangePasswordComponent },
     { path: '404', component: PageNotFoundComponent },
     { path: '**', redirectTo: '/404', pathMatch: 'full' },
 ];

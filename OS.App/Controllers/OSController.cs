@@ -5,6 +5,7 @@ using OS.Core.Application;
 using OS.Core.Application.Dtos;
 using OS.Core.Domain.OfficeSupplies;
 using OS.Core.Infrastructure.Database;
+using System.Security.Claims;
 using System.Text.RegularExpressions;
 using UA.Core.Application.SeedWork;
 
@@ -42,7 +43,7 @@ namespace OS.App.Controllers
         }
 
         [HttpGet("categories/{id}")]
-        public async Task<IActionResult> GetCategory(int id)
+        public async Task<IActionResult> GetCategory(string id)
         {
             var res = new ApiResult<Categories>
             {
@@ -76,9 +77,8 @@ namespace OS.App.Controllers
 
                 if (file != null && file.Length > 0)
                 {
-                    var fileName = Path.GetFileName(file.FileName);
-                    fileName = Regex.Replace(fileName, @"[^\w\.]", "");
-
+                    var fileExtension = Path.GetExtension(file.FileName);
+                    var fileName = Guid.NewGuid().ToString() + fileExtension;
                     var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Images", fileName);
 
                     using (var stream = new FileStream(filePath, FileMode.Create))
@@ -91,6 +91,7 @@ namespace OS.App.Controllers
 
                     Categories createCategy = new()
                     {
+                        Id = Guid.NewGuid().ToString(),
                         CategoryName = model.CategoryName,
                         ImageURL = imageUrl,
                         CategoryDescription = model.CategoryDescription,
@@ -119,7 +120,7 @@ namespace OS.App.Controllers
 
         #region httpDELETE
         [HttpDelete("categories/{id}")]
-        public async Task<IActionResult> DeleteCategogy(int id)
+        public async Task<IActionResult> DeleteCategogy(string id)
         {
             var res = new ApiResult<IEnumerable<Categories>>
             {
@@ -140,7 +141,7 @@ namespace OS.App.Controllers
 
         #region httpPUT
         [HttpPut("categories/{id}")]
-        public async Task<IActionResult> UpdateCategory([FromForm] UpdateCategoryDto categoryDto,int id)
+        public async Task<IActionResult> UpdateCategory([FromForm] UpdateCategoryDto categoryDto,string id)
         {
             var res = new ApiResult<bool>
             {

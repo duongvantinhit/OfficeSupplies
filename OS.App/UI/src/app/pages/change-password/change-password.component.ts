@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AppMessages } from 'src/app/shared/const/messages.const';
 import { Notice } from 'src/app/shared/const/notice.const';
 import { NotificationService } from 'src/app/shared/services/notification.service';
@@ -15,6 +16,7 @@ export class ChangePasswordComponent implements OnInit {
         private _fb: FormBuilder,
         private _notiService: NotificationService,
         private _authServices: AuthService,
+        private _route: Router,
     ) {}
 
     forgotPasswordForm: any;
@@ -66,6 +68,7 @@ export class ChangePasswordComponent implements OnInit {
             if (res.successed) {
                 this._notiService.success(Notice.saveSuccessed, '', 'Thành công');
                 this._authServices.logout();
+                this._route.navigate(['/login']);
             } else {
                 this._notiService.error(Notice.err);
             }

@@ -17,9 +17,12 @@ namespace OS.App.Controllers
     public class OSController : ControllerBase
     {
         private readonly OsDbContext _context;
+        private readonly IHttpContextAccessor _httpContext;
 
-        public OSController(OsDbContext context) {
+        public OSController(OsDbContext context, IHttpContextAccessor httpContext)
+        {
             _context = context;
+            _httpContext = httpContext;
         }
 
         #region httpGET
@@ -88,6 +91,7 @@ namespace OS.App.Controllers
 
                     var baseUrl = $"{Request.Scheme}://{Request.Host}{Request.PathBase}";
                     var imageUrl = $"{baseUrl}/Images/{fileName}";
+                    var userId = _httpContext.HttpContext!.User.FindFirstValue("id");
 
                     Categories createCategy = new()
                     {
@@ -95,7 +99,7 @@ namespace OS.App.Controllers
                         CategoryName = model.CategoryName,
                         ImageURL = imageUrl,
                         CategoryDescription = model.CategoryDescription,
-                        CreatedByUserId = model.CreatedByUserId,
+                        CreatedByUserId = userId,
                         CreatedDate = model.CreatedDate.ToLocalTime(),
                     };
 
@@ -127,11 +131,19 @@ namespace OS.App.Controllers
                 Successed = true,
                 ResponseCode = StatusCodes.Status200OK,
             };
-
+            
             Categories category = _context.Categories.Find(id)!;
             _context.Categories.Remove(category);
-            await _context.SaveChangesAsync();
 
+            string imageName = Path.GetFileName(category.ImageURL)!;
+            var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "Images", imageName);
+
+            if (System.IO.File.Exists(imagePath))
+            {
+                System.IO.File.Delete(imagePath);
+            }
+
+            await _context.SaveChangesAsync();
             res.Message = AppConsts.MSG_UPDATED_SUCCESSFULL;
             return Ok(res);
         }
@@ -141,7 +153,7 @@ namespace OS.App.Controllers
 
         #region httpPUT
         [HttpPut("categories/{id}")]
-        public async Task<IActionResult> UpdateCategory([FromForm] UpdateCategoryDto categoryDto,string id)
+        public async Task<IActionResult> UpdateCategory([FromForm] UpdateCategoryDto categoryDto, string id)
         {
             var res = new ApiResult<bool>
             {
@@ -153,7 +165,7 @@ namespace OS.App.Controllers
 
             var category = await _context.Categories.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
 
-            if(category == null || categoryDto == null)
+            if (category == null || categoryDto == null)
             {
                 res.Message = AppConsts.MSG_FIND_NOT_FOUND_DATA;
                 return Ok(res);
@@ -177,10 +189,12 @@ namespace OS.App.Controllers
                 category.ImageURL = imageUrl;
             }
 
+            var userId = _httpContext.HttpContext!.User.FindFirstValue("id");
+
             category.CategoryName = categoryDto.CategoryName;
             category.CategoryDescription = categoryDto.CategoryDescription;
-            category.CreatedByUserId = categoryDto.CreatedByUserId;
-            category.ModifiedDate = categoryDto.ModifiedDate;
+            category.CreatedByUserId = userId;
+            category.ModifiedDate = DateTime.Parse(categoryDto.ModifiedDate.ToString()!).ToLocalTime();
 
             try
             {

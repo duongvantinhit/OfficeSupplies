@@ -6,6 +6,7 @@ import { AppMessages } from 'src/app/shared/const/messages.const';
 import { Notice } from 'src/app/shared/const/notice.const';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { Location } from '@angular/common';
+import { AuthService } from 'src/auth/services/auth.service';
 
 @Component({
     selector: 'app-crud-category',
@@ -20,6 +21,7 @@ export class CrudCategoryComponent implements OnInit {
         private _notiService: NotificationService,
         private _actRoute: ActivatedRoute,
         private _location: Location,
+        private _authServices: AuthService,
     ) {}
 
     uploadImg: any;
@@ -47,7 +49,6 @@ export class CrudCategoryComponent implements OnInit {
         this.categoryForm = this._fb.group({
             categoryName: ['', [Validators.required]],
             categoryDescription: ['', [Validators.required]],
-            createdByUserId: ['042f4f70-8fcc-4f41-9080-baab63f8099e', [Validators.required]],
             createdDate: [new Date(), [Validators.required]],
         });
     }
@@ -95,7 +96,6 @@ export class CrudCategoryComponent implements OnInit {
         formUploadImg.append('file', this.uploadImg, this.uploadImg.name);
         formUploadImg.append('CategoryName', this.categoryForm.controls.categoryName.value);
         formUploadImg.append('CategoryDescription', this.categoryForm.controls.categoryDescription.value);
-        formUploadImg.append('createdByUserId', this.categoryForm.controls.createdByUserId.value);
         formUploadImg.append('createdDate', new Date().toISOString());
 
         this._apiServices.postData('/categories', formUploadImg).subscribe((res) => {
@@ -123,7 +123,6 @@ export class CrudCategoryComponent implements OnInit {
 
         formUploadImg.append('CategoryName', this.categoryForm.controls.categoryName.value);
         formUploadImg.append('CategoryDescription', this.categoryForm.controls.categoryDescription.value);
-        formUploadImg.append('createdByUserId', this.categoryForm.controls.createdByUserId.value);
         formUploadImg.append('ModifiedDate', new Date().toISOString());
 
         this._apiServices.putData('/categories', formUploadImg, this.categoryId).subscribe((res) => {

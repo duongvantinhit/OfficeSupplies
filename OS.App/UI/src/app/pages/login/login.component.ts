@@ -60,13 +60,18 @@ export class LoginComponent implements OnInit {
         this._authServices.postData('/sign-in', this.loginForm.value).subscribe((res) => {
             if (res.successed) {
                 this._notiService.success(Notice.loginSuccessed, '', 'Thành công');
-                this._authServices.getUserInfor().subscribe((res) => {
+                this._authServices.getUserInfor().subscribe(async (res) => {
                     localStorage.setItem('OS_CURRENT_USER', JSON.stringify(res.data));
-                    let roles = this._authServices.currentUser().roles;
-                    if (roles.indexOf('admin') !== -1 || roles.indexOf('employee')) {
-                        this._router.navigate(['/admin']);
-                    } else {
+                    let roles = await this._authServices.currentUser().roles;
+
+                    if (!roles) {
                         this._router.navigate(['']);
+                    } else {
+                        if (roles.indexOf('admin') !== -1 || roles.indexOf('employee') !== -1) {
+                            this._router.navigate(['/admin']);
+                        } else {
+                            this._router.navigate(['']);
+                        }
                     }
                 });
 

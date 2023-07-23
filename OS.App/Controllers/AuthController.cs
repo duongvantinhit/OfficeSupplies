@@ -14,12 +14,12 @@ namespace OS.App.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IAccountReponsitory accountRepo;
+        private readonly IAccountReponsitory _accountRepo;
         private readonly IHttpContextAccessor _httpContext;
 
         public AuthController(IAccountReponsitory repo, IHttpContextAccessor httpContext)
         {
-            accountRepo = repo;
+            _accountRepo = repo;
             _httpContext = httpContext;
         }
 
@@ -32,7 +32,7 @@ namespace OS.App.Controllers
                 ResponseCode = StatusCodes.Status200OK,
             };
 
-            var result = await accountRepo.SignUpAsync(signup);
+            var result = await _accountRepo.SignUpAsync(signup);
 
             if (result.Succeeded)
             {
@@ -57,7 +57,7 @@ namespace OS.App.Controllers
             };
 
             string refreshToken = HttpContext.Request.Cookies["refresh_token"]!;
-            var tokenDto = await accountRepo.RefreshTokenAsync(model.Email!, refreshToken!);
+            var tokenDto = await _accountRepo.RefreshTokenAsync(model.Email!, refreshToken!);
 
             if (tokenDto == null)
             {
@@ -89,7 +89,7 @@ namespace OS.App.Controllers
                 ResponseCode = StatusCodes.Status200OK,
             };
 
-            var result = await accountRepo.SigInAsync(signin);
+            var result = await _accountRepo.SigInAsync(signin);
 
             if (result == null)
             {
@@ -122,7 +122,7 @@ namespace OS.App.Controllers
         [HttpPost("create/role")]
         public async Task<IActionResult> CreateRole(string roleName)
         {
-            var result = await accountRepo.CreateRoleAsync(roleName);
+            var result = await _accountRepo.CreateRoleAsync(roleName);
             if (result.Succeeded)
             {
                 return Ok();
@@ -136,7 +136,7 @@ namespace OS.App.Controllers
         [HttpPost("assign/user/role")]
         public async Task<IActionResult> AssignUserRole(string userId, string roleName)
         {
-            var result = await accountRepo.AssignUserRoleAsync(userId, roleName);
+            var result = await _accountRepo.AssignUserRoleAsync(userId, roleName);
             if (result.Succeeded)
             {
                 return Ok();
@@ -158,7 +158,7 @@ namespace OS.App.Controllers
             };
 
             var userId = _httpContext.HttpContext!.User.FindFirstValue("id");
-            var userDto = await accountRepo.GetUserAsync(userId);
+            var userDto = await _accountRepo.GetUserAsync(userId);
 
             if (userDto == null)
             {
@@ -183,7 +183,7 @@ namespace OS.App.Controllers
                 ResponseCode = StatusCodes.Status200OK,
             };
 
-            var result = await accountRepo.ChangePasswordAsync(changePasswordDto);
+            var result = await _accountRepo.ChangePasswordAsync(changePasswordDto);
 
             if (!result.Succeeded)
             {

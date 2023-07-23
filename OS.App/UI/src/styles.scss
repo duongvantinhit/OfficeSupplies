@@ -278,8 +278,10 @@ del {
         }
     }
 
-    .crud-category {
-        .category {
+    .crud-category,
+    .crud-product {
+        .category,
+        .product {
             .p-fileupload-buttonbar {
                 display: flex;
                 padding: 1rem;

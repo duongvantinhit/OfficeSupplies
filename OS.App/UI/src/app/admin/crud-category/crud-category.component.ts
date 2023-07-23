@@ -49,7 +49,6 @@ export class CrudCategoryComponent implements OnInit {
         this.categoryForm = this._fb.group({
             categoryName: ['', [Validators.required]],
             categoryDescription: ['', [Validators.required]],
-            createdDate: [new Date(), [Validators.required]],
         });
     }
 

@@ -57,10 +57,10 @@ const routes: Routes = [
         children: [
             { path: '', component: CategoriesAdminComponent },
             { path: 'category', component: CrudCategoryComponent },
-            { path: 'add-product', component: CrudProductComponent },
             { path: 'add-promotion', component: CrudPromotionComponent },
             { path: 'categories', component: CategoriesAdminComponent },
             { path: 'products', component: ProductsAdminComponent },
+            { path: 'product', component: CrudProductComponent },
             { path: 'promotions', component: PromotionsAdminComponent },
             { path: 'users', component: UsersComponent },
             { path: 'create-user', component: CreateUserComponent, canActivate: [AdminGuard] },

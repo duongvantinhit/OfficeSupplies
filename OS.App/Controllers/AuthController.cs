@@ -98,6 +98,30 @@ namespace OS.App.Controllers
             return Ok(res);
         }
 
+        [HttpGet("user/roles/{userId}")]
+        
+        public async Task<ActionResult<List<string>>> GetUserRoles(string userId)
+        {
+            var res = new ApiResult<List<string>>
+            {
+                Successed = false,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+            var users = await _accountRepo.GetUserRolesAsync(userId);
+
+            if (users == null)
+            {
+                res.Message = AppConsts.MSG_FIND_NOT_FOUND_DATA;
+            }
+            else
+            {
+                res.Successed = true;
+                res.Data = users;
+            }
+
+            return Ok(res);
+        }
+
         #endregion
 
         #region httpPOST
@@ -183,31 +207,53 @@ namespace OS.App.Controllers
         }
 
         [HttpPost("create/role")]
+        [Authorize]
         public async Task<IActionResult> CreateRole(string roleName)
         {
+            var res = new ApiResult<string>
+            {
+                Successed = false,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
             var result = await _accountRepo.CreateRoleAsync(roleName);
+
             if (result.Succeeded)
             {
-                return Ok();
+                res.Successed = true;
+                res.Message = AppConsts.MSG_CREATED_SUCCESSFULL;
             }
             else
             {
-                return BadRequest(result.Errors);
+                res.Message = AppConsts.MSG_SAVED_FAILED;
             }
+
+            return Ok(res);
         }
 
         [HttpPost("assign/user/role")]
-        public async Task<IActionResult> AssignUserRole(string userId, string roleName)
+        [Authorize]
+        public async Task<IActionResult> AssignUserRole(UserRolesDto dto)
         {
-            var result = await _accountRepo.AssignUserRoleAsync(userId, roleName);
+            var res = new ApiResult<string>
+            {
+                Successed = false,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var result = await _accountRepo.AssignUserRoleAsync(dto.UserId!, dto.Role!);
+
             if (result.Succeeded)
             {
-                return Ok();
+                res.Successed = true;
+                res.Message = AppConsts.MSG_SAVED_SUCCESSFULL;
             }
             else
             {
-                return BadRequest(result.Errors);
+                res.Message = AppConsts.MSG_SAVED_FAILED;
             }
+
+            return Ok(res);
         }
 
         #endregion
@@ -233,6 +279,35 @@ namespace OS.App.Controllers
             {
                 res.Successed = true;
                 res.Message = AppConsts.MSG_CHANGE_PASSWORD_SUCCESSFULL;
+            }
+
+            return Ok(res);
+        }
+
+        #endregion
+
+        #region httpDELETE
+
+        [HttpDelete("remove/{userId}/{role}")]
+        [Authorize]
+        public async Task<IActionResult> RemoveUserRole(string userId, string role)
+        {
+            var res = new ApiResult<UserDto>
+            {
+                Successed = false,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var result = await _accountRepo.RemoveUserRoleAsync(userId, role);
+
+            if (result.Succeeded)
+            {
+                res.Successed = true;
+                res.Message = AppConsts.MSG_UPDATED_SUCCESSFULL;
+            }
+            else
+            {
+                res.Message = AppConsts.MSG_UPDATED_FAILED;
             }
 
             return Ok(res);

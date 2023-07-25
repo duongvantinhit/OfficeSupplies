@@ -13,9 +13,11 @@ namespace OS.Core.Domain.Reponsitories
         public Task<TokenDto> RefreshTokenAsync(string email, string refreshToken);
         public Task<IdentityResult> CreateRoleAsync(string roleName);
         public Task<List<string>> GetRolesAsync();
+        public Task<List<string>> GetUserRolesAsync(string userId);
         public Task<IdentityResult> AssignUserRoleAsync(string userId, string roleName);
         public Task<UserDto> GetUserAsync(string userId);
         public Task<List<UserDto>> GetAllUsersAsync();
         public Task<IdentityResult> ChangePasswordAsync(ChangePasswordDto changePasswordDto);
+        public Task<IdentityResult> RemoveUserRoleAsync(string userId, string roleName);
     }
 }

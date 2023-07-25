@@ -28,6 +28,10 @@ export class AuthService extends BaseApiService {
         return this.get(url);
     }
 
+    deleteData(url: any, id: any): Observable<any> {
+        return this.delete(`${url}/` + id);
+    }
+
     getUserInfor(): Observable<any> {
         return this.get('/user/infor');
     }

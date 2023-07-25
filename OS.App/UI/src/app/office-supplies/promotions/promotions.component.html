@@ -6,114 +6,27 @@
             </p-divider>
 
             <div class="voucher">
-                <div class="col3 flex">
+                <div class="col3 flex" *ngFor="let item of promotions">
                     <img src="https://inhungphat.com/Uploads/2132/images/DICH%20VU/price-tag.png" alt="" />
                     <div class="voucher-content">
                         <div>
-                            <h4>Giảm 50K</h4>
-                            <span>Cho đơn hàng từ 1.5 triệu</span>
+                            <h4 class="text-overflow">{{ item.promotionName }} giảm {{ item.discountPercent }}%</h4>
+                            <span class="text-overflow">{{ item.promotionDescription }}</span>
                         </div>
                         <div>
-                            <p>HSD: 15/07/2023</p>
+                            <p>HSD: {{ item.endDate | date : 'dd/MM/yyyy HH:mm:ss' }}</p>
                         </div>
                     </div>
                 </div>
-                <div class="col3 flex">
-                    <img src="https://inhungphat.com/Uploads/2132/images/DICH%20VU/price-tag.png" alt="" />
-                    <div class="voucher-content">
-                        <div>
-                            <h4>Giảm 50K</h4>
-                            <span>Cho đơn hàng từ 1.5 triệu</span>
-                        </div>
-                        <div>
-                            <p>HSD: 15/07/2023</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col3 flex">
-                    <img src="https://inhungphat.com/Uploads/2132/images/DICH%20VU/price-tag.png" alt="" />
-                    <div class="voucher-content">
-                        <div>
-                            <h4>Giảm 50K</h4>
-                            <span>Cho đơn hàng từ 1.5 triệu</span>
-                        </div>
-                        <div>
-                            <p>HSD: 15/07/2023</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col3 flex">
-                    <img src="https://inhungphat.com/Uploads/2132/images/DICH%20VU/price-tag.png" alt="" />
-                    <div class="voucher-content">
-                        <div>
-                            <h4>Giảm 50K</h4>
-                            <span>Cho đơn hàng từ 1.5 triệu</span>
-                        </div>
-                        <div>
-                            <p>HSD: 15/07/2023</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col3 flex">
-                    <img src="https://inhungphat.com/Uploads/2132/images/DICH%20VU/price-tag.png" alt="" />
-                    <div class="voucher-content">
-                        <div>
-                            <h4>Giảm 50K</h4>
-                            <span>Cho đơn hàng từ 1.5 triệu</span>
-                        </div>
-                        <div>
-                            <p>HSD: 15/07/2023</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col3 flex">
-                    <img src="https://inhungphat.com/Uploads/2132/images/DICH%20VU/price-tag.png" alt="" />
-                    <div class="voucher-content">
-                        <div>
-                            <h4>Giảm 50K</h4>
-                            <span>Cho đơn hàng từ 1.5 triệu</span>
-                        </div>
-                        <div>
-                            <p>HSD: 15/07/2023</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col3 flex">
-                    <img src="https://inhungphat.com/Uploads/2132/images/DICH%20VU/price-tag.png" alt="" />
-                    <div class="voucher-content">
-                        <div>
-                            <h4>Giảm 50K</h4>
-                            <span>Cho đơn hàng từ 1.5 triệu</span>
-                        </div>
-                        <div>
-                            <p>HSD: 15/07/2023</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col3 flex">
-                    <img src="https://inhungphat.com/Uploads/2132/images/DICH%20VU/price-tag.png" alt="" />
-                    <div class="voucher-content">
-                        <div>
-                            <h4>Giảm 50K</h4>
-                            <span>Cho đơn hàng từ 1.5 triệu</span>
-                        </div>
-                        <div>
-                            <p>HSD: 15/07/2023</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col3 flex">
-                    <img src="https://inhungphat.com/Uploads/2132/images/DICH%20VU/price-tag.png" alt="" />
-                    <div class="voucher-content">
-                        <div>
-                            <h4>Giảm 50K</h4>
-                            <span>Cho đơn hàng từ 1.5 triệu</span>
-                        </div>
-                        <div>
-                            <p>HSD: 15/07/2023</p>
-                        </div>
-                    </div>
-                </div>
+            </div>
+            <div class="card flex justify-content-center m-2">
+                <p-paginator
+                    (onPageChange)="loadPromotions($event)"
+                    [first]="first"
+                    [rows]="8"
+                    [totalRecords]="totalRecords"
+                    [rowsPerPageOptions]="[9, 18, 27]"
+                ></p-paginator>
             </div>
         </div>
     </div>

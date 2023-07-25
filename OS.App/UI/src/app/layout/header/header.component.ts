@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
+import { OfficeSuppliesService } from 'src/app/office-supplies/services/office-supplies.service';
 import { AppMessages } from 'src/app/shared/const/messages.const';
 import { Notice } from 'src/app/shared/const/notice.const';
 import { NotificationService } from 'src/app/shared/services/notification.service';
@@ -19,12 +20,14 @@ export class HeaderComponent implements OnInit {
         private _confirmationService: ConfirmationService,
         private _notiService: NotificationService,
         private _router: Router,
+        private _apiServices: OfficeSuppliesService,
     ) {}
 
     login = false;
     cartVisible: boolean = false;
     accountVisible: boolean = false;
     categoryVisible: boolean = false;
+    categories: any;
 
     accountMenu = [
         {
@@ -53,34 +56,16 @@ export class HeaderComponent implements OnInit {
 
     ngOnInit() {
         this.login = this._authServices.isLoggedIn();
+        this._apiServices.getDataAll('/categories/name').subscribe((res) => {
+            this.categories = res.data;
+        });
     }
 
-    categoryMenu = [
-        {
-            label: 'Giấy',
-            command: () => {},
-        },
-        {
-            label: 'Bàn phím',
-            command: () => {},
-        },
-        {
-            label: 'Màn hình laptop',
-            command: () => {},
-        },
-        {
-            label: 'Chuột gaming',
-            command: () => {},
-        },
-        {
-            label: 'Lót chuột',
-            command: () => {},
-        },
-        {
-            label: 'Bàn phím',
-            command: () => {},
-        },
-    ];
+    product(item: any) {
+        this._router.navigate(['/category'], {
+            queryParams: { id: item.id, name: item.categoryName },
+        });
+    }
 
     onMouseEnter(type: any) {
         switch (type) {

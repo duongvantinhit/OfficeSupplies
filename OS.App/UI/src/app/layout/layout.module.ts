@@ -28,11 +28,9 @@ import { CrudPromotionComponent } from '../admin/crud-promotion/crud-promotion.c
 import { CategoriesAdminComponent } from '../admin/categories-admin/categories-admin.component';
 import { ProductsAdminComponent } from '../admin/products-admin/products-admin.component';
 import { PromotionsAdminComponent } from '../admin/promotions-admin/promotions-admin.component';
-import { CreateUserComponent } from '../admin/create-user/create-user.component';
 import { UsersComponent } from '../admin/users/users.component';
 import { DialogService } from 'primeng/dynamicdialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { UserAuthorizationComponent } from '../admin/user-authorization/user-authorization.component';
 
 @NgModule({
     declarations: [
@@ -62,9 +60,7 @@ import { UserAuthorizationComponent } from '../admin/user-authorization/user-aut
         CategoriesAdminComponent,
         ProductsAdminComponent,
         PromotionsAdminComponent,
-        CreateUserComponent,
         UsersComponent,
-        UserAuthorizationComponent,
     ],
 
     imports: [CommonModule, RouterModule, PrimeNGModule, FormsModule, ReactiveFormsModule],

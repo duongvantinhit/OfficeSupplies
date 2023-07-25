@@ -7,47 +7,54 @@
 .outstanding {
     cursor: pointer;
     padding-bottom: 10px;
-    img {
-        height: 170px;
-        width: 100%;
-        object-fit: cover;
-    }
-
-    .tilte {
-        background-color: #252e4b;
-        color: white;
-        height: 40px;
-        position: absolute;
-        top: 85%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        padding: 0 10px;
-        box-shadow: 2px 2px 5px 1px #fd7e14;
-        p {
-            font-size: 14px;
-            font-weight: 600;
+    .outstanding-content {
+        img {
+            height: 170px;
+            width: 100%;
+            object-fit: cover;
+            box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.5);
         }
-        p:hover {
-            color: #fd7e14;
+
+        .tilte {
+            background-color: #252e4b;
+            color: white;
+            height: 40px;
+            position: absolute;
+            top: 85%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 0 10px;
+            box-shadow: 2px 2px 5px 1px #fd7e14;
+            p {
+                font-size: 14px;
+                font-weight: 600;
+            }
+            p:hover {
+                color: #fd7e14;
+            }
         }
     }
 }
 
 .new-product {
     padding: 10px 0;
-    img {
-        height: 170px;
-        width: 100%;
-        object-fit: cover;
-    }
-    .tilte {
-        p {
-            margin: 0;
-            line-height: 30px;
-            width: 273px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+    .col {
+        cursor: pointer;
+        box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.5);
+        img {
+            height: 170px;
+            width: 100%;
+            object-fit: cover;
+        }
+        .tilte {
+            p {
+                margin: 0;
+                line-height: 30px;
+                width: 273px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
         }
     }
 }
@@ -102,6 +109,7 @@
         padding: 0 10px;
         cursor: pointer;
         box-sizing: border-box;
+        //font-size: 15px;
         .top-product {
             .top-product-left {
                 img {
@@ -126,14 +134,15 @@
             .top-product-right {
                 line-height: 30px;
                 font-size: 14px;
+                font-size: 15px;
                 p {
                     margin: 0;
                     font-weight: bold;
                     color: black !important;
-                    width: 329px;
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
+                    width: 520px;
+                }
+                b {
+                    display: block;
                 }
                 span {
                     display: inline-block;
@@ -168,6 +177,7 @@
 
 .suggest {
     padding-bottom: 20px;
+    height: 895px;
     img {
         height: 180px;
         width: 100%;

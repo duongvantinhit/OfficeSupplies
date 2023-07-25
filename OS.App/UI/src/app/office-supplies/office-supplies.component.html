@@ -26,24 +26,20 @@
                 <p-divider align="center">
                     <span class="p-tag">TOP danh mục nổi bật</span>
                 </p-divider>
-                <div class="grid flex justify-content-between">
-                    <div class="col relative">
-                        <img src="../../assets/img/outstanding/keyboard.jpg" alt="" />
-                        <div class="tilte"><p>Bàn phím</p></div>
-                    </div>
-                    <div class="col relative">
-                        <img src="../../assets/img/outstanding/mouse.webp" alt="" />
-                        <div class="tilte"><p>Chuột gaming</p></div>
-                    </div>
-                    <div class="col relative">
-                        <img src="../../assets/img/outstanding/pc.jpeg" alt="" />
-                        <div class="tilte"><p>Màn hình laptop</p></div>
+                <div class="grid flex justify-content-between outstanding-content">
+                    <div class="col relative" *ngFor="let item of topCategories">
+                        <div (click)="product(item)">
+                            <img src="{{ item.imageURL }}" alt="" />
+                            <div class="tilte">
+                                <p>{{ item.categoryName }}</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div class="new-product">
-                <div class="card">
+                <div class="">
                     <p-fieldset>
                         <ng-template pTemplate="header">
                             <div class="flex align-items-center text-primary">
@@ -52,32 +48,15 @@
                             </div>
                         </ng-template>
                         <div class="grid flex justify-content-between">
-                            <div class="col relative">
-                                <img src="../../assets/img/outstanding/keyboard.jpg" alt="" />
-                                <div class="tilte">
-                                    <p>Bàn phím</p>
-                                    <p><b>345666 VND</b></p>
-                                </div>
-                            </div>
-                            <div class="col relative">
-                                <img src="../../assets/img/outstanding/mouse.webp" alt="" />
-                                <div class="tilte">
-                                    <p>Chuột gaming</p>
-                                    <p><b>345666 VND</b></p>
-                                </div>
-                            </div>
-                            <div class="col relative">
-                                <img src="../../assets/img/outstanding/pc.jpeg" alt="" />
-                                <div class="tilte">
-                                    <p>Màn hình laptop</p>
-                                    <p><b>345666 VND</b></p>
-                                </div>
-                            </div>
-                            <div class="col relative">
-                                <img src="../../assets/img/outstanding/pc.jpeg" alt="" />
-                                <div class="tilte">
-                                    <p>Màn hình laptop</p>
-                                    <p><b>345666 VND</b></p>
+                            <div class="col relative" *ngFor="let item of topNewProducts">
+                                <div (click)="productDetail(item.id)">
+                                    <img src="{{ item.imageURL }}" alt="" />
+                                    <div class="tilte">
+                                        <p>{{ item.productName }}</p>
+                                        <p>
+                                            <b>{{ item.price | number : '1.0-3' }} VND</b>
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -86,78 +65,6 @@
             </div>
 
             <div class="content">
-                <div class="content-left">
-                    <p-fieldset>
-                        <ng-template pTemplate="header">
-                            <div class="flex text-primary">
-                                <span class="pi pi-verified mr-2"></span>
-                                <span class="font-bold text-lg">Khuyến mãi hôm nay</span>
-                            </div>
-                        </ng-template>
-                        <div class="product">
-                            <div class="flex border-bottom-1 pt-1 border-400">
-                                <div class="product-left">
-                                    <img src="../../assets/img/outstanding/mouse.webp" alt="" />
-                                </div>
-                                <div class="product-right">
-                                    <p>Máy tính gaming</p>
-                                    <b>34.333.333 | <del>111111</del></b>
-                                    <p>VND</p>
-                                </div>
-                            </div>
-                            <div class="flex border-bottom-1 pt-1 border-400">
-                                <div class="product-left">
-                                    <img src="../../assets/img/outstanding/mouse.webp" alt="" />
-                                </div>
-                                <div class="product-right">
-                                    <p>Máy tính gaming</p>
-                                    <b>34.333.333 | <del>111111</del></b>
-                                    <p>VND</p>
-                                </div>
-                            </div>
-                            <div class="flex border-bottom-1 pt-1 border-400">
-                                <div class="product-left">
-                                    <img src="../../assets/img/outstanding/mouse.webp" alt="" />
-                                </div>
-                                <div class="product-right">
-                                    <p>Máy tính gaming</p>
-                                    <b>34.333.333 | <del>111111</del></b>
-                                    <p>VND</p>
-                                </div>
-                            </div>
-                            <div class="flex border-bottom-1 pt-1 border-400">
-                                <div class="product-left">
-                                    <img src="../../assets/img/outstanding/mouse.webp" alt="" />
-                                </div>
-                                <div class="product-right">
-                                    <p>Máy tính gaming</p>
-                                    <b>34.333.333 | <del>111111</del></b>
-                                    <p>VND</p>
-                                </div>
-                            </div>
-                            <div class="flex border-bottom-1 pt-1 border-400">
-                                <div class="product-left">
-                                    <img src="../../assets/img/outstanding/mouse.webp" alt="" />
-                                </div>
-                                <div class="product-right">
-                                    <p>Máy tính gaming</p>
-                                    <b>34.333.333 | <del>111111</del></b>
-                                    <p>VND</p>
-                                </div>
-                            </div>
-                            <div class="flex border-bottom-1 pt-1 border-400">
-                                <div class="product-left">
-                                    <img src="../../assets/img/outstanding/mouse.webp" alt="" />
-                                </div>
-                                <div class="product-right">
-                                    <p>Máy tính gaming</p>
-                                    <b>34.333.333 | <del>111111</del></b>
-                                    <p>VND</p>
-                                </div>
-                            </div>
-                        </div>
-                    </p-fieldset>
-                </div>
                 <div class="content-center">
                     <p-fieldset>
                         <ng-template pTemplate="header">
@@ -167,47 +74,18 @@
                             </div>
                         </ng-template>
                         <div class="top-product">
-                            <div class="flex p-2 border-400 border-bottom-1">
-                                <div class="top-product-left relative">
-                                    <img src="../../assets/img/outstanding/mouse.webp" alt="" />
-                                    <div class="position">#1</div>
-                                </div>
+                            <div *ngFor="let item of topProducts; let i = index">
+                                <div class="flex p-2 border-400 border-bottom-1" (click)="productDetail(item.id)">
+                                    <div class="top-product-left relative">
+                                        <img src="{{ item.imageURL }}" alt="" />
+                                        <div class="position">#{{ i + 1 }}</div>
+                                    </div>
 
-                                <div class="top-product-right">
-                                    <p>Túi vải đựng bút chì, bút vẽ cuộn tròn cá tính</p>
-                                    <b>34.333.333 | <del>111111</del> VND</b>
-                                    <span
-                                        >Giới thiệu sản phẩm Túi vải đựng bút chì, bút vẽ cuộn tròn cá tính F147 (Hoa
-                                        văn Thổ cẩm).</span
-                                    >
-                                </div>
-                            </div>
-                            <div class="flex p-2 border-400 border-bottom-1">
-                                <div class="top-product-left relative">
-                                    <img src="../../assets/img/outstanding/mouse.webp" alt="" />
-                                    <div class="position">#2</div>
-                                </div>
-                                <div class="top-product-right">
-                                    <p>Túi vải đựng bút chì, bút vẽ cuộn tròn cá tính</p>
-                                    <b>34.333.333 | <del>111111</del> VND</b>
-                                    <span
-                                        >Giới thiệu sản phẩm Túi vải đựng bút chì, bút vẽ cuộn tròn cá tính F147 (Hoa
-                                        văn Thổ cẩm).</span
-                                    >
-                                </div>
-                            </div>
-                            <div class="flex p-2 border-400 border-bottom-1">
-                                <div class="top-product-left relative">
-                                    <img src="../../assets/img/outstanding/keyboard.jpg" alt="" />
-                                    <div class="position">#3</div>
-                                </div>
-                                <div class="top-product-right">
-                                    <p>Túi vải đựng bút chì, bút vẽ cuộn tròn cá tính</p>
-                                    <b>34.333.333 | <del>111111</del> VND</b>
-                                    <span
-                                        >Giới thiệu sản phẩm Túi vải đựng bút chì, bút vẽ cuộn tròn cá tính F147 (Hoa
-                                        văn Thổ cẩm).</span
-                                    >
+                                    <div class="top-product-right">
+                                        <p class="text-overflow">{{ item.productName }}</p>
+                                        <b>{{ item.price | number : '1.0-3' }} VND</b>
+                                        <span>{{ item.productDescription }}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -268,116 +146,22 @@
                     <span class="p-tag">DÀNH RIÊNG CHO BẠN</span>
                 </p-divider>
                 <div class="suggest-product">
-                    <div class="col-5">
-                        <img src="../../assets/img/outstanding/keyboard.jpg" alt="" />
-                        <div class="tilte">
-                            <p>Bàn phím</p>
-                            <p><b>345666 VND</b></p>
-                        </div>
-                    </div>
-                    <div class="col-5">
-                        <img src="../../assets/img/outstanding/mouse.webp" alt="" />
-                        <div class="tilte">
-                            <p>Chuột gaming</p>
-                            <p><b>345666 VND</b></p>
-                        </div>
-                    </div>
-                    <div class="col-5">
-                        <img src="../../assets/img/outstanding/pc.jpeg" alt="" />
-                        <div class="tilte">
-                            <p>Màn hình laptop</p>
-                            <p><b>345666 VND</b></p>
-                        </div>
-                    </div>
-                    <div class="col-5">
-                        <img src="../../assets/img/outstanding/pc.jpeg" alt="" />
-                        <div class="tilte">
-                            <p>Màn hình laptop</p>
-                            <p><b>345666 VND</b></p>
-                        </div>
-                    </div>
-                    <div class="col-5">
-                        <img src="../../assets/img/outstanding/pc.jpeg" alt="" />
-                        <div class="tilte">
-                            <p>Màn hình laptop</p>
-                            <p><b>345666 VND</b></p>
-                        </div>
-                    </div>
-                    <div class="col-5">
-                        <img src="../../assets/img/outstanding/pc.jpeg" alt="" />
-                        <div class="tilte">
-                            <p>Màn hình laptop</p>
-                            <p><b>345666 VND</b></p>
-                        </div>
-                    </div>
-                    <div class="col-5">
-                        <img src="../../assets/img/outstanding/pc.jpeg" alt="" />
-                        <div class="tilte">
-                            <p>Màn hình laptop</p>
-                            <p><b>345666 VND</b></p>
-                        </div>
-                    </div>
-                    <div class="col-5">
-                        <img src="../../assets/img/outstanding/pc.jpeg" alt="" />
-                        <div class="tilte">
-                            <p>Màn hình laptop</p>
-                            <p><b>345666 VND</b></p>
-                        </div>
-                    </div>
-                    <div class="col-5">
-                        <img src="../../assets/img/outstanding/pc.jpeg" alt="" />
-                        <div class="tilte">
-                            <p>Màn hình laptop</p>
-                            <p><b>345666 VND</b></p>
-                        </div>
-                    </div>
-                    <div class="col-5">
-                        <img src="../../assets/img/outstanding/pc.jpeg" alt="" />
-                        <div class="tilte">
-                            <p>Màn hình laptop</p>
-                            <p><b>345666 VND</b></p>
-                        </div>
-                    </div>
-                    <div class="col-5">
-                        <img src="../../assets/img/outstanding/pc.jpeg" alt="" />
-                        <div class="tilte">
-                            <p>Màn hình laptop</p>
-                            <p><b>345666 VND</b></p>
-                        </div>
-                    </div>
-                    <div class="col-5">
-                        <img src="../../assets/img/outstanding/pc.jpeg" alt="" />
-                        <div class="tilte">
-                            <p>Màn hình laptop</p>
-                            <p><b>345666 VND</b></p>
-                        </div>
-                    </div>
-                    <div class="col-5">
-                        <img src="../../assets/img/outstanding/pc.jpeg" alt="" />
-                        <div class="tilte">
-                            <p>Màn hình laptop</p>
-                            <p><b>345666 VND</b></p>
-                        </div>
-                    </div>
-                    <div class="col-5">
-                        <img src="../../assets/img/outstanding/pc.jpeg" alt="" />
-                        <div class="tilte">
-                            <p>Màn hình laptop</p>
-                            <p><b>345666 VND</b></p>
-                        </div>
-                    </div>
-                    <div class="col-5">
-                        <img src="../../assets/img/outstanding/pc.jpeg" alt="" />
-                        <div class="tilte">
-                            <p>Màn hình laptop</p>
-                            <p><b>345666 VND</b></p>
+                    <div class="col-5" *ngFor="let item of recommededProducts">
+                        <div (click)="productDetail(item.id)">
+                            <img src="{{ item.imageURL }}" alt="" />
+                            <div class="tilte">
+                                <p>{{ item.productName }}</p>
+                                <p>
+                                    <b>{{ item.price | number : '1.0-3' }} VND</b>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="card flex justify-content-center pb-4">
-                <button pButton pRipple label="Xem thêm"></button>
+                <button (click)="viewProducts()" pButton pRipple label="Xem thêm"></button>
             </div>
         </body>
     </div>

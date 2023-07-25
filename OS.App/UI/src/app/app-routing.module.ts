@@ -24,7 +24,6 @@ import { CrudPromotionComponent } from './admin/crud-promotion/crud-promotion.co
 import { CategoriesAdminComponent } from './admin/categories-admin/categories-admin.component';
 import { ProductsAdminComponent } from './admin/products-admin/products-admin.component';
 import { PromotionsAdminComponent } from './admin/promotions-admin/promotions-admin.component';
-import { CreateUserComponent } from './admin/create-user/create-user.component';
 import { UsersComponent } from './admin/users/users.component';
 import { AuthGuard } from './shared/guards/AuthGuard';
 import { RoleGuard } from './shared/guards/RoleGuard';
@@ -62,7 +61,7 @@ const routes: Routes = [
             { path: 'product', component: CrudProductComponent },
             { path: 'promotions', component: PromotionsAdminComponent },
             { path: 'promotion', component: CrudPromotionComponent },
-            { path: 'users', component: UsersComponent },
+            { path: 'users', component: UsersComponent, canActivate: [AdminGuard] },
             { path: 'user-infor', component: UserInforComponent },
             { path: 'change-password', component: ChangePasswordComponent },
         ],

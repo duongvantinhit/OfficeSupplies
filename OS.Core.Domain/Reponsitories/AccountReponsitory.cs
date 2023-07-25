@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using OS.Core.Application.Dtos;
 using OS.Core.Domain.OfficeSupplies;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -278,6 +279,44 @@ namespace OS.Core.Domain.Reponsitories
             }
 
             return roles.Select(r => r.Name).ToList();
+        }
+
+        public async Task<List<string>> GetUserRolesAsync(string userId)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+            var roles = (await userManager.GetRolesAsync(user));
+            var filteredRoles = roles?.Where(r => r != null).ToList();
+            if(filteredRoles!.Any())
+            {
+                return filteredRoles!;
+            }
+            else
+            {
+                return null!;
+            }
+        }
+
+        public async Task<IdentityResult> RemoveUserRoleAsync(string userId, string roleName)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return null!;
+            }
+
+            var result = await userManager.RemoveFromRoleAsync(user, roleName);
+
+            if (!result.Succeeded)
+            {
+                return result;
+            }
+            else
+            {
+                await signInManager.SignOutAsync();
+                await userManager.UpdateSecurityStampAsync(user);
+                await userManager.RemoveAuthenticationTokenAsync(user, "Bearer", "refresh_token");
+                return IdentityResult.Success;
+            }
         }
     }
 }

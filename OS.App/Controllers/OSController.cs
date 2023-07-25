@@ -44,6 +44,60 @@ namespace OS.App.Controllers
             return Ok(res);
         }
 
+        [HttpGet("top/categories")]
+        public async Task<IActionResult> GetTopCategories()
+        {
+            var res = new ApiResult<IEnumerable<Categories>>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var query = _context.Categories.AsNoTracking();
+            var sortedDatas = await query.OrderBy(post => post.CategoryName).Take(3).ToListAsync();
+
+            res.Data = sortedDatas;
+            return Ok(res);
+        }
+
+        [HttpGet("categories/name")]
+        public async Task<IActionResult> GetAllCategoriesName()
+        {
+            var res = new ApiResult<IEnumerable<object>>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var query = _context.Categories.AsNoTracking();
+            var sortedDatas = await query.OrderBy(post => post.CategoryName).Select(data => new
+            {
+                data.Id,
+                data.CategoryName
+            }).ToListAsync();
+
+            res.Data = sortedDatas;
+            return Ok(res);
+        }
+
+        [HttpGet("{caterogyId}/product")]
+        public async Task<IActionResult> GetProductCatalogue([FromQuery] ApiRequest request, string caterogyId)
+        {
+            var res = new ApiResult<IEnumerable<Product>>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var query = _context.Products.Where(x => x.CategoryId == caterogyId).AsNoTracking();
+            var sortedDatas = await query.OrderBy(post => post.ProductName).ToListAsync();
+
+            res.TotalRows = sortedDatas.Count;
+            int skip = request.PageSize * (request.PageIndex - 1);
+            res.Data = sortedDatas.Skip(skip).Take(request.PageSize);
+            return Ok(res);
+        }
+
         [HttpGet("products")]
         public async Task<IActionResult> GetAllProducts([FromQuery] ApiRequest request)
         {
@@ -59,6 +113,54 @@ namespace OS.App.Controllers
             res.TotalRows = sortedDatas.Count;
             int skip = request.PageSize * (request.PageIndex - 1);
             res.Data = sortedDatas.Skip(skip).Take(request.PageSize);
+            return Ok(res);
+        }
+
+        [HttpGet("top/products")]
+        public async Task<IActionResult> GetTopProducts()
+        {
+            var res = new ApiResult<IEnumerable<Product>>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var query = _context.Products.AsNoTracking();
+            var sortedDatas = await query.OrderBy(post => post.ProductName).Take(3).ToListAsync();
+
+            res.Data = sortedDatas;
+            return Ok(res);
+        }
+
+        [HttpGet("recommended/products")]
+        public async Task<IActionResult> GetRecommendedProducts()
+        {
+            var res = new ApiResult<IEnumerable<Product>>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var query = _context.Products.AsNoTracking();
+            var sortedDatas = await query.OrderBy(post => post.ProductName).Take(15).ToListAsync();
+
+            res.Data = sortedDatas;
+            return Ok(res);
+        }
+
+        [HttpGet("top/new/products")]
+        public async Task<IActionResult> GetTopNewProducts()
+        {
+            var res = new ApiResult<IEnumerable<Product>>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var query = _context.Products.AsNoTracking();
+            var sortedDatas = await query.OrderBy(post => post.CreatedDate).Take(4).ToListAsync();
+
+            res.Data = sortedDatas;
             return Ok(res);
         }
 

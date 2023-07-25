@@ -2,22 +2,21 @@
     <div class="width">
         <div class="product-detail">
             <div class="grid flex justify-content-between">
-                <div class="col detail-left">
+                <div class="col detail-left" *ngIf="product">
                     <div class="flex bg-white">
                         <div class="img">
-                            <img src="../../../assets/img/introduce/setup.jpg" alt="" />
+                            <img src="{{ product.imageURL }}" alt="" />
                         </div>
                         <div class="buy-product">
-                            <p>Hộp đựng đồ văn phòng siêu tiện dụng (Xanh)</p>
+                            <p class="text-overflow">{{ product.productName }}</p>
                             <div class="flex justify-content-between">
                                 <span class="py-2 pr-2">Còn hàng</span>
-                                <span class="py-2">Đã bán: 10000</span>
+                                <span class="py-2"
+                                    >Còn lại: {{ product.quantityInStock | number : '1.0-3' }} sản phẩm</span
+                                >
                             </div>
-                            <p class="my-4 text-orange-500">45.556 VND</p>
-                            <span class="h-4rem block"
-                                >Sản phẩm được cung cấp bởi nhà cung cấp châu Âu mang đến chất lượng cam đoan và uy tín
-                                hàng đầu</span
-                            >
+                            <p class="my-4 text-orange-500">{{ product.price | number : '1.0-3' }} VND</p>
+                            <span class="h-4rem block">{{ product.productDescription }}</span>
                             <div class="flex justify-content-center my-4">
                                 <p-inputNumber
                                     [(ngModel)]="value1"
@@ -49,20 +48,17 @@
                     <div class="product-infor bg-white">
                         <p>Thông tin sản phẩm</p>
                         <ul>
-                            <li>Danh mục: Bàn phím</li>
-                            <li>Tình trạng: Mới</li>
-                            <li>Thương hiệu: Trung quốc</li>
-                            <li>Nơi bán: Cà Mau</li>
-                            <li>Bảo hành: 12 tháng</li>
+                            <li>Tình trạng: {{ product.status }}</li>
+                            <li>Thương hiệu: {{ product.trademark }}</li>
+                            <li>Nơi bán: {{ product.countryOfOrigin }}</li>
+                            <li>Bảo hành: {{ product.warranty }}</li>
+                            <li>Mô tả Bảo hành: {{ product.warrantyDescription }}</li>
                         </ul>
                     </div>
                     <div class="product-infor bg-white">
                         <p>Mô tả sản phẩm</p>
                         <span>
-                            Khi diện tích sống ngày càng thu hẹp thì sử dụng những vật dụng tiện ích, đa công dụng sẽ là
-                            giải pháp tiết kiệm không gian cho ngôi nhà của bạn. Và sản phẩm hộp đựng đồ với những ưu
-                            điểm vượt trội như với tiện dụng, tiết kiệm không gian, giữ cho nơi làm việc luôn gọn gàng,
-                            ngăn nắp… sẽ là lựa chọn thông minh của quý khách hàng.
+                            {{ product.productDescription }}
                         </span>
                     </div>
                 </div>

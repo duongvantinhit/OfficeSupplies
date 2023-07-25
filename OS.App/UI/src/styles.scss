@@ -22,6 +22,12 @@ del {
     text-align: center;
 }
 
+.text-overflow {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .p-progress-spinner {
     position: fixed !important;
     top: 50% !important;

@@ -279,9 +279,11 @@ del {
     }
 
     .crud-category,
-    .crud-product {
+    .crud-product,
+    .crud-promotion {
         .category,
-        .product {
+        .product,
+        .promotion {
             .p-fileupload-buttonbar {
                 display: flex;
                 padding: 1rem;
@@ -296,6 +298,22 @@ del {
             .ng-star-inserted {
                 text-align: center;
             }
+
+            .p-number {
+                .p-element {
+                    width: 100% !important;
+                    .p-inputnumber {
+                        width: 100% !important;
+                    }
+                }
+            }
+        }
+    }
+
+    .create-user {
+        .p-password,
+        .p-inputtext {
+            width: 100%;
         }
     }
 }

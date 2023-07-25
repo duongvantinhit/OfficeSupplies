@@ -30,17 +30,25 @@ export class CrudProductComponent implements OnInit {
     productStatus = Consts.productStatus;
     categorie: any;
     productId: any;
+    pageNumber: any;
 
     ngOnInit() {
         let route = this._actRoute.snapshot.queryParams;
 
         this.pageType = route['type'];
         this.productId = route['id'];
+        this.pageNumber = route['page'];
         this.pageType === 'edit' ? (this.pageTilte = 'Chỉnh sửa sản phẩm') : (this.pageTilte = 'Thêm sản phẩm');
 
         this._apiServices.getDataAll('/categories').subscribe((res) => {
             this.categorie = res.data;
         });
+
+        if (this.pageType) {
+            this._apiServices.getData('/product', this.productId).subscribe((res) => {
+                this.setValue(res.data);
+            });
+        }
 
         this.productForm = this._fb.group({
             productName: ['', [Validators.required]],
@@ -54,6 +62,22 @@ export class CrudProductComponent implements OnInit {
             warranty: ['', [Validators.required]],
             warrantyDescription: ['', [Validators.required]],
         });
+    }
+
+    setValue(data: any): void {
+        this.productForm.patchValue({
+            productName: data.productName,
+            quantityInStock: data.quantityInStock,
+            categoryId: data.categoryId,
+            trademark: data.trademark,
+            productDescription: data.productDescription,
+            price: data.price,
+            status: data.status,
+            countryOfOrigin: data.countryOfOrigin,
+            warranty: data.warranty,
+            warrantyDescription: data.warrantyDescription,
+        });
+        this.imgName = data.imageURL;
     }
 
     private formValidate(): any[] {
@@ -115,6 +139,7 @@ export class CrudProductComponent implements OnInit {
 
     goBack(): void {
         this._location.back();
+        this._apiServices.sendPageInfor(this.pageNumber);
     }
 
     create(): void {
@@ -125,7 +150,6 @@ export class CrudProductComponent implements OnInit {
             this._notiService.error(errorMessages.join('<br/>'), 'ua-toast');
             return;
         }
-        debugger;
 
         formUploadImg.append('file', this.uploadImg, this.uploadImg.name);
         formUploadImg.append('ProductName', this.productForm.controls.productName.value);
@@ -175,7 +199,7 @@ export class CrudProductComponent implements OnInit {
         formUploadImg.append('WarrantyDescription', this.productForm.controls.warrantyDescription.value);
         formUploadImg.append('ModifiedDate', new Date().toISOString());
 
-        this._apiServices.putData('product', formUploadImg, this.productId).subscribe((res) => {
+        this._apiServices.putData('/product', formUploadImg, this.productId).subscribe((res) => {
             if (res.successed) {
                 this._notiService.success(Notice.saveSuccessed, '', 'Thành công');
                 this.ngOnInit();

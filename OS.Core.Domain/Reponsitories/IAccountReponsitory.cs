@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using OS.Core.Application.Dtos;
 using OS.Core.Domain.OfficeSupplies;
-using System.Security.Claims;
 
 namespace OS.Core.Domain.Reponsitories
 {
@@ -13,8 +12,10 @@ namespace OS.Core.Domain.Reponsitories
         public Task<string> GenerateRefreshTokenAsync();
         public Task<TokenDto> RefreshTokenAsync(string email, string refreshToken);
         public Task<IdentityResult> CreateRoleAsync(string roleName);
+        public Task<List<string>> GetRolesAsync();
         public Task<IdentityResult> AssignUserRoleAsync(string userId, string roleName);
         public Task<UserDto> GetUserAsync(string userId);
+        public Task<List<UserDto>> GetAllUsersAsync();
         public Task<IdentityResult> ChangePasswordAsync(ChangePasswordDto changePasswordDto);
     }
 }

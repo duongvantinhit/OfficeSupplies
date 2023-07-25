@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OS.Core.Application;
 using OS.Core.Application.Dtos;
@@ -23,6 +22,85 @@ namespace OS.App.Controllers
             _httpContext = httpContext;
         }
 
+        #region httpGET
+        [HttpGet("user/infor")]
+        [Authorize]
+        public async Task<ActionResult<UserDto>> GetUser()
+        {
+            var res = new ApiResult<UserDto>
+            {
+                Successed = false,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var userId = _httpContext.HttpContext!.User.FindFirstValue("id");
+            var userDto = await _accountRepo.GetUserAsync(userId);
+
+            if (userDto == null)
+            {
+                res.Message = AppConsts.MSG_FIND_NOT_FOUND_DATA;
+            }
+            else
+            {
+                res.Successed = true;
+                res.Data = userDto;
+            }
+
+            return Ok(res);
+        }
+
+        [HttpGet("users")]
+        [Authorize]
+        public async Task<ActionResult<UserDto>> GetAllUsersAsync()
+        {
+            var res = new ApiResult<List<UserDto>>
+            {
+                Successed = false,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+            var users = await _accountRepo.GetAllUsersAsync();
+
+            if (users == null)
+            {
+                res.Message = AppConsts.MSG_FIND_NOT_FOUND_DATA;
+            }
+            else
+            {
+                res.Successed = true;
+                res.Data = users;
+            }
+
+            return Ok(res);
+        }
+
+
+        [HttpGet("roles")]
+        [Authorize]
+        public async Task<ActionResult<List<string>>> GetRoles ()
+        {
+            var res = new ApiResult<List<string>>
+            {
+                Successed = false,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+            var users = await _accountRepo.GetRolesAsync();
+
+            if (users == null)
+            {
+                res.Message = AppConsts.MSG_FIND_NOT_FOUND_DATA;
+            }
+            else
+            {
+                res.Successed = true;
+                res.Data = users;
+            }
+
+            return Ok(res);
+        }
+
+        #endregion
+
+        #region httpPOST
         [HttpPost("sign-up")]
         public async Task<IActionResult> SignUp(SignUp signup)
         {
@@ -47,6 +125,7 @@ namespace OS.App.Controllers
             return Ok(res);
         }
 
+
         [HttpPost("refreshtoken")]
         public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequestDto model)
         {
@@ -66,7 +145,7 @@ namespace OS.App.Controllers
                 res.ResponseCode = StatusCodes.Status401Unauthorized;
             }
             else
-            {            
+            {
                 JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
                 JwtSecurityToken decodedToken = tokenHandler.ReadJwtToken(tokenDto.AccessToken);
                 string? exp = decodedToken.Claims.FirstOrDefault(c => c.Type == "exp")?.Value;
@@ -93,7 +172,7 @@ namespace OS.App.Controllers
 
             if (result == null)
             {
-                res.ResponseCode = StatusCodes.Status401Unauthorized;    
+                res.ResponseCode = StatusCodes.Status401Unauthorized;
             }
             else
             {
@@ -102,22 +181,6 @@ namespace OS.App.Controllers
             }
             return Ok(res);
         }
-
-        private void SetAuthCookies(string accessToken, string refreshToken)
-        {
-            var cookieOptions = new CookieOptions
-            {
-                HttpOnly = true,
-                SameSite = SameSiteMode.None,
-                Secure = true,
-                Path = "/",
-                Expires = DateTime.Now.AddDays(7)
-            };
-
-            Response.Cookies.Append("access_token", accessToken, cookieOptions);
-            Response.Cookies.Append("refresh_token", refreshToken, cookieOptions);
-        }
-
 
         [HttpPost("create/role")]
         public async Task<IActionResult> CreateRole(string roleName)
@@ -147,32 +210,9 @@ namespace OS.App.Controllers
             }
         }
 
-        [HttpGet("user/infor")]
-        [Authorize]
-        public async Task<ActionResult<UserDto>> GetUser()
-        {
-            var res = new ApiResult<UserDto>
-            {
-                Successed = false,
-                ResponseCode = StatusCodes.Status200OK,
-            };
+        #endregion
 
-            var userId = _httpContext.HttpContext!.User.FindFirstValue("id");
-            var userDto = await _accountRepo.GetUserAsync(userId);
-
-            if (userDto == null)
-            {
-                res.Message = AppConsts.MSG_FIND_NOT_FOUND_DATA;
-            }
-            else
-            {
-                res.Successed = true;
-                res.Data = userDto;
-            }
-
-            return Ok(res);
-        }
-
+        #region httpPUT
         [HttpPut("change-password")]
         [Authorize]
         public async Task<IActionResult> ChangePasswordAsync([FromBody] ChangePasswordDto changePasswordDto)
@@ -196,6 +236,23 @@ namespace OS.App.Controllers
             }
 
             return Ok(res);
+        }
+
+        #endregion
+
+        private void SetAuthCookies(string accessToken, string refreshToken)
+        {
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                SameSite = SameSiteMode.None,
+                Secure = true,
+                Path = "/",
+                Expires = DateTime.Now.AddDays(7)
+            };
+
+            Response.Cookies.Append("access_token", accessToken, cookieOptions);
+            Response.Cookies.Append("refresh_token", refreshToken, cookieOptions);
         }
     }
 }

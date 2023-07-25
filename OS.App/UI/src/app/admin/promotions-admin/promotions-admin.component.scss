@@ -3,10 +3,10 @@
         display: flex;
         flex-wrap: wrap;
         color: var(--text-color);
+        height: 568px;
         .col-2 {
             width: calc(50% - 10px);
             cursor: pointer;
-            display: flex;
             background-color: white;
             border-radius: 5px;
             margin: 5px;

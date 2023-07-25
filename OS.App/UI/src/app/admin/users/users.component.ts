@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AdminService } from '../services/admin.service';
+import { AuthService } from 'src/auth/services/auth.service';
 
 @Component({
     selector: 'app-users',
@@ -6,31 +8,29 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./users.component.scss'],
 })
 export class UsersComponent implements OnInit {
-    constructor() {}
+    constructor(private _authServices: AuthService) {}
 
-    ngOnInit() {}
+    users: any;
+    visible = true;
+    roles: any;
+    userId: any;
+    userRoles: any;
 
-    products = [
-        {
-            firstname: 'Tinh',
-            lastname: 'Duong',
-            phoneNumber: '0989828527',
-            email: 'duongvantinh07072017@gmail.com',
-            address: 'Man thiện - Hiệp phú - Tp.Thủ Đức',
-        },
-        {
-            firstname: 'Tinh',
-            lastname: 'Duong',
-            phoneNumber: '0989828527',
-            email: 'duongvantinh07072017@gmail.com',
-            address: 'Man thiện - Hiệp phú - Tp.Thủ Đức',
-        },
-        {
-            firstname: 'Tinh',
-            lastname: 'Duong',
-            phoneNumber: '0989828527',
-            email: 'duongvantinh07072017@gmail.com',
-            address: 'Man thiện - Hiệp phú - Tp.Thủ Đức',
-        },
-    ];
+    showDialog(user: any) {
+        this.visible = true;
+        this.userId = user.id;
+        console.log(user.id);
+    }
+
+    userAuthorization() {}
+
+    ngOnInit() {
+        this._authServices.getDataAll('/users').subscribe((res) => {
+            this.users = res.data;
+        });
+
+        this._authServices.getDataAll('/roles').subscribe((res) => {
+            this.roles = res.data;
+        });
+    }
 }

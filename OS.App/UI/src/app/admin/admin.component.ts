@@ -67,7 +67,7 @@ export class AdminComponent implements OnInit {
                 {
                     label: 'Thêm mã',
                     icon: 'pi pi-fw pi-ticket',
-                    routerLink: '/admin/add-promotion',
+                    routerLink: '/admin/promotion',
                 },
             ],
         },
@@ -95,11 +95,6 @@ export class AdminComponent implements OnInit {
                     label: 'Danh sách người dùng',
                     icon: 'pi pi-fw  pi-list',
                     routerLink: '/admin/users',
-                },
-                {
-                    label: 'Tạo mới',
-                    icon: 'pi pi-fw pi-user-plus',
-                    routerLink: '/admin/create-user',
                 },
             ],
         },

@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
 import { EndpointUri } from 'src/app/shared/const/endpoint.const';
 import { BaseApiService } from 'src/app/shared/services/base-api.service';
@@ -7,7 +8,7 @@ import { NotificationService } from 'src/app/shared/services/notification.servic
 
 @Injectable()
 export class AuthService extends BaseApiService {
-    constructor(http: HttpClient, notiService: NotificationService) {
+    constructor(http: HttpClient, notiService: NotificationService, private _router: Router) {
         super(http, notiService);
         this.baseUrl = EndpointUri.Auth;
     }
@@ -21,6 +22,10 @@ export class AuthService extends BaseApiService {
 
     getData(url: any, param: any): Observable<any> {
         return this.get(`${url}/` + param);
+    }
+
+    getDataAll(url: any): Observable<any> {
+        return this.get(url);
     }
 
     getUserInfor(): Observable<any> {
@@ -57,8 +62,13 @@ export class AuthService extends BaseApiService {
             })
             .pipe(
                 tap((response) => {
-                    const expiresIn = this.getTokenExpirationDate(response.data).valueOf() - new Date().valueOf();
+                    if (!response.successed) {
+                        this.logout();
+                        this._router.navigate(['/login']);
+                        return;
+                    }
 
+                    const expiresIn = this.getTokenExpirationDate(response.data).valueOf() - new Date().valueOf();
                     this.refreshTokenTimeout = setTimeout(() => {
                         this.refreshToken().subscribe();
                     }, expiresIn - 40000);

@@ -23,6 +23,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { DialogModule } from 'primeng/dialog';
 
 const modules = [
     ButtonModule,
@@ -49,6 +50,7 @@ const modules = [
     ToastModule,
     ConfirmDialogModule,
     ProgressSpinnerModule,
+    DialogModule,
 ];
 
 @NgModule({

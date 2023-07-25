@@ -1,73 +1,39 @@
 <div class="office-supplies-admin">
     <div class="promotions-admin">
-        <div class="title">
-            <h2><i class="pi pi-stop-circle"></i>Danh sách mã khuyến mãi</h2>
+        <div class="flex title">
+            <div class="tilte-right">
+                <h2>Danh sách mã khuyến mãi</h2>
+            </div>
         </div>
         <div class="promotions">
-            <div class="col-2">
-                <img src="https://inhungphat.com/Uploads/2132/images/DICH%20VU/price-tag.png" alt="" />
-                <div class="voucher-content">
-                    <div>
-                        <h4>Giảm 50K</h4>
-                        <span>Cho đơn hàng từ 1.5 triệu</span>
-                    </div>
-                    <div class="flex justify-content-between w-full">
-                        <p>HSD: 15/07/2023</p>
-                        <p-button
-                            icon="pi pi-trash"
-                            styleClass="p-button-rounded p-button-danger p-button-text p-button-raised m-2"
-                        ></p-button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-2">
-                <img src="https://inhungphat.com/Uploads/2132/images/DICH%20VU/price-tag.png" alt="" />
-                <div class="voucher-content">
-                    <div>
-                        <h4>Giảm 50K</h4>
-                        <span>Cho đơn hàng từ 1.5 triệu</span>
-                    </div>
-                    <div class="flex justify-content-between w-full">
-                        <p>HSD: 15/07/2023</p>
-                        <p-button
-                            icon="pi pi-trash"
-                            styleClass="p-button-rounded p-button-danger p-button-text p-button-raised m-2"
-                        ></p-button>
+            <div class="col-2" *ngFor="let item of promotions">
+                <div class="flex justify-content-between h-full" (click)="editPromotion(item.id)">
+                    <img src="https://inhungphat.com/Uploads/2132/images/DICH%20VU/price-tag.png" alt="" />
+                    <div class="voucher-content">
+                        <div>
+                            <h4>{{ item.promotionName }} giảm {{ item.discountPercent }}%</h4>
+                            <span>{{ item.promotionDescription }}</span>
+                        </div>
+                        <div class="flex justify-content-between w-full">
+                            <p>HSD: {{ item.endDate | date : 'dd/MM/yyyy HH:mm:ss' }}</p>
+                            <p-button
+                                (click)="deletePromotion(item.id, $event)"
+                                icon="pi pi-trash"
+                                styleClass="p-button-rounded p-button-danger p-button-text p-button-raised m-2"
+                            ></p-button>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-2">
-                <img src="https://inhungphat.com/Uploads/2132/images/DICH%20VU/price-tag.png" alt="" />
-                <div class="voucher-content">
-                    <div>
-                        <h4>Giảm 50K</h4>
-                        <span>Cho đơn hàng từ 1.5 triệu</span>
-                    </div>
-                    <div class="flex justify-content-between w-full">
-                        <p>HSD: 15/07/2023</p>
-                        <p-button
-                            icon="pi pi-trash"
-                            styleClass="p-button-rounded p-button-danger p-button-text p-button-raised m-2"
-                        ></p-button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-2">
-                <img src="https://inhungphat.com/Uploads/2132/images/DICH%20VU/price-tag.png" alt="" />
-                <div class="voucher-content">
-                    <div>
-                        <h4>Giảm 50K</h4>
-                        <span>Cho đơn hàng từ 1.5 triệu</span>
-                    </div>
-                    <div class="flex justify-content-between w-full">
-                        <p>HSD: 15/07/2023</p>
-                        <p-button
-                            icon="pi pi-trash"
-                            styleClass="p-button-rounded p-button-danger p-button-text p-button-raised m-2"
-                        ></p-button>
-                    </div>
-                </div>
-            </div>
+        </div>
+        <div class="card flex justify-content-center m-2">
+            <p-paginator
+                (onPageChange)="loadPromotions($event)"
+                [first]="first"
+                [rows]="8"
+                [totalRecords]="totalRecords"
+                [rowsPerPageOptions]="[8, 16, 24]"
+            ></p-paginator>
         </div>
     </div>
 </div>

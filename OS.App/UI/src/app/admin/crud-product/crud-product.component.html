@@ -20,7 +20,7 @@
                             (onSelect)="onFileSelected($event)"
                         >
                             <ng-template pTemplate="file">
-                                <div>{{ imgName }}</div>
+                                <div class="img-name">{{ imgName }}</div>
                             </ng-template>
                         </p-fileUpload>
                     </div>
@@ -67,15 +67,9 @@
                     />
                 </div>
 
-                <div class="col-3">
+                <div class="col-3 p-number">
                     <span class="font-bold block mb-2">Số lượng</span>
-                    <input
-                        type="text"
-                        class="w-full"
-                        pInputText
-                        placeholder="Nhập số lượng"
-                        formControlName="quantityInStock"
-                    />
+                    <p-inputNumber inputId="integeronly" formControlName="quantityInStock"> </p-inputNumber>
                 </div>
 
                 <div class="col-3">
@@ -100,9 +94,9 @@
                     />
                 </div>
 
-                <div class="col-3">
-                    <span class="font-bold block mb-2">Giá</span>
-                    <input type="text" class="w-full" pInputText placeholder="Nhập giá" formControlName="price" />
+                <div class="col-3 p-number">
+                    <span class="font-bold block mb-2">Giá sản phẩm (VND)</span>
+                    <p-inputNumber inputId="integeronly" formControlName="price"> </p-inputNumber>
                 </div>
 
                 <div class="col-3">

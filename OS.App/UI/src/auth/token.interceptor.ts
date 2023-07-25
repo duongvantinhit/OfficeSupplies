@@ -34,8 +34,6 @@ export class TokenInterceptor implements HttpInterceptor {
                 } else {
                     return of(null).pipe(
                         map(() => {
-                            this._authService.logout();
-                            this._router.navigate(['/login']);
                             throw new Error('Something went wrong');
                         }),
                     );

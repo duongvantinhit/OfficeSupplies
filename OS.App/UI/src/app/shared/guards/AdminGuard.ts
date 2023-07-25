@@ -13,7 +13,7 @@ export class AdminGuard {
         if (roles.indexOf('admin') !== -1) {
             return true;
         } else {
-            this._router.navigate(['']);
+            this._router.navigate(['/admin']);
             return false;
         }
     }

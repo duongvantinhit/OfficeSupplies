@@ -3,9 +3,11 @@
         display: flex;
         flex-wrap: wrap;
         color: var(--text-color);
+        min-height: 556px;
     }
     .col-3 {
         width: calc(25% - 10px);
+        height: 268px;
         cursor: pointer;
         display: inline-block;
         background-color: white;

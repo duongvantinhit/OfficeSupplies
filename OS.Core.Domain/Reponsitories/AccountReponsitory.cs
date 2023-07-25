@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using OS.Core.Application.Dtos;
@@ -17,7 +18,9 @@ namespace OS.Core.Domain.Reponsitories
         private readonly IConfiguration configuration;
         private readonly RoleManager<IdentityRole> roleManager;
 
-        public AccountReponsitory(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration, RoleManager<IdentityRole> roleManager)
+        public AccountReponsitory(UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager, IConfiguration configuration,
+            RoleManager<IdentityRole> roleManager)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
@@ -56,7 +59,7 @@ namespace OS.Core.Domain.Reponsitories
                 return null!;
             }
 
-       
+
             var accessTokenString = await GenerateAccessTokenAsync(model.Email!, user);
             var refreshTokenString = await GenerateRefreshTokenAsync();
 
@@ -91,7 +94,7 @@ namespace OS.Core.Domain.Reponsitories
                     return null!;
                 }
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return null!;
             };
@@ -236,6 +239,45 @@ namespace OS.Core.Domain.Reponsitories
                 await userManager.RemoveAuthenticationTokenAsync(user, "Bearer", "refresh_token");
                 return IdentityResult.Success;
             }
+        }
+
+        public async Task<List<UserDto>> GetAllUsersAsync()
+        {
+            var users = await userManager.Users.ToListAsync();
+
+            if (users == null)
+            {
+                return null!;
+            }
+
+            var userDtos = users.Select(u => new UserDto
+            {
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                Email = u.Email,
+                PhoneNumber = u.PhoneNumber,
+                Address = u.Address,
+                Id = u.Id,
+            }).ToList();
+
+            return userDtos;
+        }
+
+        public async Task<List<string>> GetRolesAsync()
+        {
+            var roles = await roleManager.Roles.ToListAsync();
+
+            if (roles == null)
+            {
+                return null!;
+            }
+
+            if (!roles.Any())
+            {
+                return new List<string>();
+            }
+
+            return roles.Select(r => r.Name).ToList();
         }
     }
 }

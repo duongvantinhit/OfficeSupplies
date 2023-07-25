@@ -1,29 +1,61 @@
 <div class="office-supplies-admin">
     <div class="create-user">
-        <div class="title">
-            <h2><i class="pi pi-stop-circle"></i>Danh sách người dùng</h2>
+        <div class="flex title">
+            <div class="tilte-right">
+                <h2>Danh sách người dùng</h2>
+            </div>
         </div>
         <div class="users">
-            <p-table [value]="products" [tableStyle]="{ 'min-width': '50rem' }">
+            <p-table [value]="users" [tableStyle]="{ 'min-width': '50rem' }">
                 <ng-template pTemplate="header">
                     <tr>
-                        <th>Họ</th>
-                        <th>Tên</th>
+                        <th>Họ Tên</th>
                         <th>Số điện thoại</th>
                         <th>Email</th>
                         <th>Địa chỉ</th>
+                        <th>Cấp quyền</th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-product>
+                <ng-template pTemplate="body" let-user>
                     <tr>
-                        <td>{{ product.firstname }}</td>
-                        <td>{{ product.lastname }}</td>
-                        <td>{{ product.phoneNumber }}</td>
-                        <td>{{ product.email }}</td>
-                        <td>{{ product.address }}</td>
+                        <td>{{ user.firstName }} {{ user.lastName }}</td>
+                        <td>{{ user.phoneNumber }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.address }}</td>
+                        <td (click)="showDialog(user)" class="text-center cursor-pointer">
+                            <i class="pi pi-cog text-primary"></i>
+                        </td>
                     </tr>
                 </ng-template>
             </p-table>
+            <div class="card flex justify-content-center">
+                <p-dialog
+                    header="Cấp quyền người dùng"
+                    [draggable]="false"
+                    [(visible)]="visible"
+                    [modal]="true"
+                    [style]="{ width: '35vw' }"
+                >
+                    <div class="mb-2 list-roles">
+                        <b>Role hiện tại:</b>
+                        <li>Admin</li>
+                        <li>Employee</li>
+                    </div>
+                    <h3><i class="pi pi-plus mr-2"></i>Thêm role</h3>
+                    <div class="card flex justify-content-center">
+                        <p-dropdown
+                            [options]="roles"
+                            appendTo="body"
+                            placeholder="Chọn role"
+                            [virtualScrollItemSize]="38"
+                            styleClass="w-16rem"
+                        ></p-dropdown>
+                    </div>
+                    <div class="card flex justify-content-center mt-4">
+                        <p-button label="Lưu" (onClick)="userAuthorization()"></p-button>
+                    </div>
+                </p-dialog>
+            </div>
         </div>
     </div>
 </div>

@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { AdminService } from '../services/admin.service';
+import { AppMessages } from 'src/app/shared/const/messages.const';
+import { Notice } from 'src/app/shared/const/notice.const';
 
 @Component({
     selector: 'app-products-admin',
@@ -62,6 +64,22 @@ export class ProductsAdminComponent implements OnInit {
     editProduct(id: any) {
         this._router.navigate(['/admin/product'], {
             queryParams: { id: id, type: 'edit', page: this.getPageNumber },
+        });
+    }
+
+    deleteProduct(id: any, event: any) {
+        event.stopPropagation();
+
+        this._confirmationService.confirm({
+            message: AppMessages.C_M_1,
+            header: 'Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this._apiServices.deleteData('/product', id).subscribe((res) => {
+                    this.ngOnInit();
+                    this._notiService.success(Notice.deleteSuccessed, '', 'Thành công');
+                });
+            },
         });
     }
 }

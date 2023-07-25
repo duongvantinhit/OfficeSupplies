@@ -8,7 +8,6 @@ using Microsoft.IdentityModel.Tokens;
 using OS.Core.Domain.OfficeSupplies;
 using OS.Core.Domain.Reponsitories;
 using OS.Core.Infrastructure.Database;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
@@ -94,8 +93,7 @@ builder.Services.AddAuthentication(options =>
             var user = await userManager.FindByIdAsync(userId);
             if (user != null && user.SecurityStamp != context.Principal.FindFirstValue("AspNet.Identity.SecurityStamp"))
             {
-                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                await context.Response.WriteAsync("Security stamp has changed.");
+                context.Fail("Authentication failed: invalid token");
                 return;
             }
         }

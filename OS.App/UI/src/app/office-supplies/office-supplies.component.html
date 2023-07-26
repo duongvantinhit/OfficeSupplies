@@ -65,7 +65,7 @@
             </div>
 
             <div class="content">
-                <div class="content-center">
+                <div class="content-left">
                     <p-fieldset>
                         <ng-template pTemplate="header">
                             <div class="flex text-primary">
@@ -74,8 +74,12 @@
                             </div>
                         </ng-template>
                         <div class="top-product">
-                            <div *ngFor="let item of topProducts; let i = index">
-                                <div class="flex p-2 border-400 border-bottom-1" (click)="productDetail(item.id)">
+                            <div *ngFor="let item of topProducts; let i = index" class="top-product-content">
+                                <div
+                                    class="flex p-2 top-product-content"
+                                    [ngClass]="{ 'border-400 border-bottom-1': i !== topProducts.length - 1 }"
+                                    (click)="productDetail(item.id)"
+                                >
                                     <div class="top-product-left relative">
                                         <img src="{{ item.imageURL }}" alt="" />
                                         <div class="position">#{{ i + 1 }}</div>

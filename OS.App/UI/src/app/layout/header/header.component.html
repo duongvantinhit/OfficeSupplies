@@ -89,7 +89,7 @@
                     </div>
                     <div class="cart relative" (mouseenter)="onMouseEnter('cart')" (mouseleave)="onMouseLeave('cart')">
                         <i class="pi pi-cart-plus" style="font-size: 2rem"></i>
-                        <p>0 Sản phẩm</p>
+                        <p *ngIf="totalProducts">{{ totalProducts }} Sản phẩm</p>
 
                         <p-overlay
                             [(visible)]="cartVisible"
@@ -99,35 +99,20 @@
                             contentStyleClass="p-3 surface-overlay shadow-2 border-round"
                         >
                             <p class="text-base">Sản phẩm mới thêm</p>
-                            <div>
-                                <ul>
-                                    <li>
-                                        <img src="../../../assets/img/introduce/mouse.jpg" alt="" />
-                                        <p>Chuột gaming hdhd dhdhdh dhdhdh dhdhd dhdhd</p>
-                                        <span>244444 VND</span>
-                                    </li>
-                                    <li>
-                                        <img src="../../../assets/img/introduce/mouse.jpg" alt="" />
-                                        <p>Chuột gaming</p>
-                                        <span>244444 VND</span>
-                                    </li>
-                                    <li>
-                                        <img src="../../../assets/img/introduce/mouse.jpg" alt="" />
-                                        <p>Chuột gaming</p>
-                                        <span>244444 VND</span>
-                                    </li>
-                                    <li>
-                                        <img src="../../../assets/img/introduce/mouse.jpg" alt="" />
-                                        <p>Chuột gaming</p>
-                                        <span>244444 VND</span>
+                            <div class="cart-content">
+                                <ul *ngFor="let item of carts">
+                                    <li (click)="productDetail(item.productId)">
+                                        <img src="{{ item.imageURL }}" alt="" />
+                                        <p>{{ item.productName }}</p>
+                                        <span>{{ item.price | number : '1.0-3' }} VND</span>
                                     </li>
                                 </ul>
                             </div>
                             <span class="hidden">
                                 <p>Còn 2 sản phẩm khác</p>
                             </span>
-                            <div class="flex justify-content-end">
-                                <p-button label="Xem giỏ hàng"></p-button>
+                            <div class="flex justify-content-end mt-3">
+                                <p-button (onClick)="goToCarts()" label="Xem giỏ hàng"></p-button>
                             </div>
                         </p-overlay>
                     </div>

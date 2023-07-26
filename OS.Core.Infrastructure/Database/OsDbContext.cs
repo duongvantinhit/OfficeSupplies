@@ -12,5 +12,6 @@ namespace OS.Core.Infrastructure.Database
         public DbSet<Categories> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Promotion> Promotions { get; set; }
+        public DbSet<Cart> Carts { get; set; }
     }
 }

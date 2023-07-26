@@ -8,9 +8,17 @@ import { NotificationService } from 'src/app/shared/services/notification.servic
 @Injectable()
 export class OfficeSuppliesService extends BaseApiService {
     public _behaviorSubject = new BehaviorSubject<any>(null);
+    public _carts = new BehaviorSubject<any>(null);
+
     public getMessage = this._behaviorSubject.asObservable();
+    public getUpdateCart = this._carts.asObservable();
+
     public sendMessage(msg: any) {
         this._behaviorSubject.next(msg);
+    }
+
+    public sendUpdateCarts(msg: any) {
+        this._carts.next(msg);
     }
 
     public pageInfor = new BehaviorSubject<any>(null);

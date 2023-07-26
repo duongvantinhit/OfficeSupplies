@@ -59,7 +59,6 @@ export class AuthService extends BaseApiService {
             email: email,
         };
 
-        const headers = { 'Content-Type': 'application/json' };
         return this.http
             .post<any>('https://localhost:7072/api/Auth/refreshtoken', refreshTokenForm, {
                 withCredentials: true,

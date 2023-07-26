@@ -70,8 +70,12 @@ export class PromotionsAdminComponent implements OnInit {
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
                 this._apiServices.deleteData('/promotion', id).subscribe((res) => {
-                    this.ngOnInit();
-                    this._notiService.success(Notice.deleteSuccessed, '', 'Thành công');
+                    if (res.successed) {
+                        this.ngOnInit();
+                        this._notiService.success(Notice.deleteSuccessed, '', 'Thành công');
+                    } else {
+                        this._notiService.error(Notice.addFail);
+                    }
                 });
             },
         });

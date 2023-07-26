@@ -28,6 +28,8 @@ export class HeaderComponent implements OnInit {
     accountVisible: boolean = false;
     categoryVisible: boolean = false;
     categories: any;
+    carts: any;
+    totalProducts: any;
 
     accountMenu = [
         {
@@ -56,8 +58,23 @@ export class HeaderComponent implements OnInit {
 
     ngOnInit() {
         this.login = this._authServices.isLoggedIn();
+
         this._apiServices.getDataAll('/categories/name').subscribe((res) => {
             this.categories = res.data;
+        });
+
+        this._apiServices.getDataAll('/carts').subscribe((res) => {
+            this.carts = res.data;
+            this.totalProducts = res.data.length;
+        });
+
+        this._apiServices.getUpdateCart.subscribe((res) => {
+            if (res) {
+                this._apiServices.getDataAll('/carts').subscribe((res) => {
+                    this.carts = res.data;
+                    this.totalProducts = res.data.length;
+                });
+            }
         });
     }
 
@@ -65,6 +82,16 @@ export class HeaderComponent implements OnInit {
         this._router.navigate(['/category'], {
             queryParams: { id: item.id, name: item.categoryName },
         });
+    }
+
+    productDetail(productId: any) {
+        this._router.navigate(['/product/detail'], {
+            queryParams: { id: productId },
+        });
+    }
+
+    goToCarts() {
+        this._router.navigate(['/cart']);
     }
 
     onMouseEnter(type: any) {

@@ -1,0 +1,85 @@
+<div class="office-supplies">
+    <div class="width">
+        <!-- <h2>THANH TOÁN ĐƠN HÀNG</h2> -->
+        <p-divider align="center">
+            <span class="p-tag">THANH TOÁN ĐƠN HÀNG</span>
+        </p-divider>
+        <div class="checkout">
+            <div class="checkout-left">
+                <h4>Thông tin nhận hàng</h4>
+                <ul>
+                    <li>Họ tên: {{ userInfor.lastName }} {{ userInfor.firstName }}</li>
+                    <li>Số điện thoại: {{ userInfor.phoneNumber }}</li>
+                    <li>Email: {{ userInfor.email }}</li>
+                    <li>Địa chỉ nhận hàng: {{ userInfor.address }}</li>
+                </ul>
+            </div>
+            <div class="checkout-center">
+                <h4>Vận chuyển</h4>
+                <p><i class="pi pi-car mr-2 text-orange-500"></i>Giao hàng tiết kiệm</p>
+                <p><i class="pi pi-car mr-2 text-green-600"></i>Giao hàng nhanh</p>
+                <p><i class="pi pi-car mr-2 text-yellow-500"></i>VN Post</p>
+                <p><i class="pi pi-car mr-2 text-orange-500"></i>Shoppe Express</p>
+                <h4>Thanh toán</h4>
+
+                <p><i class="pi pi-check-square mr-2 text-blue-500"></i>Thanh toán khi giao hàng (COD)</p>
+            </div>
+            <div class="checkout-right">
+                <h4>Thông tin Đơn hàng</h4>
+                <ul class="border-bottom-1 surface-border">
+                    <li *ngFor="let item of carts">
+                        <img src="{{ item.imageURL }}" alt="" />
+                        <p class="text-overflow">{{ item.productName }}</p>
+                        <span>{{ item.price * item.quantity | number : '1.0-3' }} VND</span>
+                    </li>
+                </ul>
+
+                <div class="pay border-bottom-1 surface-border">
+                    <div class="flex justify-content-between cursor-pointer" (click)="showDialog()">
+                        <p class="cursor-pointer text-primary-600 flex-1">Chọn mã khuyến mãi</p>
+                        <i class="pi pi-ticket m-auto"></i>
+                    </div>
+                    <div class="flex justify-content-between">
+                        <p>Tạm tính:</p>
+                        <p>{{ subtotal | number : '1.0-3' }} VND</p>
+                    </div>
+                    <div class="flex justify-content-between">
+                        <p>Giảm giá:</p>
+                        <p>{{ discount | number : '1.0-3' }} VND</p>
+                    </div>
+                </div>
+                <div class="flex justify-content-between">
+                    <h4>Thành tiền:</h4>
+                    <h4>{{ totalCost | number : '1.0-3' }} VND</h4>
+                </div>
+                <div class="card flex justify-content-center m-4">
+                    <p-button (onClick)="apply()" label="Đặt hàng"></p-button>
+                </div>
+            </div>
+            <p-dialog
+                header="Chọn mã giảm giá"
+                [draggable]="false"
+                [(visible)]="voucherVisible"
+                [modal]="true"
+                [style]="{ width: '35vw' }"
+            >
+                <div class="card">
+                    <div class="">
+                        <div *ngFor="let voucher of voucher" class="field-checkbox">
+                            <p-radioButton [value]="voucher" [(ngModel)]="selectedVoucher"></p-radioButton>
+                            <label [for]="voucher.key" class="ml-2 w-full">
+                                <div class="flex justify-content-between">
+                                    <p class="block">{{ voucher.promotionName }}</p>
+                                    <p class="block">Giảm {{ voucher.discountPercent }}%</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="card flex justify-content-center mt-4">
+                    <p-button (onClick)="apply()" label="Áp dụng"></p-button>
+                </div>
+            </p-dialog>
+        </div>
+    </div>
+</div>

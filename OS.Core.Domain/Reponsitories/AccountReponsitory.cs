@@ -212,7 +212,8 @@ namespace OS.Core.Domain.Reponsitories
                 LastName = user.LastName,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
-                Roles = filteredRoles!.Any() ? filteredRoles : null
+                Roles = filteredRoles!.Any() ? filteredRoles : null,
+                Address = user.Address,
             };
 
             return userDto;

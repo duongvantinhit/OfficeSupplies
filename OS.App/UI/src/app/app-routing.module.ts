@@ -28,6 +28,7 @@ import { UsersComponent } from './admin/users/users.component';
 import { AuthGuard } from './shared/guards/AuthGuard';
 import { RoleGuard } from './shared/guards/RoleGuard';
 import { AdminGuard } from './shared/guards/AdminGuard';
+import { CheckoutComponent } from './office-supplies/checkout/checkout.component';
 
 const routes: Routes = [
     {
@@ -47,6 +48,7 @@ const routes: Routes = [
             { path: 'introduce', component: IntroduceComponent },
             { path: 'promotions', component: PromotionsComponent },
             { path: 'contact', component: ContactComponent },
+            { path: 'checkout', component: CheckoutComponent },
         ],
     },
     {

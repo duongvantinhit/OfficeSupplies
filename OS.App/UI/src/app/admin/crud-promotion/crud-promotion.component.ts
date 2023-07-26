@@ -98,7 +98,6 @@ export class CrudPromotionComponent implements OnInit {
         }
 
         this._apiServices.postData('/promotion', this.promotionForm.value).subscribe((res) => {
-            debugger;
             if (res.successed) {
                 this._notiService.success(Notice.addSuccessed, '', 'Thành công');
                 this.ngOnInit();

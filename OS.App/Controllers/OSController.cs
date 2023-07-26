@@ -80,6 +80,23 @@ namespace OS.App.Controllers
             return Ok(res);
         }
 
+        [HttpGet("categories/{id}")]
+        public async Task<IActionResult> GetCategory(string id)
+        {
+            var res = new ApiResult<Categories>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var query = _context.Categories.AsNoTracking()
+                .Where(x => x.Id == id);
+
+            res.TotalRows = query.Count();
+            res.Data = await query.FirstOrDefaultAsync();
+            return Ok(res);
+        }
+
         [HttpGet("{caterogyId}/product")]
         public async Task<IActionResult> GetProductCatalogue([FromQuery] ApiRequest request, string caterogyId)
         {
@@ -164,6 +181,23 @@ namespace OS.App.Controllers
             return Ok(res);
         }
 
+        [HttpGet("product/{id}")]
+        public async Task<IActionResult> GetProduct(string id)
+        {
+            var res = new ApiResult<Product>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var query = _context.Products.AsNoTracking()
+                .Where(x => x.Id == id);
+
+            res.TotalRows = query.Count();
+            res.Data = await query.FirstOrDefaultAsync();
+            return Ok(res);
+        }
+
         [HttpGet("promotions")]
         public async Task<IActionResult> GetAllPromotions([FromQuery] ApiRequest request)
         {
@@ -182,38 +216,22 @@ namespace OS.App.Controllers
             return Ok(res);
         }
 
-
-        [HttpGet("categories/{id}")]
-        public async Task<IActionResult> GetCategory(string id)
+        [HttpGet("promotions/available")]
+        public async Task<IActionResult> GetAllPromotionsAvailable()
         {
-            var res = new ApiResult<Categories>
+            var res = new ApiResult<IEnumerable<Promotion>>
             {
                 Successed = true,
                 ResponseCode = StatusCodes.Status200OK,
             };
 
-            var query = _context.Categories.AsNoTracking()
-                .Where(x => x.Id == id);
+            var query = _context.Promotions.AsNoTracking();
+            var now = DateTime.Now;
 
-            res.TotalRows = query.Count();
-            res.Data = await query.FirstOrDefaultAsync();
-            return Ok(res);
-        }
+            var result = query.Where(x => x.StartDate < now && x.EndDate > now);
+            var sortedDatas = await result.OrderBy(post => post.PromotionName).ToListAsync();
 
-        [HttpGet("product/{id}")]
-        public async Task<IActionResult> GetProduct(string id)
-        {
-            var res = new ApiResult<Product>
-            {
-                Successed = true,
-                ResponseCode = StatusCodes.Status200OK,
-            };
-
-            var query = _context.Products.AsNoTracking()
-                .Where(x => x.Id == id);
-
-            res.TotalRows = query.Count();
-            res.Data = await query.FirstOrDefaultAsync();
+            res.Data = sortedDatas;
             return Ok(res);
         }
 
@@ -231,6 +249,42 @@ namespace OS.App.Controllers
 
             res.TotalRows = query.Count();
             res.Data = await query.FirstOrDefaultAsync();
+            return Ok(res);
+        }
+
+        [HttpGet("carts")]
+        public async Task<IActionResult> GetCarts()
+        {
+            var res = new ApiResult<IEnumerable<CartsDto>>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var userId = _httpContext.HttpContext!.User.FindFirstValue("id");
+
+            var query = from cart in _context.Carts
+                        join product in _context.Products
+                        on cart.ProductId equals product.Id
+                        where cart.UserId == userId
+                        select new
+                        {
+                            Cart = cart,
+                            Product = product
+                        };
+
+            var result = await query.Select(x => new CartsDto
+            {
+                Id = x.Cart.Id,
+                UserId = x.Cart.UserId,
+                ProductId = x.Cart.ProductId,
+                Quantity = x.Cart.Quantity,
+                ProductName = x.Product.ProductName,
+                ImageURL = x.Product.ImageURL,
+                Price = x.Product.Price
+            }).ToListAsync();
+
+            res.Data = result;
             return Ok(res);
         }
 
@@ -356,7 +410,7 @@ namespace OS.App.Controllers
                 res.Message = ex.Message;
                 res.ResponseCode = StatusCodes.Status500InternalServerError;
             }
-            return Ok(res); 
+            return Ok(res);
         }
 
         [HttpPost("promotion")]
@@ -395,6 +449,51 @@ namespace OS.App.Controllers
                 res.Message = ex.Message;
                 res.ResponseCode = StatusCodes.Status500InternalServerError;
             }
+            return Ok(res);
+        }
+
+        [HttpPost("cart")]
+        public async Task<IActionResult> CreateCart(Cart model)
+        {
+            var res = new ApiResult<IEnumerable<Cart>>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var userId = _httpContext.HttpContext!.User.FindFirstValue("id");
+            var cart = await _context.Carts.AsNoTracking().FirstOrDefaultAsync(x => x.ProductId == model.ProductId && x.UserId == userId);
+
+            try
+            {
+                if (cart == null)
+                {
+                    Cart createCart = new()
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        UserId = userId,
+                        ProductId = model.ProductId,
+                        Quantity = model.Quantity
+                    };
+                    _context.Add(createCart);
+                }
+                else
+                {
+                    cart.Quantity = cart.Quantity + model.Quantity;
+                    _context.Update(cart);
+                }
+
+                await _context.SaveChangesAsync();
+                res.Message = AppConsts.MSG_CREATED_SUCCESSFULL;
+
+            }
+            catch (Exception ex)
+            {
+                res.Successed = false;
+                res.Message = ex.Message;
+                res.ResponseCode = StatusCodes.Status500InternalServerError;
+            }
+
             return Ok(res);
         }
 
@@ -496,6 +595,30 @@ namespace OS.App.Controllers
             return Ok(res);
         }
 
+        [HttpDelete("cart/{id}")]
+        public async Task<IActionResult> DeleteCart(string id)
+        {
+            var res = new ApiResult<IEnumerable<Cart>>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            Cart cart = _context.Carts.Find(id)!;
+            _context.Carts.Remove(cart);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                res.Message = AppConsts.MSG_UPDATED_SUCCESSFULL;
+            }
+            catch (Exception ex)
+            {
+                res.Successed = false;
+                res.Message = ex.ToString();
+            }
+            return Ok(res);
+        }
 
         #endregion httpDELETE
 
@@ -646,7 +769,7 @@ namespace OS.App.Controllers
         }
 
         [HttpPut("promotion/{id}")]
-        public async Task<IActionResult> UpdatePromotion( UpdatePromotionDto promotionDto, string id)
+        public async Task<IActionResult> UpdatePromotion(UpdatePromotionDto promotionDto, string id)
         {
             var res = new ApiResult<bool>
             {
@@ -675,6 +798,41 @@ namespace OS.App.Controllers
             try
             {
                 _context.Update(promotion);
+                await _context.SaveChangesAsync();
+                res.Message = AppConsts.MSG_UPDATED_SUCCESSFULL;
+            }
+            catch (Exception ex)
+            {
+                res.Successed = false;
+                res.Message = ex.Message;
+                res.ResponseCode = StatusCodes.Status500InternalServerError;
+            }
+
+            return Ok(res);
+        }
+
+        [HttpPut("cart/{id}")]
+        public async Task<IActionResult> UpdateCart(UpdateCartDto cartDto, string id)
+        {
+            var res = new ApiResult<bool>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var cart = await _context.Carts.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+
+            if (cart == null || cartDto == null)
+            {
+                res.Message = AppConsts.MSG_FIND_NOT_FOUND_DATA;
+                return Ok(res);
+            }
+
+            cart.Quantity = cartDto.Quantity;
+
+            try
+            {
+                _context.Update(cart);
                 await _context.SaveChangesAsync();
                 res.Message = AppConsts.MSG_UPDATED_SUCCESSFULL;
             }

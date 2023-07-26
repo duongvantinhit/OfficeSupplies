@@ -1,0 +1,62 @@
+.checkout {
+    display: flex;
+    margin: 10px 0;
+    h4 {
+        //text-align: center;
+        font-size: 18px;
+        color: var(--text-color);
+    }
+    .checkout-left {
+        flex: 1;
+        padding: 0 10px;
+        // background-color: white;
+        ul {
+            list-style: none;
+            padding-left: 0;
+            li {
+                line-height: 30px;
+            }
+        }
+    }
+
+    .checkout-center {
+        flex: 1;
+        padding: 0 10px;
+        margin: 0 10px;
+        // background-color: white;
+    }
+
+    .checkout-right {
+        flex: 1;
+        padding: 0 10px;
+        background-color: white;
+        ul {
+            list-style: none;
+            padding-left: 0;
+            padding: 0;
+            li {
+                display: flex;
+                justify-content: space-between;
+                padding: 5px 0;
+                img {
+                    height: 70px;
+                    width: 70px;
+                    object-fit: cover;
+                }
+                p {
+                    flex: 1;
+                    padding-left: 10px;
+                    padding-right: 10px;
+                    width: 266px;
+                }
+                span {
+                    margin: auto;
+                }
+            }
+        }
+        .voucher {
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+}

@@ -102,7 +102,7 @@
                             <div class="cart-content">
                                 <ul *ngFor="let item of carts">
                                     <li (click)="productDetail(item.productId)">
-                                        <img src="{{ item.imageURL }}" alt="" />
+                                        <img class="border-img" src="{{ item.imageURL }}" alt="" />
                                         <p>{{ item.productName }}</p>
                                         <span>{{ item.price | number : '1.0-3' }} VND</span>
                                     </li>

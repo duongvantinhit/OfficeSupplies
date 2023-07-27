@@ -56,4 +56,10 @@ export class ProductDetailComponent implements OnInit {
             }
         });
     }
+
+    checkout() {
+        this._router.navigate(['/checkout'], {
+            queryParams: { id: this.productId, quantity: this.quantity },
+        });
+    }
 }

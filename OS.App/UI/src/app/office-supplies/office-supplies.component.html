@@ -146,22 +146,7 @@
                 </div>
             </div>
             <div class="suggest">
-                <p-divider align="center">
-                    <span class="p-tag">DÀNH RIÊNG CHO BẠN</span>
-                </p-divider>
-                <div class="suggest-product">
-                    <div class="col-5" *ngFor="let item of recommededProducts">
-                        <div (click)="productDetail(item.id)">
-                            <img src="{{ item.imageURL }}" alt="" />
-                            <div class="tilte">
-                                <p>{{ item.productName }}</p>
-                                <p>
-                                    <b>{{ item.price | number : '1.0-3' }} VND</b>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <app-products></app-products>
             </div>
 
             <div class="card flex justify-content-center pb-4">

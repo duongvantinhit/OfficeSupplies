@@ -13,7 +13,6 @@ export class OfficeSuppliesComponent implements OnInit {
     topCategories: any;
     topNewProducts: any;
     topProducts: any;
-    recommededProducts: any;
 
     images = [
         {
@@ -105,10 +104,6 @@ export class OfficeSuppliesComponent implements OnInit {
 
         this._apiServices.getDataAll('/top/products').subscribe((res) => {
             this.topProducts = res.data;
-        });
-
-        this._apiServices.getDataAll('/recommended/products').subscribe((res) => {
-            this.recommededProducts = res.data;
         });
     }
 }

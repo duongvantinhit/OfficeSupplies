@@ -6,6 +6,7 @@ using OS.Core.Application.Dtos;
 using OS.Core.Domain.OfficeSupplies;
 using OS.Core.Infrastructure.Database;
 using System.Security.Claims;
+using System.Transactions;
 using UA.Core.Application.SeedWork;
 
 namespace OS.App.Controllers
@@ -144,22 +145,6 @@ namespace OS.App.Controllers
 
             var query = _context.Products.AsNoTracking();
             var sortedDatas = await query.OrderBy(post => post.ProductName).Take(3).ToListAsync();
-
-            res.Data = sortedDatas;
-            return Ok(res);
-        }
-
-        [HttpGet("recommended/products")]
-        public async Task<IActionResult> GetRecommendedProducts()
-        {
-            var res = new ApiResult<IEnumerable<Product>>
-            {
-                Successed = true,
-                ResponseCode = StatusCodes.Status200OK,
-            };
-
-            var query = _context.Products.AsNoTracking();
-            var sortedDatas = await query.OrderBy(post => post.ProductName).Take(15).ToListAsync();
 
             res.Data = sortedDatas;
             return Ok(res);
@@ -497,6 +482,74 @@ namespace OS.App.Controllers
             return Ok(res);
         }
 
+        [HttpPost("order")]
+        public async Task<IActionResult> CreateOrder(OrderDto model)
+       {
+            var res = new ApiResult<IEnumerable<Cart>>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var userId = _httpContext.HttpContext!.User.FindFirstValue("id");
+            var orderId = Guid.NewGuid().ToString();
+            List<OrderDetailDto> orderDetails = model.OrderItems;
+
+            var orderDetailDB = new List<OrderDetail>();
+            var carts = await _context.Carts.Where(x => x.UserId == userId).ToListAsync();
+
+            Order order = new()
+            {
+                Id = orderId,
+                UserId = userId,
+                TotalCost = model.TotalCost,
+                OrderDate = model.OrderDate.ToLocalTime(),
+                PromotionId = model.PromotionId
+            };
+
+            foreach (var item in orderDetails)
+            {
+                var orderDetail = new OrderDetail
+                {
+                    OrderId = orderId,
+                    ProductId = item.ProductId,
+                    Quantity = item.Quantity,
+                    UnitPrice = item.UnitPriceTemp
+                };
+
+                orderDetailDB.Add(orderDetail);
+            }
+
+            using var transaction = _context.Database.BeginTransaction();
+            try
+            {
+                _context.Add(order);
+                await _context.SaveChangesAsync();
+
+                if (carts != null && carts.Any() && orderDetails.Count > 1)
+                {
+                    _context.Carts.RemoveRange(carts);
+                }
+
+                _context.AddRange(orderDetailDB);
+                await _context.SaveChangesAsync();
+
+                transaction.Commit();
+                res.Message = AppConsts.MSG_CREATED_SUCCESSFULL;
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+
+                res.Successed = false;
+                res.Message = ex.Message;
+                res.ResponseCode = StatusCodes.Status500InternalServerError;
+            }
+
+
+            return Ok(res);
+        }
+
 
         #endregion httpPOST
 
@@ -579,11 +632,11 @@ namespace OS.App.Controllers
             };
 
             Promotion product = _context.Promotions.Find(id)!;
-            _context.Promotions.Remove(product);
 
 
             try
             {
+                _context.Promotions.Remove(product);
                 await _context.SaveChangesAsync();
                 res.Message = AppConsts.MSG_UPDATED_SUCCESSFULL;
             }
@@ -605,10 +658,10 @@ namespace OS.App.Controllers
             };
 
             Cart cart = _context.Carts.Find(id)!;
-            _context.Carts.Remove(cart);
 
             try
             {
+                _context.Carts.Remove(cart);
                 await _context.SaveChangesAsync();
                 res.Message = AppConsts.MSG_UPDATED_SUCCESSFULL;
             }

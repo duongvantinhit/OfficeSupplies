@@ -107,9 +107,6 @@
                 }
             }
         }
-        // .top-product-content:last-child {
-        //     border-bottom: none !important;
-        // }
     }
     .content-right {
         flex: 1;
@@ -133,32 +130,4 @@
 .suggest {
     padding-bottom: 20px;
     height: 895px;
-    img {
-        height: 180px;
-        width: 100%;
-        object-fit: cover;
-    }
-    .suggest-product {
-        display: flex;
-        flex-wrap: wrap;
-        .col-5 {
-            width: calc(20% - 10px);
-            cursor: pointer;
-            display: inline-block;
-            background-color: white;
-            margin: 5px;
-            padding: 0;
-            box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.5);
-        }
-
-        .tilte {
-            p {
-                width: 206px;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                padding: 0 10px;
-            }
-        }
-    }
 }

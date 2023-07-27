@@ -19,6 +19,7 @@ export class ProductsComponent implements OnInit {
     getPageNumber = 1;
     setPageNumber: any;
     products: any;
+    pageType: any;
 
     ngOnInit() {
         this.loadProducts();
@@ -27,7 +28,7 @@ export class ProductsComponent implements OnInit {
     loadProducts(event: any = null) {
         let loadPageForm = {
             pageIndex: event ? event.first / event.rows + 1 : 1,
-            pageSize: event ? event.rows : 18,
+            pageSize: event ? event.rows : 15,
         };
 
         event ? (this.getPageNumber = event.first / event.rows + 1) : (this.first = 0);
@@ -36,16 +37,20 @@ export class ProductsComponent implements OnInit {
             this.setPageNumber = res;
         });
 
+        if (this._router.routerState.snapshot.url.includes('products')) {
+            this.pageType = 'products';
+        }
+
         if (!event && this.setPageNumber) {
             loadPageForm = {
                 pageIndex: this.setPageNumber,
-                pageSize: event ? event.rows : 18,
+                pageSize: event ? event.rows : 15,
             };
 
             this._apiServices.loadPages(loadPageForm, `/products`).subscribe((res) => {
                 this.totalRecords = res?.totalRows;
                 this.products = res.data;
-                this.first = (this.setPageNumber - 1) * 18;
+                this.first = (this.setPageNumber - 1) * 15;
                 this.getPageNumber = this.setPageNumber;
             });
         } else {

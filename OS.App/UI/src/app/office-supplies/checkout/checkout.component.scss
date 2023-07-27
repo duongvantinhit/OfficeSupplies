@@ -2,14 +2,13 @@
     display: flex;
     margin: 10px 0;
     h4 {
-        //text-align: center;
         font-size: 18px;
         color: var(--text-color);
     }
     .checkout-left {
         flex: 1;
         padding: 0 10px;
-        // background-color: white;
+
         ul {
             list-style: none;
             padding-left: 0;
@@ -23,7 +22,6 @@
         flex: 1;
         padding: 0 10px;
         margin: 0 10px;
-        // background-color: white;
     }
 
     .checkout-right {
@@ -44,19 +42,51 @@
                     object-fit: cover;
                 }
                 p {
-                    flex: 1;
                     padding-left: 10px;
                     padding-right: 10px;
-                    width: 266px;
+                    width: 293px;
+                    margin: 0;
                 }
                 span {
-                    margin: auto;
+                    margin: 0;
+                    padding-left: 10px;
                 }
             }
         }
-        .voucher {
+    }
+
+    .voucher {
+        display: flex;
+        padding: 10px 10px;
+        box-sizing: border-box;
+        border-bottom: 1px solid var(--surface-border);
+        .voucher-content {
+            padding: 10px;
             display: flex;
+            flex-direction: column;
             justify-content: space-between;
+            h4 {
+                margin: 0;
+                font-size: 18px;
+                line-height: 24px;
+                width: 399px;
+            }
+            span {
+                font-size: 13px;
+                line-height: 20px;
+                display: block;
+                width: 399px;
+            }
+            p {
+                margin: 0;
+                font-size: 13px;
+                line-height: 20px;
+            }
+        }
+        img {
+            height: 100px;
+            width: 100px;
+            margin-right: 20px;
         }
     }
 }

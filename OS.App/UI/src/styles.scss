@@ -17,6 +17,14 @@ body {
     padding: 0 10px;
 }
 
+.border-img {
+    border: 1px solid var(--surface-border);
+}
+
+.border-bottom-img {
+    border-bottom: 1px solid var(--surface-border);
+}
+
 del {
     text-decoration: line-through;
     text-align: center;
@@ -254,6 +262,12 @@ del {
     .login {
         .p-inputtext {
             width: 352px;
+        }
+    }
+
+    .checkout {
+        .field-checkbox {
+            margin-bottom: 0px !important;
         }
     }
 }

@@ -10,4 +10,5 @@ export class Notice {
     static readonly saveSuccessed = 'Lưu thành công';
     static readonly deleteSuccessed = 'Xóa thành công';
     static readonly logoutSuccessed = 'Đăng xuất thành công';
+    static readonly checkOutSuccessed = 'Đặt hàng thành công';
 }

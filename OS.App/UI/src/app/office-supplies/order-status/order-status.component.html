@@ -4,19 +4,37 @@
             <div class="card">
                 <p-tabView>
                     <p-tabPanel header="Tất cả">
-                        <div class="all-order">
-                            <div class="product-infor flex">
-                                <img src="../../../assets/img/introduce/mouse.jpg" alt="" />
-                                <div class="px-2 w-full flex flex-column justify-content-between">
-                                    <div class="flex justify-content-between">
-                                        <p>Chuột máy tính siêu nhạy cho dân văn phòng, với 3 mức DPI siêu nhạy</p>
-                                        <p class="text-teal-600">ĐANG GIAO</p>
+                        <div class="all-order" *ngFor="let item of orderAll">
+                            <div class="product-infor">
+                                <div class="order-header">
+                                    <p><b>MÃ ĐƠN HÀNG:</b> 640bec95-2519-41aa-98c3-c44f2ff72f0a</p>
+                                    <p class="text-primary">ĐANG GIAO</p>
+                                </div>
+                                <div class="content">
+                                    <img src="../../../assets/img/introduce/mouse.jpg" alt="" />
+                                    <div class="px-2 w-full flex flex-column justify-content-between">
+                                        <div class="flex justify-content-between">
+                                            <p>Chuột máy tính siêu nhạy cho dân văn phòng, với 3 mức DPI siêu nhạy</p>
+                                        </div>
+                                        <div class="flex justify-content-between">
+                                            <span>Danh mục: chuột gaming</span>
+                                            <p class="text-orange-500">234.222 VND</p>
+                                        </div>
+                                        <p><span>Số lượng: 1</span></p>
                                     </div>
-                                    <div class="flex justify-content-between">
-                                        <span>Danh mục: chuột gaming</span>
-                                        <p class="text-orange-500">234.222 VND</p>
+                                </div>
+                                <div class="content">
+                                    <img src="../../../assets/img/introduce/mouse.jpg" alt="" />
+                                    <div class="px-2 w-full flex flex-column justify-content-between">
+                                        <div class="flex justify-content-between">
+                                            <p>Chuột máy tính siêu nhạy cho dân văn phòng, với 3 mức DPI siêu nhạy</p>
+                                        </div>
+                                        <div class="flex justify-content-between">
+                                            <span>Danh mục: chuột gaming</span>
+                                            <p class="text-orange-500">234.222 VND</p>
+                                        </div>
+                                        <p><span>Số lượng: 1</span></p>
                                     </div>
-                                    <p><span>Số lượng: 1</span></p>
                                 </div>
                             </div>
 
@@ -25,40 +43,38 @@
                                 <p-button styleClass="m-2" label="Xem chi tiết đơn hàng"></p-button>
                             </div>
                         </div>
-                        <div class="all-order">
-                            <div class="product-infor flex">
-                                <img src="../../../assets/img/introduce/mouse.jpg" alt="" />
-                                <div class="px-2 w-full flex flex-column justify-content-between">
-                                    <div class="flex justify-content-between">
-                                        <p>Chuột máy tính siêu nhạy cho dân văn phòng, với 3 mức DPI siêu nhạy</p>
-                                        <p class="text-teal-600">ĐANG GIAO</p>
-                                    </div>
-                                    <div class="flex justify-content-between">
-                                        <span>Danh mục: chuột gaming</span>
-                                        <p class="text-orange-500">234.222 VND</p>
-                                    </div>
-                                    <p><span>Số lượng: 1</span></p>
-                                </div>
-                            </div>
 
-                            <div class="card flex justify-content-end">
-                                <p-button styleClass="m-2" label="Mua lại"></p-button>
-                                <p-button styleClass="m-2" label="Xem chi tiết đơn hàng"></p-button>
-                            </div>
-                        </div>
-                        <div class="all-order">
-                            <div class="product-infor flex">
-                                <img src="../../../assets/img/introduce/mouse.jpg" alt="" />
-                                <div class="px-2 w-full flex flex-column justify-content-between">
-                                    <div class="flex justify-content-between">
-                                        <p>Chuột máy tính siêu nhạy cho dân văn phòng, với 3 mức DPI siêu nhạy</p>
-                                        <p class="text-teal-600">ĐANG GIAO</p>
+                        <div class="all-order" *ngFor="let item of orderAll">
+                            <div class="product-infor">
+                                <div class="order-header">
+                                    <p><b>Mã đơn hàng:</b> 640bec95-2519-41aa-98c3-c44f2ff72f0a</p>
+                                    <p class="text-primary">ĐANG GIAO</p>
+                                </div>
+                                <div class="content">
+                                    <img src="../../../assets/img/introduce/mouse.jpg" alt="" />
+                                    <div class="px-2 w-full flex flex-column justify-content-between">
+                                        <div class="flex justify-content-between">
+                                            <p>Chuột máy tính siêu nhạy cho dân văn phòng, với 3 mức DPI siêu nhạy</p>
+                                        </div>
+                                        <div class="flex justify-content-between">
+                                            <span>Danh mục: chuột gaming</span>
+                                            <p class="text-orange-500">234.222 VND</p>
+                                        </div>
+                                        <p><span>Số lượng: 1</span></p>
                                     </div>
-                                    <div class="flex justify-content-between">
-                                        <span>Danh mục: chuột gaming</span>
-                                        <p class="text-orange-500">234.222 VND</p>
+                                </div>
+                                <div class="content">
+                                    <img src="../../../assets/img/introduce/mouse.jpg" alt="" />
+                                    <div class="px-2 w-full flex flex-column justify-content-between">
+                                        <div class="flex justify-content-between">
+                                            <p>Chuột máy tính siêu nhạy cho dân văn phòng, với 3 mức DPI siêu nhạy</p>
+                                        </div>
+                                        <div class="flex justify-content-between">
+                                            <span>Danh mục: chuột gaming</span>
+                                            <p class="text-orange-500">234.222 VND</p>
+                                        </div>
+                                        <p><span>Số lượng: 1</span></p>
                                     </div>
-                                    <p><span>Số lượng: 1</span></p>
                                 </div>
                             </div>
 
@@ -68,29 +84,8 @@
                             </div>
                         </div>
                     </p-tabPanel>
-                    <p-tabPanel header="Chờ thanh toán">
+                    <p-tabPanel header="Chờ xác nhận">
                         <app-no-orders></app-no-orders>
-                        <!-- <div class="all-order">
-                            <div class="product-infor flex">
-                                <img src="../../../assets/img/introduce/mouse.jpg" alt="" />
-                                <div class="px-2 w-full flex flex-column justify-content-between">
-                                    <div class="flex justify-content-between">
-                                        <p>Chuột máy tính siêu nhạy cho dân văn phòng, với 3 mức DPI siêu nhạy</p>
-                                        <p class="text-teal-600">CHỜ THANH TOÁN</p>
-                                    </div>
-                                    <div class="flex justify-content-between">
-                                        <span>Danh mục: chuột gaming</span>
-                                        <p class="text-orange-500">234.222 VND</p>
-                                    </div>
-                                    <p><span>Số lượng: 1</span></p>
-                                </div>
-                            </div>
-
-                            <div class="card flex justify-content-end">
-                                <p-button styleClass="m-2" label="Thanh toán"></p-button>
-                                <p-button styleClass="m-2" label="Xem chi tiết đơn hàng"></p-button>
-                            </div>
-                        </div> -->
                     </p-tabPanel>
                     <p-tabPanel header="Vận chuyển">
                         <div class="all-order">
@@ -167,29 +162,6 @@
                                     <div class="flex justify-content-between">
                                         <p>Chuột máy tính siêu nhạy cho dân văn phòng, với 3 mức DPI siêu nhạy</p>
                                         <p class="text-teal-600">ĐÃ HỦY</p>
-                                    </div>
-                                    <div class="flex justify-content-between">
-                                        <span>Danh mục: chuột gaming</span>
-                                        <p class="text-orange-500">234.222 VND</p>
-                                    </div>
-                                    <p><span>Số lượng: 1</span></p>
-                                </div>
-                            </div>
-
-                            <div class="card flex justify-content-end">
-                                <p-button styleClass="m-2" label="Mua lại"></p-button>
-                                <p-button styleClass="m-2" label="Xem chi tiết đơn hàng"></p-button>
-                            </div>
-                        </div>
-                    </p-tabPanel>
-                    <p-tabPanel header="Trả hàng/Hoàn tiền">
-                        <div class="all-order">
-                            <div class="product-infor flex">
-                                <img src="../../../assets/img/introduce/mouse.jpg" alt="" />
-                                <div class="px-2 w-full flex flex-column justify-content-between">
-                                    <div class="flex justify-content-between">
-                                        <p>Chuột máy tính siêu nhạy cho dân văn phòng, với 3 mức DPI siêu nhạy</p>
-                                        <p class="text-teal-600">TRẢ HÀNG/HOÀN TIỀN</p>
                                     </div>
                                     <div class="flex justify-content-between">
                                         <span>Danh mục: chuột gaming</span>

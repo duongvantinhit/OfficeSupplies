@@ -10,5 +10,6 @@ namespace OS.Core.Domain.OfficeSupplies
         public double TotalCost { get; set; }
         public DateTime OrderDate { get; set; }
         public string? PromotionId { get; set; }
+        public string? OrderStatusId { get; set; }
     }
 }

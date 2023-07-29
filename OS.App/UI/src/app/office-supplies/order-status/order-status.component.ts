@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { OfficeSuppliesService } from '../services/office-supplies.service';
 
 @Component({
     selector: 'app-order-status',
@@ -6,7 +8,12 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./order-status.component.scss'],
 })
 export class OrderStatusComponent implements OnInit {
-    constructor() {}
-
-    ngOnInit() {}
+    constructor(private _apiServices: OfficeSuppliesService, private _router: Router) {}
+    orderAll: any;
+    ngOnInit() {
+        this._apiServices.getDataAll('/orders/user').subscribe((res) => {
+            console.log(res);
+            this.orderAll = res.data;
+        });
+    }
 }

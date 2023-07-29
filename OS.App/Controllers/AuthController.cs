@@ -233,6 +233,7 @@ namespace OS.App.Controllers
 
         [HttpPost("assign/user/role")]
         [Authorize]
+        [Authorize(Policy = "Admin")]
         public async Task<IActionResult> AssignUserRole(UserRolesDto dto)
         {
             var res = new ApiResult<string>
@@ -290,6 +291,7 @@ namespace OS.App.Controllers
 
         [HttpDelete("remove/{userId}/{role}")]
         [Authorize]
+        [Authorize(Policy = "Admin")]
         public async Task<IActionResult> RemoveUserRole(string userId, string role)
         {
             var res = new ApiResult<UserDto>

@@ -17,6 +17,7 @@
         public double TotalCost { get; set; }
         public DateTime OrderDate { get; set; }
         public string? PromotionId { get; set; }
+        public string? OrderStatusId { get; set; }
         public List<OrderDetailDto> OrderItems { get; set; } = new List<OrderDetailDto>();
     }
 }

@@ -188,11 +188,27 @@ namespace OS.Core.Domain.Reponsitories
         public async Task<IdentityResult> AssignUserRoleAsync(string userId, string roleName)
         {
             var user = await userManager.FindByIdAsync(userId);
-            if (user != null)
+
+            if (user == null)
             {
-                return await userManager.AddToRoleAsync(user, roleName);
+                return null!;
             }
-            return IdentityResult.Failed(new IdentityError { Description = $"Không tìm thấy người dùng với ID '{userId}'." });
+            else
+            {
+               /* var adminRole = await roleManager.FindByNameAsync("admin");
+                var employeeRole = await roleManager.FindByNameAsync("employee");
+
+                await roleManager.AddClaimAsync(adminRole, new Claim("ManageProducts", "true"));
+                await roleManager.AddClaimAsync(adminRole, new Claim("ManageOrders", "true"));
+                await roleManager.AddClaimAsync(adminRole, new Claim("ManageUsers", "true"));
+
+                await roleManager.AddClaimAsync(employeeRole, new Claim("ManageProducts", "true"));
+                await roleManager.AddClaimAsync(employeeRole, new Claim("ManageOrders", "true"));
+                await roleManager.AddClaimAsync(employeeRole, new Claim("ManageUsers", "false"));*/
+
+                await userManager.AddToRoleAsync(user, roleName);
+                return IdentityResult.Success;
+            }
         }
 
         public async Task<UserDto> GetUserAsync(string userId)
@@ -287,7 +303,7 @@ namespace OS.Core.Domain.Reponsitories
             var user = await userManager.FindByIdAsync(userId);
             var roles = (await userManager.GetRolesAsync(user));
             var filteredRoles = roles?.Where(r => r != null).ToList();
-            if(filteredRoles!.Any())
+            if (filteredRoles!.Any())
             {
                 return filteredRoles!;
             }

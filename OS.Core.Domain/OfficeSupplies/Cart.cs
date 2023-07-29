@@ -8,7 +8,6 @@ namespace OS.Core.Domain.OfficeSupplies
     public class Cart : BaseEntity<string>
     {
         public string? UserId { get; set; }
-        public string? ProductId { get; set; }
-        public int Quantity { get; set; }
+        public ICollection<CartDetail> CartDetails { get; set; }
     }
 }

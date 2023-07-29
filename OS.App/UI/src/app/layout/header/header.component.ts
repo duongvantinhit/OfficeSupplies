@@ -64,15 +64,15 @@ export class HeaderComponent implements OnInit {
         });
 
         this._apiServices.getDataAll('/carts').subscribe((res) => {
-            this.carts = res.data;
-            this.totalProducts = res.data.length;
+            this.carts = res.data.cartDetails;
+            this.totalProducts = res.data.cartDetails.length;
         });
 
         this._apiServices.getUpdateCart.subscribe((res) => {
             if (res) {
                 this._apiServices.getDataAll('/carts').subscribe((res) => {
-                    this.carts = res.data;
-                    this.totalProducts = res.data.length;
+                    this.carts = res.data.cartDetails;
+                    this.totalProducts = res.data.cartDetails.length;
                 });
             }
         });

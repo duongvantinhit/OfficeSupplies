@@ -6,6 +6,7 @@ import { AppMessages } from 'src/app/shared/const/messages.const';
 import { Notice } from 'src/app/shared/const/notice.const';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { Location } from '@angular/common';
+import { AuthService } from 'src/auth/services/auth.service';
 
 @Component({
     selector: 'app-crud-category',
@@ -20,6 +21,7 @@ export class CrudCategoryComponent implements OnInit {
         private _notiService: NotificationService,
         private _actRoute: ActivatedRoute,
         private _location: Location,
+        private _authServices: AuthService,
     ) {}
 
     uploadImg: any;
@@ -47,8 +49,6 @@ export class CrudCategoryComponent implements OnInit {
         this.categoryForm = this._fb.group({
             categoryName: ['', [Validators.required]],
             categoryDescription: ['', [Validators.required]],
-            createdByUserId: ['69eedddd-930e-49de-963f-512fcd798ae6', [Validators.required]],
-            createdDate: [new Date(), [Validators.required]],
         });
     }
 
@@ -60,7 +60,7 @@ export class CrudCategoryComponent implements OnInit {
         this.imgName = data.imageURL;
     }
 
-    private lineLeadFormValidate(): any[] {
+    private formValidate(): any[] {
         const errorMessages = [];
 
         if (!this.categoryForm.controls?.categoryName?.valid) {
@@ -85,7 +85,7 @@ export class CrudCategoryComponent implements OnInit {
 
     create(): void {
         const formUploadImg: FormData = new FormData();
-        let errorMessages = this.lineLeadFormValidate();
+        let errorMessages = this.formValidate();
 
         if (errorMessages.length > 0) {
             this._notiService.error(errorMessages.join('<br/>'), 'ua-toast');
@@ -95,12 +95,11 @@ export class CrudCategoryComponent implements OnInit {
         formUploadImg.append('file', this.uploadImg, this.uploadImg.name);
         formUploadImg.append('CategoryName', this.categoryForm.controls.categoryName.value);
         formUploadImg.append('CategoryDescription', this.categoryForm.controls.categoryDescription.value);
-        formUploadImg.append('createdByUserId', this.categoryForm.controls.createdByUserId.value);
         formUploadImg.append('createdDate', new Date().toISOString());
 
         this._apiServices.postData('/categories', formUploadImg).subscribe((res) => {
             if (res.successed) {
-                this._notiService.success(Notice.addSuccced, '', 'Thành công');
+                this._notiService.success(Notice.addSuccessed, '', 'Thành công');
                 this.ngOnInit();
             } else {
                 this._notiService.error(Notice.addFail);
@@ -110,7 +109,7 @@ export class CrudCategoryComponent implements OnInit {
 
     edit(): void {
         const formUploadImg: FormData = new FormData();
-        let errorMessages = this.lineLeadFormValidate();
+        let errorMessages = this.formValidate();
 
         if (errorMessages.length > 0) {
             this._notiService.error(errorMessages.join('<br/>'), 'ua-toast');
@@ -123,12 +122,11 @@ export class CrudCategoryComponent implements OnInit {
 
         formUploadImg.append('CategoryName', this.categoryForm.controls.categoryName.value);
         formUploadImg.append('CategoryDescription', this.categoryForm.controls.categoryDescription.value);
-        formUploadImg.append('createdByUserId', this.categoryForm.controls.createdByUserId.value);
         formUploadImg.append('ModifiedDate', new Date().toISOString());
 
         this._apiServices.putData('/categories', formUploadImg, this.categoryId).subscribe((res) => {
             if (res.successed) {
-                this._notiService.success(Notice.addSuccced, '', 'Thành công');
+                this._notiService.success(Notice.saveSuccessed, '', 'Thành công');
                 this.ngOnInit();
             } else {
                 this._notiService.error(Notice.addFail);

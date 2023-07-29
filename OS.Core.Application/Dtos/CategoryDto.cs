@@ -12,7 +12,7 @@ namespace OS.Core.Application.Dtos
         public IFormFile? File { get; set; }
     }
 
-    public class CreateCategoryDto: BaseCategory
+    public class CategoryDto: BaseCategory
     {
         public DateTime CreatedDate { get; set; }
     }

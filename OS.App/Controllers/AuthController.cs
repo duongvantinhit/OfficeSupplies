@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OS.Core.Application;
 using OS.Core.Application.Dtos;
 using OS.Core.Domain.Reponsitories;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using UA.Core.Application.SeedWork;
 
 namespace OS.App.Controllers
@@ -10,15 +13,120 @@ namespace OS.App.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IAccountReponsitory accountRepo;
+        private readonly IAccountReponsitory _accountRepo;
+        private readonly IHttpContextAccessor _httpContext;
 
-        public AuthController(IAccountReponsitory repo)
+        public AuthController(IAccountReponsitory repo, IHttpContextAccessor httpContext)
         {
-            accountRepo = repo;
+            _accountRepo = repo;
+            _httpContext = httpContext;
         }
 
-        [HttpPost("SigUp")]
-        public async Task<IActionResult> SigUp(Sigup sigup)
+        #region httpGET
+        [HttpGet("user/infor")]
+        [Authorize]
+        public async Task<ActionResult<UserDto>> GetUser()
+        {
+            var res = new ApiResult<UserDto>
+            {
+                Successed = false,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var userId = _httpContext.HttpContext!.User.FindFirstValue("id");
+            var userDto = await _accountRepo.GetUserAsync(userId);
+
+            if (userDto == null)
+            {
+                res.Message = AppConsts.MSG_FIND_NOT_FOUND_DATA;
+            }
+            else
+            {
+                res.Successed = true;
+                res.Data = userDto;
+            }
+
+            return Ok(res);
+        }
+
+        [HttpGet("users")]
+        [Authorize]
+        public async Task<ActionResult<UserDto>> GetAllUsersAsync()
+        {
+            var res = new ApiResult<List<UserDto>>
+            {
+                Successed = false,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+            var users = await _accountRepo.GetAllUsersAsync();
+
+            if (users == null)
+            {
+                res.Message = AppConsts.MSG_FIND_NOT_FOUND_DATA;
+            }
+            else
+            {
+                res.Successed = true;
+                res.Data = users;
+            }
+
+            return Ok(res);
+        }
+
+
+        [HttpGet("roles")]
+        [Authorize]
+        public async Task<ActionResult<List<string>>> GetRoles ()
+        {
+            var res = new ApiResult<List<string>>
+            {
+                Successed = false,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+            var users = await _accountRepo.GetRolesAsync();
+
+            if (users == null)
+            {
+                res.Message = AppConsts.MSG_FIND_NOT_FOUND_DATA;
+            }
+            else
+            {
+                res.Successed = true;
+                res.Data = users;
+            }
+
+            return Ok(res);
+        }
+
+        [HttpGet("user/roles/{userId}")]
+        
+        public async Task<ActionResult<List<string>>> GetUserRoles(string userId)
+        {
+            var res = new ApiResult<List<string>>
+            {
+                Successed = false,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+            var users = await _accountRepo.GetUserRolesAsync(userId);
+
+            if (users == null)
+            {
+                res.Message = AppConsts.MSG_FIND_NOT_FOUND_DATA;
+            }
+            else
+            {
+                res.Successed = true;
+                res.Data = users;
+            }
+
+            return Ok(res);
+        }
+
+        #endregion
+
+        #region httpPOST
+        [HttpPost("sign-up")]
+        public async Task<IActionResult> SignUp(SignUp signup)
         {
             var res = new ApiResult<IEnumerable<bool>>
             {
@@ -26,7 +134,7 @@ namespace OS.App.Controllers
                 ResponseCode = StatusCodes.Status200OK,
             };
 
-            var result = await accountRepo.SignUpAsync(sigup);
+            var result = await _accountRepo.SignUpAsync(signup);
 
             if (result.Succeeded)
             {
@@ -41,41 +149,50 @@ namespace OS.App.Controllers
             return Ok(res);
         }
 
+
         [HttpPost("refreshtoken")]
         public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequestDto model)
         {
-            var res = new ApiResult<TokenDto>
+            var res = new ApiResult<string>
             {
                 Successed = false,
                 ResponseCode = StatusCodes.Status200OK,
             };
 
-            var tokenDto = await accountRepo.RefreshTokenAsync(model.Email!, model.RefreshToken!);
+            string refreshToken = HttpContext.Request.Cookies["refresh_token"]!;
+            var tokenDto = await _accountRepo.RefreshTokenAsync(model.Email!, refreshToken!);
 
             if (tokenDto == null)
             {
+                Response.Cookies.Delete("refresh_token");
+                Response.Cookies.Delete("access_token");
                 res.ResponseCode = StatusCodes.Status401Unauthorized;
             }
             else
             {
+                JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+                JwtSecurityToken decodedToken = tokenHandler.ReadJwtToken(tokenDto.AccessToken);
+                string? exp = decodedToken.Claims.FirstOrDefault(c => c.Type == "exp")?.Value;
+
+                SetAuthCookies(tokenDto.AccessToken!, tokenDto.RefreshToken!);
                 res.Successed = true;
-                res.Data = tokenDto;
+                res.Data = exp;
             }
 
             return Ok(res);
         }
 
 
-        [HttpPost("SigIn")]
-        public async Task<IActionResult> SigIn(Sigin sigin)
+        [HttpPost("sign-in")]
+        public async Task<IActionResult> SignIn(SignIn signin)
         {
-            var res = new ApiResult<TokenDto>
+            var res = new ApiResult<string>
             {
                 Successed = false,
                 ResponseCode = StatusCodes.Status200OK,
             };
 
-            var result = await accountRepo.SigInAsync(sigin);
+            var result = await _accountRepo.SigInAsync(signin);
 
             if (result == null)
             {
@@ -83,44 +200,68 @@ namespace OS.App.Controllers
             }
             else
             {
+                SetAuthCookies(result.AccessToken!, result.RefreshToken!);
                 res.Successed = true;
-                res.Data = result;
             }
             return Ok(res);
         }
 
-
-        [HttpPost("CreateRole")]
+        [HttpPost("create/role")]
+        [Authorize]
         public async Task<IActionResult> CreateRole(string roleName)
         {
-            var result = await accountRepo.CreateRoleAsync(roleName);
+            var res = new ApiResult<string>
+            {
+                Successed = false,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var result = await _accountRepo.CreateRoleAsync(roleName);
+
             if (result.Succeeded)
             {
-                return Ok();
+                res.Successed = true;
+                res.Message = AppConsts.MSG_CREATED_SUCCESSFULL;
             }
             else
             {
-                return BadRequest(result.Errors);
+                res.Message = AppConsts.MSG_SAVED_FAILED;
             }
+
+            return Ok(res);
         }
 
-
-        [HttpPost("AssignUserRole")]
-        public async Task<IActionResult> AssignUserRole(string userId, string roleName)
+        [HttpPost("assign/user/role")]
+        [Authorize]
+        public async Task<IActionResult> AssignUserRole(UserRolesDto dto)
         {
-            var result = await accountRepo.AssignUserRoleAsync(userId, roleName);
+            var res = new ApiResult<string>
+            {
+                Successed = false,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var result = await _accountRepo.AssignUserRoleAsync(dto.UserId!, dto.Role!);
+
             if (result.Succeeded)
             {
-                return Ok();
+                res.Successed = true;
+                res.Message = AppConsts.MSG_SAVED_SUCCESSFULL;
             }
             else
             {
-                return BadRequest(result.Errors);
+                res.Message = AppConsts.MSG_SAVED_FAILED;
             }
+
+            return Ok(res);
         }
 
-        [HttpGet("infor/{userId}")]
-        public async Task<ActionResult<UserDto>> GetUser(string userId)
+        #endregion
+
+        #region httpPUT
+        [HttpPut("change-password")]
+        [Authorize]
+        public async Task<IActionResult> ChangePasswordAsync([FromBody] ChangePasswordDto changePasswordDto)
         {
             var res = new ApiResult<UserDto>
             {
@@ -128,19 +269,65 @@ namespace OS.App.Controllers
                 ResponseCode = StatusCodes.Status200OK,
             };
 
-            var userDto = await accountRepo.GetUserAsync(userId);
+            var result = await _accountRepo.ChangePasswordAsync(changePasswordDto);
 
-            if (userDto == null)
+            if (!result.Succeeded)
             {
                 res.Message = AppConsts.MSG_FIND_NOT_FOUND_DATA;
             }
             else
             {
                 res.Successed = true;
-                res.Data = userDto;
+                res.Message = AppConsts.MSG_CHANGE_PASSWORD_SUCCESSFULL;
             }
 
             return Ok(res);
+        }
+
+        #endregion
+
+        #region httpDELETE
+
+        [HttpDelete("remove/{userId}/{role}")]
+        [Authorize]
+        public async Task<IActionResult> RemoveUserRole(string userId, string role)
+        {
+            var res = new ApiResult<UserDto>
+            {
+                Successed = false,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var result = await _accountRepo.RemoveUserRoleAsync(userId, role);
+
+            if (result.Succeeded)
+            {
+                res.Successed = true;
+                res.Message = AppConsts.MSG_UPDATED_SUCCESSFULL;
+            }
+            else
+            {
+                res.Message = AppConsts.MSG_UPDATED_FAILED;
+            }
+
+            return Ok(res);
+        }
+
+        #endregion
+
+        private void SetAuthCookies(string accessToken, string refreshToken)
+        {
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                SameSite = SameSiteMode.None,
+                Secure = true,
+                Path = "/",
+                Expires = DateTime.Now.AddDays(7)
+            };
+
+            Response.Cookies.Append("access_token", accessToken, cookieOptions);
+            Response.Cookies.Append("refresh_token", refreshToken, cookieOptions);
         }
     }
 }

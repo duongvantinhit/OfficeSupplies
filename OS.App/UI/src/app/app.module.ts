@@ -14,6 +14,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from 'src/auth/token.interceptor';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { OfficeSuppliesService } from './office-supplies/services/office-supplies.service';
 
 @NgModule({
     declarations: [AppComponent, PageNotFoundComponent],
@@ -25,6 +26,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
         ConfirmationService,
         AuthGuard,
         AuthService,
+        OfficeSuppliesService,
     ],
     bootstrap: [AppComponent],
 })

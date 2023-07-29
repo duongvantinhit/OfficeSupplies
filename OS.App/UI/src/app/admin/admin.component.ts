@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AdminService } from './services/admin.service';
 import { AuthService } from 'src/auth/services/auth.service';
+import { ConfirmationService } from 'primeng/api';
+import { AppMessages } from '../shared/const/messages.const';
+import { NotificationService } from '../shared/services/notification.service';
+import { Notice } from '../shared/const/notice.const';
 
 @Component({
     selector: 'app-admin',
@@ -9,7 +13,13 @@ import { AuthService } from 'src/auth/services/auth.service';
     styleUrls: ['./admin.component.scss'],
 })
 export class AdminComponent implements OnInit {
-    constructor(private _router: Router, private _apiServices: AdminService, private _authService: AuthService) {}
+    constructor(
+        private _router: Router,
+        private _apiServices: AdminService,
+        private _authServices: AuthService,
+        private _confirmationService: ConfirmationService,
+        private _notiService: NotificationService,
+    ) {}
     ngOnInit(): void {}
 
     function = [
@@ -41,7 +51,7 @@ export class AdminComponent implements OnInit {
                 {
                     label: 'Thêm sản phẩm',
                     icon: 'pi pi-fw pi-plus',
-                    routerLink: '/admin/add-product',
+                    routerLink: '/admin/product',
                 },
             ],
         },
@@ -57,7 +67,7 @@ export class AdminComponent implements OnInit {
                 {
                     label: 'Thêm mã',
                     icon: 'pi pi-fw pi-ticket',
-                    routerLink: '/admin/add-promotion',
+                    routerLink: '/admin/promotion',
                 },
             ],
         },
@@ -85,11 +95,6 @@ export class AdminComponent implements OnInit {
                     label: 'Danh sách người dùng',
                     icon: 'pi pi-fw  pi-list',
                     routerLink: '/admin/users',
-                },
-                {
-                    label: 'Tạo mới',
-                    icon: 'pi pi-fw pi-user-plus',
-                    routerLink: '/admin/create-user',
                 },
             ],
         },
@@ -124,11 +129,6 @@ export class AdminComponent implements OnInit {
                     routerLink: '/admin/user-infor',
                 },
                 {
-                    label: 'Chỉnh sửa thông tin',
-                    icon: 'pi pi-fw pi-user-edit',
-                    routerLink: '/admin',
-                },
-                {
                     label: 'Đổi mật khẩu',
                     icon: 'pi pi-fw pi-refresh',
                     routerLink: '/admin/change-password',
@@ -136,9 +136,17 @@ export class AdminComponent implements OnInit {
                 {
                     label: 'Đăng xuất',
                     icon: 'pi pi-fw pi-sign-out',
-                    routerLink: '/login',
                     command: () => {
-                        this._authService.logout();
+                        this._confirmationService.confirm({
+                            message: AppMessages.C_M_3,
+                            header: 'Confirmation',
+                            icon: 'pi pi-exclamation-triangle',
+                            accept: () => {
+                                this._router.navigate(['/login']);
+                                this._authServices.logout();
+                                this._notiService.success(Notice.logoutSuccessed, '', 'Thành công');
+                            },
+                        });
                     },
                 },
             ],

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { OfficeSuppliesService } from './services/office-supplies.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-office-supplies',
@@ -6,9 +8,11 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./office-supplies.component.scss'],
 })
 export class OfficeSuppliesComponent implements OnInit {
-    constructor() {}
+    constructor(private _apiServices: OfficeSuppliesService, private _router: Router) {}
 
-    ngOnInit() {}
+    topCategories: any;
+    topNewProducts: any;
+    topProducts: any;
 
     images = [
         {
@@ -71,5 +75,35 @@ export class OfficeSuppliesComponent implements OnInit {
     onPageChange(event: any) {
         this.first = event.first;
         this.rows = event.rows;
+    }
+
+    product(item: any) {
+        this._router.navigate(['/category'], {
+            queryParams: { id: item.id, name: item.categoryName },
+        });
+    }
+
+    productDetail(productId: any) {
+        this._router.navigate(['/product/detail'], {
+            queryParams: { id: productId },
+        });
+    }
+
+    viewProducts() {
+        this._router.navigate(['/products']);
+    }
+
+    ngOnInit() {
+        this._apiServices.getDataAll('/top/categories').subscribe((res) => {
+            this.topCategories = res.data;
+        });
+
+        this._apiServices.getDataAll('/top/new/products').subscribe((res) => {
+            this.topNewProducts = res.data;
+        });
+
+        this._apiServices.getDataAll('/top/products').subscribe((res) => {
+            this.topProducts = res.data;
+        });
     }
 }

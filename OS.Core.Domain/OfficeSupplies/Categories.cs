@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace OS.Core.Domain.OfficeSupplies
 {
     [Table("Categories")]
-    public class Categories : BaseEntity<int>
+    public class Categories : BaseEntity<string>
     {
         public string? CategoryName { get; set; }
         public string? ImageURL { get; set; }

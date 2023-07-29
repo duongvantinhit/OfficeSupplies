@@ -2,107 +2,28 @@
     <div class="products">
         <div class="width">
             <p-divider align="center">
-                <span class="p-tag">DÀNH RIÊNG CHO BẠN</span>
+                <span class="p-tag">SẢN PHẨM</span>
             </p-divider>
             <div class="products-content">
-                <div class="col-3">
-                    <img src="../../assets/img/outstanding/keyboard.jpg" alt="" />
-                    <div class="tilte"><p>Bàn phím</p></div>
-                    <p><b>345666 VND</b></p>
-                </div>
-                <div class="col-3">
-                    <img src="../../assets/img/outstanding/mouse.webp" alt="" />
-                    <div class="tilte"><p>Chuột gaming</p></div>
-                    <p><b>345666 VND</b></p>
-                </div>
-                <div class="col-3">
-                    <img src="../../assets/img/outstanding/keyboard.jpg" alt="" />
-                    <div class="tilte"><p>Bàn phím</p></div>
-                    <p><b>345666 VND</b></p>
-                </div>
-                <div class="col-3">
-                    <img src="../../assets/img/outstanding/mouse.webp" alt="" />
-                    <div class="tilte"><p>Chuột gaming</p></div>
-                    <p><b>345666 VND</b></p>
-                </div>
-                <div class="col-3">
-                    <img src="../../assets/img/outstanding/keyboard.jpg" alt="" />
-                    <div class="tilte"><p>Bàn phím</p></div>
-                    <p><b>345666 VND</b></p>
-                </div>
-                <div class="col-3">
-                    <img src="../../assets/img/outstanding/mouse.webp" alt="" />
-                    <div class="tilte"><p>Chuột gaming</p></div>
-                    <p><b>345666 VND</b></p>
-                </div>
-                <div class="col-3">
-                    <img src="../../assets/img/outstanding/keyboard.jpg" alt="" />
-                    <div class="tilte"><p>Bàn phím</p></div>
-                    <p><b>345666 VND</b></p>
-                </div>
-                <div class="col-3">
-                    <img src="../../assets/img/outstanding/mouse.webp" alt="" />
-                    <div class="tilte"><p>Chuột gaming</p></div>
-                    <p><b>345666 VND</b></p>
-                </div>
-                <div class="col-3">
-                    <img src="../../assets/img/outstanding/keyboard.jpg" alt="" />
-                    <div class="tilte"><p>Bàn phím</p></div>
-                    <p><b>345666 VND</b></p>
-                </div>
-                <div class="col-3">
-                    <img src="../../assets/img/outstanding/mouse.webp" alt="" />
-                    <div class="tilte"><p>Chuột gaming</p></div>
-                    <p><b>345666 VND</b></p>
-                </div>
-                <div class="col-3">
-                    <img src="../../assets/img/outstanding/keyboard.jpg" alt="" />
-                    <div class="tilte"><p>Bàn phím</p></div>
-                    <p><b>345666 VND</b></p>
-                </div>
-                <div class="col-3">
-                    <img src="../../assets/img/outstanding/mouse.webp" alt="" />
-                    <div class="tilte"><p>Chuột gaming</p></div>
-                    <p><b>345666 VND</b></p>
-                </div>
-                <div class="col-3">
-                    <img src="../../assets/img/outstanding/keyboard.jpg" alt="" />
-                    <div class="tilte"><p>Bàn phím</p></div>
-                    <p><b>345666 VND</b></p>
-                </div>
-                <div class="col-3">
-                    <img src="../../assets/img/outstanding/mouse.webp" alt="" />
-                    <div class="tilte"><p>Chuột gaming</p></div>
-                    <p><b>345666 VND</b></p>
-                </div>
-                <div class="col-3">
-                    <img src="../../assets/img/outstanding/keyboard.jpg" alt="" />
-                    <div class="tilte"><p>Bàn phím</p></div>
-                    <p><b>345666 VND</b></p>
-                </div>
-                <div class="col-3">
-                    <img src="../../assets/img/outstanding/mouse.webp" alt="" />
-                    <div class="tilte"><p>Chuột gaming</p></div>
-                    <p><b>345666 VND</b></p>
-                </div>
-                <div class="col-3">
-                    <img src="../../assets/img/outstanding/keyboard.jpg" alt="" />
-                    <div class="tilte"><p>Bàn phím</p></div>
-                    <p><b>345666 VND</b></p>
-                </div>
-                <div class="col-3">
-                    <img src="../../assets/img/outstanding/mouse.webp" alt="" />
-                    <div class="tilte"><p>Chuột gaming</p></div>
-                    <p><b>345666 VND</b></p>
+                <div class="col-3" *ngFor="let item of products">
+                    <div (click)="productDetail(item.id)">
+                        <img src="{{ item.imageURL }}" alt="" />
+                        <div class="tilte">
+                            <p class="text-overflow">{{ item.productName }}</p>
+                        </div>
+                        <p>
+                            <b>{{ item.price | number : '1.0-3' }} VND</b>
+                        </p>
+                    </div>
                 </div>
             </div>
-            <div class="flex justify-content-center pb-3">
+            <div class="card flex justify-content-center m-2" *ngIf="pageType">
                 <p-paginator
-                    (onPageChange)="onPageChange($event)"
+                    (onPageChange)="loadProducts($event)"
                     [first]="first"
-                    [rows]="rows"
-                    [totalRecords]="120"
-                    [rowsPerPageOptions]="[10, 20, 30]"
+                    [rows]="8"
+                    [totalRecords]="totalRecords"
+                    [rowsPerPageOptions]="[15, 30, 45]"
                 ></p-paginator>
             </div>
         </div>

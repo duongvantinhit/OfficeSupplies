@@ -1,98 +1,145 @@
 <div class="office-supplies-admin">
     <div class="crud-product">
         <div class="flex title">
-            <div class="tilte-left">
+            <div class="tilte-left" (click)="goBack()" *ngIf="pageType === 'edit'">
                 <p-button icon="pi pi-arrow-left"></p-button>
             </div>
             <div class="tilte-right">
-                <h2>Thêm sản phẩm</h2>
+                <h2>{{ pageTilte }}</h2>
             </div>
         </div>
-        <div class="product">
-            <div class="col-3 flex border-1 border-400 border-dashed border-round-md">
-                <div class="card flex justify-content-center m-auto">
-                    <p-fileUpload
-                        mode="basic"
-                        chooseLabel="Chọn ảnh"
-                        name="demo[]"
-                        url="https://www.primefaces.org/cdn/api/upload.php"
-                        accept="image/*"
-                        (onUpload)="onUpload($event)"
-                    ></p-fileUpload>
+        <form [formGroup]="productForm">
+            <div class="product">
+                <div class="col-3">
+                    <div class="flex justify-content-center">
+                        <p-fileUpload
+                            chooseLabel="Chọn ảnh"
+                            accept="image/*"
+                            [showUploadButton]="false"
+                            [showCancelButton]="false"
+                            (onSelect)="onFileSelected($event)"
+                        >
+                            <ng-template pTemplate="file">
+                                <div class="img-name">{{ imgName }}</div>
+                            </ng-template>
+                        </p-fileUpload>
+                    </div>
+                </div>
+
+                <div class="col-3">
+                    <div class="flex-auto">
+                        <span class="font-bold block mb-2">Danh mục </span>
+                        <p-dropdown
+                            [options]="categorie"
+                            appendTo="body"
+                            optionLabel="categoryName"
+                            optionValue="id"
+                            placeholder="Chọn danh mục"
+                            [virtualScrollItemSize]="38"
+                            styleClass="w-full"
+                            formControlName="categoryId"
+                        ></p-dropdown>
+                    </div>
+                </div>
+
+                <div class="col-3">
+                    <div class="flex-auto">
+                        <span class="font-bold block mb-2">Trạng thái </span>
+                        <p-dropdown
+                            [options]="productStatus"
+                            appendTo="body"
+                            placeholder="Chọn trạng thái"
+                            [virtualScrollItemSize]="38"
+                            styleClass="w-full"
+                            formControlName="status"
+                        ></p-dropdown>
+                    </div>
+                </div>
+
+                <div class="col-3">
+                    <span class="font-bold block mb-2">Tên sản phẩm</span>
+                    <input
+                        type="text"
+                        class="w-full"
+                        pInputText
+                        placeholder="Nhập tên sản phẩm"
+                        formControlName="productName"
+                    />
+                </div>
+
+                <div class="col-3 p-number">
+                    <span class="font-bold block mb-2">Số lượng</span>
+                    <p-inputNumber inputId="integeronly" formControlName="quantityInStock"> </p-inputNumber>
+                </div>
+
+                <div class="col-3">
+                    <span class="font-bold block mb-2">Thương hiệu</span>
+                    <input
+                        type="text"
+                        class="w-full"
+                        pInputText
+                        placeholder="Nhập thương hiệu"
+                        formControlName="trademark"
+                    />
+                </div>
+
+                <div class="col-3">
+                    <span class="font-bold block mb-2">Mô tả</span>
+                    <input
+                        type="text"
+                        class="w-full"
+                        pInputText
+                        placeholder="Nhập mô tả"
+                        formControlName="productDescription"
+                    />
+                </div>
+
+                <div class="col-3 p-number">
+                    <span class="font-bold block mb-2">Giá sản phẩm (VND)</span>
+                    <p-inputNumber inputId="integeronly" formControlName="price"> </p-inputNumber>
+                </div>
+
+                <div class="col-3">
+                    <span class="font-bold block mb-2">Xuất xứ</span>
+                    <input
+                        type="text"
+                        class="w-full"
+                        pInputText
+                        placeholder="Nhập xuất xứ"
+                        formControlName="countryOfOrigin"
+                    />
+                </div>
+
+                <div class="col-3">
+                    <span class="font-bold block mb-2">Thời gian bảo hành</span>
+                    <input
+                        type="text"
+                        class="w-full"
+                        pInputText
+                        placeholder="Nhập thời gian bảo hành"
+                        formControlName="warranty"
+                    />
+                </div>
+
+                <div class="col-3">
+                    <span class="font-bold block mb-2">Mô tả bảo hành</span>
+                    <input
+                        type="text"
+                        class="w-full"
+                        pInputText
+                        placeholder="Nhập mô tả bảo hành"
+                        formControlName="warrantyDescription"
+                    />
                 </div>
             </div>
+        </form>
 
-            <div class="col-3">
-                <div class="flex-auto">
-                    <span class="font-bold block mb-2">Danh mục </span>
-                    <p-dropdown
-                        appendTo="body"
-                        optionLabel="name"
-                        optionValue="id"
-                        placeholder="Chọn danh mục"
-                        [virtualScrollItemSize]="38"
-                        styleClass="w-full"
-                    ></p-dropdown>
-                </div>
-            </div>
-
-            <div class="col-3">
-                <div class="flex-auto">
-                    <span class="font-bold block mb-2">Trạng thái </span>
-                    <p-dropdown
-                        appendTo="body"
-                        optionLabel="name"
-                        optionValue="id"
-                        placeholder="Chọn trạng thái"
-                        [virtualScrollItemSize]="38"
-                        styleClass="w-full"
-                    ></p-dropdown>
-                </div>
-            </div>
-
-            <div class="col-3">
-                <span class="font-bold block mb-2">Tên sản phẩm</span>
-                <input type="text" class="w-full" pInputText placeholder="Nhập tên sản phẩm" />
-            </div>
-
-            <div class="col-3">
-                <span class="font-bold block mb-2">Số lượng</span>
-                <input type="text" class="w-full" pInputText placeholder="Nhập số lượng" />
-            </div>
-
-            <div class="col-3">
-                <span class="font-bold block mb-2">Thương hiệu</span>
-                <input type="text" class="w-full" pInputText placeholder="Nhập thương hiệu" />
-            </div>
-
-            <div class="col-3">
-                <span class="font-bold block mb-2">Mô tả</span>
-                <input type="text" class="w-full" pInputText placeholder="Nhập mô tả" />
-            </div>
-
-            <div class="col-3">
-                <span class="font-bold block mb-2">Giá</span>
-                <input type="text" class="w-full" pInputText placeholder="Nhập giá" />
-            </div>
-
-            <div class="col-3">
-                <span class="font-bold block mb-2">Xuất xứ</span>
-                <input type="text" class="w-full" pInputText placeholder="Nhập xuất xứ" />
-            </div>
-
-            <div class="col-3">
-                <span class="font-bold block mb-2">Thời gian bảo hành</span>
-                <input type="text" class="w-full" pInputText placeholder="Nhập thời gian bảo hành" />
-            </div>
-
-            <div class="col-3">
-                <span class="font-bold block mb-2">Mô tả bảo hành</span>
-                <input type="text" class="w-full" pInputText placeholder="Nhập mô tả bảo hành" />
-            </div>
+        <div class="card flex justify-content-center p-2" *ngIf="pageType != 'edit'">
+            <p-button (onClick)="create()" label="Tạo"></p-button>
         </div>
 
-        <div class="card flex justify-content-center p-2">
-            <p-button label="Tạo"></p-button>
+        <div class="card flex justify-content-center p-2" *ngIf="pageType === 'edit'">
+            <p-button (onClick)="edit()" label="Lưu"></p-button>
         </div>
     </div>
 </div>

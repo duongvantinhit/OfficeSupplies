@@ -13,5 +13,6 @@
         public const string MSG_LOAD_FAILED = "Load failed";
         public const string MSG_LOAD_SUCCESSFULL = "Load successfully";
         public const string MSG_LOGIN_SUCCESSFULL = "Login successfully";
+        public const string MSG_CHANGE_PASSWORD_SUCCESSFULL = "Change Password successfully";
     }
 }

@@ -2,7 +2,7 @@
 
 namespace OS.Core.Application.Dtos
 {
-    public class Sigup
+    public class SignUp
     {
         [Required]
         public string? FirstName { get; set; }
@@ -16,5 +16,6 @@ namespace OS.Core.Application.Dtos
         [Required]
         public string? ConfirmPassword { get; set; }
         public string? Address { get; set; }
+        public string? Role { get; set; }
     }
 }

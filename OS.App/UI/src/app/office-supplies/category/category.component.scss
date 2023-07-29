@@ -6,7 +6,7 @@
         margin: 0;
         li {
             line-height: 30px;
-            // font-size: 15px;
+
             font-weight: 500;
             cursor: pointer;
         }
@@ -16,24 +16,7 @@
         }
     }
 
-    .category-left {
-        flex: 1;
-        .filter {
-            ul {
-                li {
-                    padding-left: 30px;
-                    font-weight: 400;
-                    i {
-                        padding-right: 5px;
-                    }
-                }
-                li:hover {
-                    background-color: white;
-                }
-            }
-        }
-    }
-    .category-right {
+    .category {
         flex: 3;
         p {
             font-size: 20px;
@@ -59,11 +42,13 @@
                 background-color: white;
                 margin: 5px;
                 cursor: pointer;
+                box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.5);
                 p {
                     font-size: 15px;
                     font-weight: 500;
                     padding: 0 10px;
                     color: var(--text-color);
+                    width: 282px;
                 }
 
                 img {

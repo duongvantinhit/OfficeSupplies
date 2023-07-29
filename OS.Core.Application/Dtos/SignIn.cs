@@ -2,7 +2,7 @@
 
 namespace OS.Core.Application.Dtos
 {
-    public class Sigin
+    public class SignIn
     {
         [Required, EmailAddress]
         public string? Email { get; set; }

@@ -2,7 +2,7 @@
     <div class="carts">
         <div class="width">
             <h3><i class="pi pi-cart-plus" style="font-size: 1.5rem"></i>Giỏ hàng</h3>
-            <p-table [value]="products" [tableStyle]="{ 'min-width': '50rem' }">
+            <p-table [value]="carts" [tableStyle]="{ 'min-width': '50rem' }">
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="min-width: 450px">Sản phẩm</th>
@@ -11,20 +11,22 @@
                         <th>Tổng tiền</th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-product>
+                <ng-template pTemplate="body" let-item>
                     <tr>
-                        <td class="flex cart-product">
-                            <img src="{{ product.img }}" alt="" />
+                        <td (click)="productDetail(item.productId)" class="flex cart-product cursor-pointer">
+                            <img src="{{ item.imageURL }}" alt="" />
                             <span>
-                                <p>{{ product.name }}</p>
-                                <p><i class="pi pi-minus-circle pr-2 text-red-600"></i>Xóa sản phẩm</p>
+                                <p>{{ item.productName }}</p>
+                                <p (click)="deleteCart(item.id, $event)">
+                                    <i class="pi pi-trash pr-2 text-red-600"></i>Xóa sản phẩm
+                                </p>
                             </span>
                         </td>
-                        <td>{{ product.price }} VND</td>
+                        <td>{{ item.price | number : '1.0-3' }} VND</td>
                         <td style="width: 100px">
                             <div class="flex justify-content-center">
                                 <p-inputNumber
-                                    [(ngModel)]="value1"
+                                    [(ngModel)]="item.quantity"
                                     [showButtons]="true"
                                     buttonLayout="horizontal"
                                     spinnerMode="horizontal"
@@ -33,20 +35,29 @@
                                     incrementButtonClass="p-button-secondary"
                                     incrementButtonIcon="pi pi-plus"
                                     decrementButtonIcon="pi pi-minus"
+                                    (onInput)="updateCart(carts, item.id, item.quantity)"
                                 ></p-inputNumber>
                             </div>
                         </td>
-                        <td>{{ product.price * product.quantity }} VND</td>
+                        <td>{{ item.price * item.quantity | number : '1.0-3' }} VND</td>
                     </tr>
                 </ng-template>
             </p-table>
-            <p class="text-right">Tổng tiền: <b class="text-red-500">343333 VND</b></p>
+            <p class="text-right">
+                Tổng tiền: <b class="text-red-500">{{ totalPrice | number : '1.0-3' }} VND</b>
+            </p>
             <div class="cart-footer flex justify-content-end">
                 <div class="card flex justify-content-center pb-4 pr-2">
-                    <button pButton pRipple label="Tiếp tục mua hàng"></button>
+                    <button routerLink="/products" pButton pRipple label="Tiếp tục mua hàng"></button>
                 </div>
                 <div class="card flex justify-content-center pb-4">
-                    <button class="bg-orange-400 border-orange-400" pButton pRipple label="Thanh toán"></button>
+                    <button
+                        routerLink="/checkout"
+                        class="bg-orange-400 border-orange-400"
+                        pButton
+                        pRipple
+                        label="Thanh toán"
+                    ></button>
                 </div>
             </div>
         </div>

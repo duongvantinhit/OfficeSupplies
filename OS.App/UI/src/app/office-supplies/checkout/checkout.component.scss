@@ -1,0 +1,92 @@
+.checkout {
+    display: flex;
+    margin: 10px 0;
+    h4 {
+        font-size: 18px;
+        color: var(--text-color);
+    }
+    .checkout-left {
+        flex: 1;
+        padding: 0 10px;
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+            li {
+                line-height: 30px;
+            }
+        }
+    }
+
+    .checkout-center {
+        flex: 1;
+        padding: 0 10px;
+        margin: 0 10px;
+    }
+
+    .checkout-right {
+        flex: 1;
+        padding: 0 10px;
+        background-color: white;
+        ul {
+            list-style: none;
+            padding-left: 0;
+            padding: 0;
+            li {
+                display: flex;
+                justify-content: space-between;
+                padding: 5px 0;
+                img {
+                    height: 70px;
+                    width: 70px;
+                    object-fit: cover;
+                }
+                p {
+                    padding-left: 10px;
+                    padding-right: 10px;
+                    width: 293px;
+                    margin: 0;
+                }
+                span {
+                    margin: 0;
+                    padding-left: 10px;
+                }
+            }
+        }
+    }
+
+    .voucher {
+        display: flex;
+        padding: 10px 10px;
+        box-sizing: border-box;
+        border-bottom: 1px solid var(--surface-border);
+        .voucher-content {
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            h4 {
+                margin: 0;
+                font-size: 18px;
+                line-height: 24px;
+                width: 399px;
+            }
+            span {
+                font-size: 13px;
+                line-height: 20px;
+                display: block;
+                width: 399px;
+            }
+            p {
+                margin: 0;
+                font-size: 13px;
+                line-height: 20px;
+            }
+        }
+        img {
+            height: 100px;
+            width: 100px;
+            margin-right: 20px;
+        }
+    }
+}

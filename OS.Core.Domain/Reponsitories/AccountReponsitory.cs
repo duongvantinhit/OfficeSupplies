@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using OS.Core.Application.Dtos;
 using OS.Core.Domain.OfficeSupplies;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -17,7 +19,9 @@ namespace OS.Core.Domain.Reponsitories
         private readonly IConfiguration configuration;
         private readonly RoleManager<IdentityRole> roleManager;
 
-        public AccountReponsitory(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration, RoleManager<IdentityRole> roleManager)
+        public AccountReponsitory(UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager, IConfiguration configuration,
+            RoleManager<IdentityRole> roleManager)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
@@ -25,16 +29,38 @@ namespace OS.Core.Domain.Reponsitories
             this.roleManager = roleManager;
         }
 
-        public async Task<TokenDto> SigInAsync(Sigin model)
+        public async Task<TokenDto> SigInAsync(SignIn model)
         {
             var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
+            var user = await userManager.FindByEmailAsync(model.Email);
+
+            if (result.IsLockedOut)
+            {
+                return null!;
+            }
+            else if (!result.Succeeded)
+            {
+                await userManager.AccessFailedAsync(user);
+                var accessFailedCount = await userManager.GetAccessFailedCountAsync(user);
+
+                if (accessFailedCount >= 5)
+                {
+                    await userManager.SetLockoutEndDateAsync(user, DateTimeOffset.UtcNow.AddMinutes(10));
+                }
+
+                return null!;
+            }
+            else
+            {
+                await userManager.ResetAccessFailedCountAsync(user);
+            }
 
             if (!result.Succeeded)
             {
                 return null!;
             }
 
-            var user = await userManager.FindByEmailAsync(model.Email);
+
             var accessTokenString = await GenerateAccessTokenAsync(model.Email!, user);
             var refreshTokenString = await GenerateRefreshTokenAsync();
 
@@ -69,7 +95,7 @@ namespace OS.Core.Domain.Reponsitories
                     return null!;
                 }
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return null!;
             };
@@ -99,12 +125,16 @@ namespace OS.Core.Domain.Reponsitories
         public async Task<string> GenerateAccessTokenAsync(string email, ApplicationUser user)
         {
             var roles = await userManager.GetRolesAsync(user);
+            var securityStampClaim = new Claim(new ClaimsIdentityOptions().SecurityStampClaimType, user.SecurityStamp);
+
             var authClaims = new List<Claim>
             {
                 new Claim("email",email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim("role", string.Join(",", roles)),
-                new Claim("id", user.Id.ToString())
+                new Claim("id", user.Id.ToString()),
+                new Claim(new ClaimsIdentityOptions().SecurityStampClaimType, user.SecurityStamp),
+                new Claim(ClaimTypes.NameIdentifier, user.Id)
             };
 
             var authenKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]));
@@ -128,7 +158,7 @@ namespace OS.Core.Domain.Reponsitories
             return await Task.FromResult(new JwtSecurityTokenHandler().WriteToken(refreshToken));
         }
 
-        public async Task<IdentityResult> SignUpAsync(Sigup model)
+        public async Task<IdentityResult> SignUpAsync(SignUp model)
         {
             var user = new ApplicationUser
             {
@@ -168,6 +198,8 @@ namespace OS.Core.Domain.Reponsitories
         public async Task<UserDto> GetUserAsync(string userId)
         {
             var user = await userManager.FindByIdAsync(userId);
+            var roles = (await userManager.GetRolesAsync(user));
+            var filteredRoles = roles?.Where(r => r != null).ToList();
 
             if (user == null)
             {
@@ -180,9 +212,112 @@ namespace OS.Core.Domain.Reponsitories
                 LastName = user.LastName,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
+                Roles = filteredRoles!.Any() ? filteredRoles : null,
+                Address = user.Address,
             };
 
             return userDto;
+        }
+
+        public async Task<IdentityResult> ChangePasswordAsync(ChangePasswordDto changePasswordDto)
+        {
+            var user = await userManager.FindByEmailAsync(changePasswordDto.Email);
+
+            if (user == null)
+            {
+                return null!;
+            }
+
+            var result = await userManager.ChangePasswordAsync(user, changePasswordDto.OldPassword, changePasswordDto.NewPassword);
+
+            if (!result.Succeeded)
+            {
+                return result;
+            }
+            else
+            {
+                await signInManager.SignOutAsync();
+                await userManager.UpdateSecurityStampAsync(user);
+                await userManager.RemoveAuthenticationTokenAsync(user, "Bearer", "refresh_token");
+                return IdentityResult.Success;
+            }
+        }
+
+        public async Task<List<UserDto>> GetAllUsersAsync()
+        {
+            var users = await userManager.Users.ToListAsync();
+
+            if (users == null)
+            {
+                return null!;
+            }
+
+            var userDtos = users.Select(u => new UserDto
+            {
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                Email = u.Email,
+                PhoneNumber = u.PhoneNumber,
+                Address = u.Address,
+                Id = u.Id,
+            }).ToList();
+
+            return userDtos;
+        }
+
+        public async Task<List<string>> GetRolesAsync()
+        {
+            var roles = await roleManager.Roles.ToListAsync();
+
+            if (roles == null)
+            {
+                return null!;
+            }
+
+            if (!roles.Any())
+            {
+                return new List<string>();
+            }
+
+            return roles.Select(r => r.Name).ToList();
+        }
+
+        public async Task<List<string>> GetUserRolesAsync(string userId)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+            var roles = (await userManager.GetRolesAsync(user));
+            var filteredRoles = roles?.Where(r => r != null).ToList();
+            if(filteredRoles!.Any())
+            {
+                return filteredRoles!;
+            }
+            else
+            {
+                return null!;
+            }
+        }
+
+        public async Task<IdentityResult> RemoveUserRoleAsync(string userId, string roleName)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return null!;
+            }
+
+            var result = await userManager.RemoveFromRoleAsync(user, roleName);
+
+            if (!result.Succeeded)
+            {
+                return result;
+            }
+            else
+            {
+                await signInManager.SignOutAsync();
+                await userManager.UpdateSecurityStampAsync(user);
+                await userManager.RemoveAuthenticationTokenAsync(user, "Bearer", "refresh_token");
+                return IdentityResult.Success;
+            }
         }
     }
 }

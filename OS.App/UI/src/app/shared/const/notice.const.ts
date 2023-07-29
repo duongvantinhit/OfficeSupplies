@@ -1,10 +1,14 @@
 export class Notice {
     static readonly messageEnter = 'Vui lòng nhập';
     static readonly messageChoose = 'Vui lòng chọn';
-    static readonly addSuccced = 'Thêm thành công';
+    static readonly addSuccessed = 'Thêm thành công';
     static readonly addFail = 'Thêm thất bại';
-    static readonly loginSucceed = 'Đăng nhập thành công';
+    static readonly loginSuccessed = 'Đăng nhập thành công';
     static readonly loginFail = 'Đăng nhập thất bại';
-    static readonly err = 'Có lỗi xảy ra vui lòng tải lại trang';
+    static readonly err = 'Có lỗi xảy ra';
     static readonly loadFail = 'Tải không thành công';
+    static readonly saveSuccessed = 'Lưu thành công';
+    static readonly deleteSuccessed = 'Xóa thành công';
+    static readonly logoutSuccessed = 'Đăng xuất thành công';
+    static readonly checkOutSuccessed = 'Đặt hàng thành công';
 }

@@ -17,9 +17,23 @@ body {
     padding: 0 10px;
 }
 
+.border-img {
+    border: 1px solid var(--surface-border);
+}
+
+.border-bottom-img {
+    border-bottom: 1px solid var(--surface-border);
+}
+
 del {
     text-decoration: line-through;
     text-align: center;
+}
+
+.text-overflow {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .p-progress-spinner {
@@ -74,7 +88,6 @@ del {
 }
 
 .office-supplies {
-    // page home
     .p-galleria {
         max-width: 100% !important;
     }
@@ -198,7 +211,14 @@ del {
         }
     }
 
-    // page categogy
+    .product-detail {
+        .buy-product {
+            .p-inputtext {
+                width: 212px !important;
+            }
+        }
+    }
+
     .list-category {
         .field-checkbox {
             margin-bottom: 0 !important;
@@ -207,21 +227,18 @@ del {
         }
     }
 
-    // page cart
     .carts {
         .p-inputnumber-input {
             width: 50px !important;
         }
     }
 
-    //page order-status
     .order-status {
         .p-tabview-panel {
             min-height: 300px;
         }
     }
 
-    // page sign-up
     .sign-up {
         .p-inputtext {
             width: 194.78px !important;
@@ -233,7 +250,6 @@ del {
         }
     }
 
-    // page change-password
     .change-password {
         .p-password {
             width: 100% !important;
@@ -243,10 +259,15 @@ del {
         }
     }
 
-    // page login
     .login {
         .p-inputtext {
             width: 352px;
+        }
+    }
+
+    .checkout {
+        .field-checkbox {
+            margin-bottom: 0px !important;
         }
     }
 }
@@ -278,8 +299,12 @@ del {
         }
     }
 
-    .crud-category {
-        .category {
+    .crud-category,
+    .crud-product,
+    .crud-promotion {
+        .category,
+        .product,
+        .promotion {
             .p-fileupload-buttonbar {
                 display: flex;
                 padding: 1rem;
@@ -294,6 +319,22 @@ del {
             .ng-star-inserted {
                 text-align: center;
             }
+
+            .p-number {
+                .p-element {
+                    width: 100% !important;
+                    .p-inputnumber {
+                        width: 100% !important;
+                    }
+                }
+            }
+        }
+    }
+
+    .create-user {
+        .p-password,
+        .p-inputtext {
+            width: 100%;
         }
     }
 }

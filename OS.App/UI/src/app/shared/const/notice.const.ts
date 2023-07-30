@@ -2,6 +2,7 @@ export class Notice {
     static readonly messageEnter = 'Vui lòng nhập';
     static readonly messageChoose = 'Vui lòng chọn';
     static readonly addSuccessed = 'Thêm thành công';
+    static readonly updateSuccessed = 'Cập nhật thành công';
     static readonly addFail = 'Thêm thất bại';
     static readonly loginSuccessed = 'Đăng nhập thành công';
     static readonly loginFail = 'Đăng nhập thất bại';

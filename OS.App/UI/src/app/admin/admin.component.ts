@@ -78,12 +78,7 @@ export class AdminComponent implements OnInit {
                 {
                     label: 'Đơn hàng',
                     icon: 'pi pi-fw pi-cart-plus',
-                    routerLink: '/admin',
-                },
-                {
-                    label: 'Cập nhật trạng thái',
-                    icon: 'pi pi-fw pi-globe',
-                    routerLink: '/admin',
+                    routerLink: '/admin/orders',
                 },
             ],
         },

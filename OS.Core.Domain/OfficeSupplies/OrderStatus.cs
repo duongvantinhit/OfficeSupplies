@@ -7,5 +7,6 @@ namespace OS.Core.Domain.OfficeSupplies
     public class OrderStatus : BaseEntity<string>
     {
         public string? OrderStatusName { get; set; }
+        public ICollection<Order>? Orders { get; set; }
     }
 }

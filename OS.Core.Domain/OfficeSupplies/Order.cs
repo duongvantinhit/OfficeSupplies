@@ -11,5 +11,9 @@ namespace OS.Core.Domain.OfficeSupplies
         public DateTime OrderDate { get; set; }
         public string? PromotionId { get; set; }
         public string? OrderStatusId { get; set; }
+        public ICollection<OrderDetail>? OrderDetails { get; set; }
+        public Promotion? Promotion { get; set; }
+        public ApplicationUser? ApplicationUser { get; set; }
+        public OrderStatus? OrderStatus { get; set; }
     }
 }

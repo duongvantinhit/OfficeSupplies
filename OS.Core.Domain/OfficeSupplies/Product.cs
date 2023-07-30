@@ -20,6 +20,7 @@ namespace OS.Core.Domain.OfficeSupplies
         public string? CreatedByUserId { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
-        public ICollection<CartDetail> CartsDetail { get; set; }
+        public ICollection<CartDetail>? CartsDetail { get; set; }
+        public ICollection<OrderDetail>? OrderDetail { get; set; }
     }
 }

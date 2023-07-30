@@ -16,9 +16,8 @@ import { LoginComponent } from '../pages/login/login.component';
 import { ForgotPasswordComponent } from '../pages/forgot-password/forgot-password.component';
 import { SignUpComponent } from '../pages/sign-up/sign-up.component';
 import { PromotionsComponent } from '../office-supplies/promotions/promotions.component';
-import { OrderStatusComponent } from '../office-supplies/order-status/order-status.component';
+import { PurchaseComponent } from '../office-supplies/purchase/purchase.component';
 import { NoOrdersComponent } from '../pages/no-orders/no-orders.component';
-import { OrderDetailsComponent } from '../office-supplies/order-details/order-details.component';
 import { UserInforComponent } from '../office-supplies/user-infor/user-infor.component';
 import { ChangePasswordComponent } from '../pages/change-password/change-password.component';
 import { AdminComponent } from '../admin/admin.component';
@@ -32,6 +31,7 @@ import { UsersComponent } from '../admin/users/users.component';
 import { DialogService } from 'primeng/dynamicdialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CheckoutComponent } from '../office-supplies/checkout/checkout.component';
+import { OrdersAdminComponent } from '../admin/orders-admin/orders-admin.component';
 
 @NgModule({
     declarations: [
@@ -49,9 +49,8 @@ import { CheckoutComponent } from '../office-supplies/checkout/checkout.componen
         ForgotPasswordComponent,
         SignUpComponent,
         PromotionsComponent,
-        OrderStatusComponent,
+        PurchaseComponent,
         NoOrdersComponent,
-        OrderDetailsComponent,
         UserInforComponent,
         ChangePasswordComponent,
         AdminComponent,
@@ -63,6 +62,7 @@ import { CheckoutComponent } from '../office-supplies/checkout/checkout.componen
         PromotionsAdminComponent,
         UsersComponent,
         CheckoutComponent,
+        OrdersAdminComponent,
     ],
 
     imports: [CommonModule, RouterModule, PrimeNGModule, FormsModule, ReactiveFormsModule],

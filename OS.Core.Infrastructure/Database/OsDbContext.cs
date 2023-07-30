@@ -39,6 +39,31 @@ namespace OS.Core.Infrastructure.Database
                 .HasMany(x => x.CartsDetail)
                 .WithOne(x => x.Product)
                 .HasForeignKey(x => x.ProductId);
+
+            modelBuilder.Entity<Order>()
+                 .HasMany(x => x.OrderDetails)
+                 .WithOne(x => x.Order)
+                 .HasForeignKey(x => x.OrderId);
+
+            modelBuilder.Entity<Product>()
+                .HasMany(x => x.OrderDetail)
+                .WithOne(x => x.Product)
+                .HasForeignKey(x => x.ProductId);
+
+            modelBuilder.Entity<Promotion>()
+                .HasMany(x => x.Orders)
+                .WithOne(x => x.Promotion)
+                .HasForeignKey(x => x.PromotionId);
+
+            modelBuilder.Entity<OrderStatus>()
+                .HasMany(x => x.Orders)
+                .WithOne(x => x.OrderStatus)
+                .HasForeignKey(x => x.OrderStatusId);
+
+            modelBuilder.Entity<ApplicationUser>()
+                .HasMany(x => x.Orders)
+                .WithOne(x => x.ApplicationUser)
+                .HasForeignKey(x => x.UserId);
         }
     }
 }

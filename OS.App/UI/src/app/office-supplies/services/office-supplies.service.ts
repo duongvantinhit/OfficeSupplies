@@ -9,9 +9,11 @@ import { NotificationService } from 'src/app/shared/services/notification.servic
 export class OfficeSuppliesService extends BaseApiService {
     public _behaviorSubject = new BehaviorSubject<any>(null);
     public _carts = new BehaviorSubject<any>(null);
+    public _purchaseStatus = new BehaviorSubject<any>(null);
 
     public getMessage = this._behaviorSubject.asObservable();
     public getUpdateCart = this._carts.asObservable();
+    public getPurchaseStatus = this._purchaseStatus.asObservable();
 
     public sendMessage(msg: any) {
         this._behaviorSubject.next(msg);
@@ -19,6 +21,10 @@ export class OfficeSuppliesService extends BaseApiService {
 
     public sendUpdateCarts(msg: any) {
         this._carts.next(msg);
+    }
+
+    public sendPurchaseStatus(msg: any) {
+        this._purchaseStatus.next(msg);
     }
 
     public pageInfor = new BehaviorSubject<any>(null);

@@ -1,0 +1,57 @@
+<div class="office-supplies-admin">
+    <div class="statistics">
+        <div class="flex title">
+            <div class="tilte-right">
+                <h2>THỐNG KÊ DOANH THU</h2>
+            </div>
+        </div>
+
+        <div class="content">
+            <h2>DOANH THU NĂM</h2>
+            <div class="card">
+                <p-chart type="bar" [data]="revenueMonthOfYear" [options]="optionsMonthOfYear"></p-chart>
+            </div>
+
+            <h2>DOANH THU THÁNG</h2>
+            <div class="select-month">
+                <span>Chọn tháng: </span>
+                <p-dropdown
+                    [options]="months"
+                    appendTo="body"
+                    placeholder="Chọn tháng"
+                    [virtualScrollItemSize]="38"
+                    styleClass="w-6rem text-center"
+                    (onChange)="changeMonthOfRevenue()"
+                    [(ngModel)]="selectMonthOfRevenue"
+                ></p-dropdown>
+            </div>
+            <div class="card">
+                <p-chart type="bar" [data]="revenueDayOfMonth" [options]="optionsDayOfMonth"></p-chart>
+            </div>
+        </div>
+
+        <div class="content">
+            <h2>TỔNG ĐƠN NĂM</h2>
+            <div class="card">
+                <p-chart type="bar" [data]="orderMonthOfYear" [options]="optionsMonthOfYear"></p-chart>
+            </div>
+
+            <h2>TỔNG ĐƠN THÁNG</h2>
+            <div class="select-month">
+                <span>Chọn tháng: </span>
+                <p-dropdown
+                    [options]="months"
+                    appendTo="body"
+                    placeholder="Chọn tháng"
+                    [virtualScrollItemSize]="38"
+                    styleClass="w-6rem text-center"
+                    (onChange)="changeMonthOfOrder()"
+                    [(ngModel)]="selectMonthOfOrder"
+                ></p-dropdown>
+            </div>
+            <div class="card">
+                <p-chart type="bar" [data]="orderDayOfMonth" [options]="optionsDayOfMonth"></p-chart>
+            </div>
+        </div>
+    </div>
+</div>

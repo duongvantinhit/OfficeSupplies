@@ -281,9 +281,58 @@ namespace OS.App.Controllers
                 ResponseCode = StatusCodes.Status200OK,
             };
 
-            var query = _context.OrderStatus.AsNoTracking();
+            var query = _context.OrderStatus;
+            res.Data = await query.ToListAsync();
+            return Ok(res);
+        }
 
-            res.Data = query;
+        [HttpGet("statistics/{month}")]
+        public async Task<IActionResult> GetAllOrderOfYear(int month)
+        {
+            var res = new ApiResult<IEnumerable<RevenueSatisticsDto>>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var year = DateTime.Today.Year;
+            var query = _context.Orders
+                .Where(x => x.OrderDate.Month == month && x.OrderDate.Year == year)
+                .GroupBy(x => x.OrderDate.Day)
+                .Select(x => new RevenueSatisticsDto
+                {
+                    Day = x.Key,
+                    TotalAmount = x.Sum(o => o.TotalCost),
+                    TotalOrder = x.Count()
+                });
+
+            res.Data = await query.ToListAsync();
+
+            return Ok(res);
+        }
+
+        [HttpGet("statistics")]
+        public async Task<IActionResult> GetOrderRevenue()
+        {
+            var res = new ApiResult<IEnumerable<RevenueSatisticsDto>>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var currentYear = DateTime.Now.Year;
+
+            var query = _context.Orders
+                .Where(x => x.OrderDate.Year == currentYear)
+                .GroupBy(x => new { x.OrderDate.Month })
+                .Select(x => new RevenueSatisticsDto
+                {
+                    Month = "Tháng " + x.Key.Month,
+                    TotalAmount = x.Sum(o => o.TotalCost),
+                    TotalOrder = x.Count()
+                });
+
+            res.Data = await query.ToListAsync();
             return Ok(res);
         }
 

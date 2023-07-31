@@ -32,6 +32,7 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CheckoutComponent } from '../office-supplies/checkout/checkout.component';
 import { OrdersAdminComponent } from '../admin/orders-admin/orders-admin.component';
+import { StatisticsComponent } from '../admin/statistics/statistics.component';
 
 @NgModule({
     declarations: [
@@ -63,6 +64,7 @@ import { OrdersAdminComponent } from '../admin/orders-admin/orders-admin.compone
         UsersComponent,
         CheckoutComponent,
         OrdersAdminComponent,
+        StatisticsComponent,
     ],
 
     imports: [CommonModule, RouterModule, PrimeNGModule, FormsModule, ReactiveFormsModule],

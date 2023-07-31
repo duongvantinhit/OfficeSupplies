@@ -29,6 +29,7 @@ import { RoleGuard } from './shared/guards/RoleGuard';
 import { AdminGuard } from './shared/guards/AdminGuard';
 import { CheckoutComponent } from './office-supplies/checkout/checkout.component';
 import { OrdersAdminComponent } from './admin/orders-admin/orders-admin.component';
+import { StatisticsComponent } from './admin/statistics/statistics.component';
 
 const routes: Routes = [
     {
@@ -66,6 +67,7 @@ const routes: Routes = [
             { path: 'user-infor', component: UserInforComponent },
             { path: 'change-password', component: ChangePasswordComponent },
             { path: 'orders', component: OrdersAdminComponent },
+            { path: 'statistics', component: StatisticsComponent },
         ],
     },
     { path: 'login', component: LoginComponent },

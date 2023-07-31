@@ -98,9 +98,9 @@ export class AdminComponent implements OnInit {
             icon: 'pi pi-fw pi-chart-line',
             items: [
                 {
-                    label: 'Tổng quan',
+                    label: 'Doanh thu',
                     icon: 'pi pi-fw pi-chart-bar',
-                    routerLink: '/admin',
+                    routerLink: '/admin/statistics',
                 },
                 {
                     label: 'Ngày',

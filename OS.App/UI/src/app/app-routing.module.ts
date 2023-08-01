@@ -67,7 +67,7 @@ const routes: Routes = [
             { path: 'user-infor', component: UserInforComponent },
             { path: 'change-password', component: ChangePasswordComponent },
             { path: 'orders', component: OrdersAdminComponent },
-            { path: 'statistics', component: StatisticsComponent },
+            { path: 'statistics', component: StatisticsComponent, canActivate: [AdminGuard] },
         ],
     },
     { path: 'login', component: LoginComponent },

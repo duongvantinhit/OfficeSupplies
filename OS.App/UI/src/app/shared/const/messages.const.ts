@@ -8,8 +8,9 @@ export class AppMessages {
     static readonly C_M_17 = 'This rating referenced to other fabric, cannot delete!';
     static readonly C_M_18 = 'Are you sure to accept edits for the selected?';
     static readonly C_M_19 = 'Are you sure to submit for the selected?';
-    static readonly C_M_20 = 'BẠN MUỐN THAY ĐỔI MÃ & MÀU?';
+    static readonly C_M_20 = 'Bạn có chắc chắn muốn thay đổi trạng thái?';
     static readonly C_M_21 = 'Bạn có chắc chắn muốn đăng xuất không?';
+    static readonly C_M_22 = 'Bạn có chắc chắn muốn xóa không?';
 
     static readonly NO_INTERNET_CONNECTION = 'No internet connection.';
 

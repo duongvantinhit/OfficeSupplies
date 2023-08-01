@@ -19,18 +19,27 @@ export class StatisticsComponent implements OnInit {
     months = Consts.month;
     selectMonthOfRevenue = new Date().getMonth() + 1;
     selectMonthOfOrder = new Date().getMonth() + 1;
+    totalOrder: any;
+    totalRevenue: any;
+    totalCustomer: any;
 
     ngOnInit() {
         this.loadRevenueDayOfMonth();
         this.loadRevenueMonthOfYear();
         this.loadOrderDayOfMonth();
         this.loadOrderMonthOfYear();
+        this._apiServices.getDataAll('/statistics/today').subscribe((res) => {
+            console.log(res.data);
+            this.totalOrder = res.data.totalOrder;
+            this.totalRevenue = res.data.totalRevenue;
+            this.totalCustomer = res.data.totalCustomer;
+        });
     }
 
     loadRevenueDayOfMonth() {
         this._apiServices.getDataAll(`/statistics/${this.selectMonthOfRevenue}`).subscribe((res) => {
             const labels = res.data.map((item: any) => item.day);
-            const totalAmount = res.data.map((item: any) => item.totalAmount);
+            const totalRevenue = res.data.map((item: any) => item.totalRevenue);
 
             this.revenueDayOfMonth = {
                 labels: labels,
@@ -42,7 +51,7 @@ export class StatisticsComponent implements OnInit {
                         borderWidth: 2,
                         fill: false,
                         tension: 0.4,
-                        data: totalAmount,
+                        data: totalRevenue,
                     },
                 ],
             };
@@ -87,19 +96,19 @@ export class StatisticsComponent implements OnInit {
     loadOrderDayOfMonth() {
         this._apiServices.getDataAll(`/statistics/${this.selectMonthOfOrder}`).subscribe((res) => {
             const labels = res.data.map((item: any) => item.day);
-            const totalAmount = res.data.map((item: any) => item.totalOrder);
+            const totalRevenue = res.data.map((item: any) => item.totalOrder);
 
             this.orderDayOfMonth = {
                 labels: labels,
                 datasets: [
                     {
                         type: 'line',
-                        label: 'Doanh thu (VND)',
+                        label: 'Đơn hàng',
                         borderColor: documentStyle.getPropertyValue('--blue-500'),
                         borderWidth: 2,
                         fill: false,
                         tension: 0.4,
-                        data: totalAmount,
+                        data: totalRevenue,
                     },
                 ],
             };
@@ -144,14 +153,14 @@ export class StatisticsComponent implements OnInit {
     loadRevenueMonthOfYear() {
         this._apiServices.getDataAll('/statistics').subscribe((res) => {
             const labels = res.data.map((item: any) => item.month);
-            const totalAmount = res.data.map((item: any) => item.totalAmount);
+            const totalRevenue = res.data.map((item: any) => item.totalRevenue);
 
             this.revenueMonthOfYear = {
                 labels: labels,
                 datasets: [
                     {
                         label: 'Doanh thu (VND)',
-                        data: totalAmount,
+                        data: totalRevenue,
                         type: 'bar',
                         backgroundColor: documentStyle.getPropertyValue('--green-500'),
                         borderColor: 'white',
@@ -200,14 +209,14 @@ export class StatisticsComponent implements OnInit {
     loadOrderMonthOfYear() {
         this._apiServices.getDataAll('/statistics').subscribe((res) => {
             const labels = res.data.map((item: any) => item.month);
-            const totalAmount = res.data.map((item: any) => item.totalOrder);
+            const totalRevenue = res.data.map((item: any) => item.totalOrder);
 
             this.orderMonthOfYear = {
                 labels: labels,
                 datasets: [
                     {
-                        label: 'Doanh thu (VND)',
-                        data: totalAmount,
+                        label: 'Đơn hàng',
+                        data: totalRevenue,
                         type: 'bar',
                         backgroundColor: documentStyle.getPropertyValue('--green-500'),
                         borderColor: 'white',

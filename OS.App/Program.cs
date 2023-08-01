@@ -112,7 +112,8 @@ builder.Services.AddAuthorization(options =>
         //policy.RequireRole("admin");
         policy.RequireAssertion(context =>
            context.User.HasClaim(c =>
-               c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role" && c.Value.Contains("admin")
+               c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+               && c.Value.Contains("admin")
            ));
     });
 
@@ -121,7 +122,8 @@ builder.Services.AddAuthorization(options =>
         policy.RequireAuthenticatedUser();
         policy.RequireAssertion(context =>
            context.User.HasClaim(c =>
-               c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role" && c.Value.Contains("employee")
+               c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+               && (c.Value.Contains("employee") || c.Value.Contains("admin"))
            ));
     });
 });

@@ -4,28 +4,42 @@
             <form [formGroup]="userInforForm">
                 <h3>Thông tin tài khoản</h3>
 
-                <div class="flex flex-column gap-2 w-22rem block m-3 text-left">
-                    <label htmlFor="lastname">Họ</label>
-                    <input pInputText id="lastname" formControlName="firstName" />
+                <div class="flex">
+                    <div class="flex flex-column gap-2 w-22rem block m-3 text-left">
+                        <label htmlFor="lastname">Họ</label>
+                        <input pInputText id="lastname" formControlName="firstName" />
+                    </div>
+
+                    <div class="flex flex-column gap-2 w-22rem block m-3 text-left">
+                        <label htmlFor="firstname">Tên</label>
+                        <input pInputText id="firstname" formControlName="lastName" />
+                    </div>
                 </div>
 
-                <div class="flex flex-column gap-2 w-22rem block m-3 text-left">
-                    <label htmlFor="firstname">Tên</label>
-                    <input pInputText id="firstname" formControlName="lastName" />
+                <div class="flex">
+                    <div class="flex flex-column gap-2 w-22rem block m-3 text-left">
+                        <label htmlFor="email">Email</label>
+                        <input pInputText id="email" formControlName="email" />
+                    </div>
+                    <div class="flex flex-column gap-2 w-22rem block m-3 text-left">
+                        <label htmlFor="phone">Số điện thoại</label>
+                        <p-inputMask
+                            styleClass="w-22rem "
+                            mask="(999) 999-9999"
+                            placeholder="(999) 999-9999"
+                            formControlName="phoneNumber"
+                        ></p-inputMask>
+                    </div>
                 </div>
 
-                <div class="flex flex-column gap-2 w-22rem block m-3 text-left">
-                    <label htmlFor="email">Email</label>
-                    <input pInputText id="email" formControlName="email" />
-                </div>
-                <div class="flex flex-column gap-2 w-22rem block m-3 text-left">
-                    <label htmlFor="phone">Số điện thoại</label>
-                    <p-inputMask
-                        styleClass="w-22rem "
-                        mask="(999) 999-9999"
-                        placeholder="(999) 999-9999"
-                        formControlName="phoneNumber"
-                    ></p-inputMask>
+                <div class="card flex justify-content-center">
+                    <textarea
+                        class="w-22rem address"
+                        rows="4"
+                        pInputTextarea
+                        placeholder="Nhập địa chỉ"
+                        formControlName="address"
+                    ></textarea>
                 </div>
 
                 <p-button (onClick)="edit()" styleClass="m-3" label="Lưu"></p-button>

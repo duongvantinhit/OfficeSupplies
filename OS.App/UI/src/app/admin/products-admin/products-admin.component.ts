@@ -71,7 +71,7 @@ export class ProductsAdminComponent implements OnInit {
         event.stopPropagation();
 
         this._confirmationService.confirm({
-            message: AppMessages.C_M_1,
+            message: AppMessages.C_M_22,
             header: 'Confirmation',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
@@ -80,7 +80,7 @@ export class ProductsAdminComponent implements OnInit {
                         this.ngOnInit();
                         this._notiService.success(Notice.deleteSuccessed, '', 'Thành công');
                     } else {
-                        this._notiService.error(Notice.addFail);
+                        this._notiService.error(Notice.err);
                     }
                 });
             },

@@ -102,16 +102,6 @@ export class AdminComponent implements OnInit {
                     icon: 'pi pi-fw pi-chart-bar',
                     routerLink: '/admin/statistics',
                 },
-                {
-                    label: 'Ngày',
-                    icon: 'pi pi-fw pi-calendar',
-                    routerLink: '/admin',
-                },
-                {
-                    label: 'Tháng',
-                    icon: 'pi pi-fw pi-calendar-minus',
-                    routerLink: '/admin',
-                },
             ],
         },
         {
@@ -119,21 +109,16 @@ export class AdminComponent implements OnInit {
             icon: 'pi pi-fw pi-lock',
             items: [
                 {
-                    label: 'Hồ sơ',
+                    label: 'Thông tin tài khoản',
                     icon: 'pi pi-fw pi-info-circle',
                     routerLink: '/admin/user-infor',
-                },
-                {
-                    label: 'Đổi mật khẩu',
-                    icon: 'pi pi-fw pi-refresh',
-                    routerLink: '/admin/change-password',
                 },
                 {
                     label: 'Đăng xuất',
                     icon: 'pi pi-fw pi-sign-out',
                     command: () => {
                         this._confirmationService.confirm({
-                            message: AppMessages.C_M_3,
+                            message: AppMessages.C_M_21,
                             header: 'Confirmation',
                             icon: 'pi pi-exclamation-triangle',
                             accept: () => {

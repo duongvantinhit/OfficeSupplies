@@ -115,13 +115,14 @@ export class OrdersAdminComponent implements OnInit {
             return;
         }
         this._confirmationService.confirm({
-            message: AppMessages.C_M_1,
+            message: AppMessages.C_M_20,
             header: 'Confirmation',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
                 this._apiServices.putData('/order/status', updateForm, this.orderId).subscribe((res) => {
                     if (res.successed) {
                         this._notiService.success(Notice.updateSuccessed, '', 'Thành công');
+                        this.loadData();
                     } else {
                         this._notiService.error(Notice.err);
                     }

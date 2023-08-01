@@ -57,8 +57,6 @@ export class HeaderComponent implements OnInit {
     ];
 
     ngOnInit() {
-        this.login = this._authServices.isLoggedIn();
-
         this._apiServices.getDataAll('/categories/name').subscribe((res) => {
             this.categories = res.data;
         });

@@ -53,6 +53,7 @@
                 </div>
                 <div class="card flex justify-content-center pb-4">
                     <button
+                        [disabled]="!carts"
                         routerLink="/checkout"
                         class="bg-orange-400 border-orange-400"
                         pButton
@@ -62,5 +63,6 @@
                 </div>
             </div>
         </div>
+        <app-products></app-products>
     </div>
 </div>

@@ -32,6 +32,7 @@ export class UserInforComponent implements OnInit {
             lastName: ['', [Validators.required]],
             email: ['', [Validators.required, Validators.email]],
             phoneNumber: ['', [Validators.required]],
+            address: ['', [Validators.required]],
         });
 
         this.setValue(this.currentUser);
@@ -43,6 +44,7 @@ export class UserInforComponent implements OnInit {
             lastName: data.lastName,
             email: data.email,
             phoneNumber: data.phoneNumber,
+            address: data.address,
         });
     }
 
@@ -69,6 +71,10 @@ export class UserInforComponent implements OnInit {
             errorMessages.push(AppMessages.PLEASE_ENTER('Số điện thoại', Notice.messageEnter));
         }
 
+        if (!this.userInforForm.controls?.address?.valid) {
+            errorMessages.push(AppMessages.PLEASE_ENTER('Địa chỉ', Notice.messageEnter));
+        }
+
         return errorMessages;
     }
 
@@ -79,5 +85,17 @@ export class UserInforComponent implements OnInit {
             this._notiService.error(errorMessages.join('<br/>'), 'ua-toast');
             return;
         }
+
+        this._authServices.putData('/change-user/infor', this.userInforForm.value, '').subscribe((res) => {
+            if (res.successed) {
+                this._notiService.success(Notice.updateSuccessed, '', 'Thành công');
+                this._authServices.getUserInfor().subscribe(async (res) => {
+                    localStorage.setItem('OS_CURRENT_USER', JSON.stringify(res.data));
+                    this.ngOnInit();
+                });
+            } else {
+                this._notiService.error(Notice.err);
+            }
+        });
     }
 }

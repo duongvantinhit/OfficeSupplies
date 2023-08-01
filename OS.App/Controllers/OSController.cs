@@ -287,9 +287,10 @@ namespace OS.App.Controllers
         }
 
         [HttpGet("statistics/{month}")]
+        [Authorize(Policy = "Admin")]
         public async Task<IActionResult> GetAllOrderOfYear(int month)
         {
-            var res = new ApiResult<IEnumerable<RevenueSatisticsDto>>
+            var res = new ApiResult<IEnumerable<StatisticsDto>>
             {
                 Successed = true,
                 ResponseCode = StatusCodes.Status200OK,
@@ -299,10 +300,10 @@ namespace OS.App.Controllers
             var query = _context.Orders
                 .Where(x => x.OrderDate.Month == month && x.OrderDate.Year == year)
                 .GroupBy(x => x.OrderDate.Day)
-                .Select(x => new RevenueSatisticsDto
+                .Select(x => new StatisticsDto
                 {
                     Day = x.Key,
-                    TotalAmount = x.Sum(o => o.TotalCost),
+                    TotalRevenue = x.Sum(o => o.TotalCost),
                     TotalOrder = x.Count()
                 });
 
@@ -311,10 +312,38 @@ namespace OS.App.Controllers
             return Ok(res);
         }
 
+        [HttpGet("statistics/today")]
+        [Authorize(Policy = "Admin")]
+        public async Task<IActionResult> GetAllOrderOfDay()
+        {
+            var res = new ApiResult<StatisticsDto>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var currentDate = DateTime.Today;
+
+            var query = _context.Orders
+                .Where(x => x.OrderDate.Date == currentDate)
+                .GroupBy(x => x.OrderDate.Date)
+                .Select(x => new StatisticsDto
+                {
+                    TotalRevenue = x.Sum(o => o.TotalCost),
+                    TotalOrder = x.Count(),
+                    TotalCustomer = x.Select(o => o.UserId).Distinct().Count()
+                });
+
+            res.Data = await query.FirstOrDefaultAsync();
+
+            return Ok(res);
+        }
+
         [HttpGet("statistics")]
+        [Authorize(Policy = "Admin")]
         public async Task<IActionResult> GetOrderRevenue()
         {
-            var res = new ApiResult<IEnumerable<RevenueSatisticsDto>>
+            var res = new ApiResult<IEnumerable<StatisticsDto>>
             {
                 Successed = true,
                 ResponseCode = StatusCodes.Status200OK,
@@ -325,10 +354,10 @@ namespace OS.App.Controllers
             var query = _context.Orders
                 .Where(x => x.OrderDate.Year == currentYear)
                 .GroupBy(x => new { x.OrderDate.Month })
-                .Select(x => new RevenueSatisticsDto
+                .Select(x => new StatisticsDto
                 {
                     Month = "Tháng " + x.Key.Month,
-                    TotalAmount = x.Sum(o => o.TotalCost),
+                    TotalRevenue = x.Sum(o => o.TotalCost),
                     TotalOrder = x.Count()
                 });
 
@@ -806,6 +835,7 @@ namespace OS.App.Controllers
 
         #region httpDELETE
         [HttpDelete("categories/{id}")]
+        [Authorize(Policy = "Employee")]
         public async Task<IActionResult> DeleteCategory(string id)
         {
             var res = new ApiResult<IEnumerable<Categories>>
@@ -840,6 +870,7 @@ namespace OS.App.Controllers
         }
 
         [HttpDelete("product/{id}")]
+        [Authorize(Policy = "Employee")]
         public async Task<IActionResult> DeleteProduct(string id)
         {
             var res = new ApiResult<IEnumerable<Product>>
@@ -874,6 +905,7 @@ namespace OS.App.Controllers
         }
 
         [HttpDelete("promotion/{id}")]
+        [Authorize(Policy = "Employee")]
         public async Task<IActionResult> DeletePromotion(string id)
         {
             var res = new ApiResult<IEnumerable<Promotion>>
@@ -900,6 +932,7 @@ namespace OS.App.Controllers
         }
 
         [HttpDelete("cart/{productId}")]
+        [Authorize(Policy = "Employee")]
         public async Task<IActionResult> DeleteCart(string productId)
         {
             var res = new ApiResult<IEnumerable<Cart>>
@@ -937,7 +970,7 @@ namespace OS.App.Controllers
                 Successed = true,
                 ResponseCode = StatusCodes.Status200OK,
             };
-
+            
             IFormFile file = categoryDto.File!;
 
             var category = await _context.Categories.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
@@ -950,6 +983,14 @@ namespace OS.App.Controllers
 
             if (file != null && file.Length > 0)
             {
+                string imageName = Path.GetFileName(category.ImageURL)!;
+                var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "Images", imageName);
+
+                if (System.IO.File.Exists(imagePath))
+                {
+                    System.IO.File.Delete(imagePath);
+                }
+
                 var fileExtension = Path.GetExtension(file.FileName);
                 var fileName = Guid.NewGuid().ToString() + fileExtension;
 
@@ -964,14 +1005,6 @@ namespace OS.App.Controllers
                 var imageUrl = $"{baseUrl}/Images/{fileName}";
 
                 category.ImageURL = imageUrl;
-
-                string imageName = Path.GetFileName(category.ImageURL)!;
-                var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "Images", imageName);
-
-                if (System.IO.File.Exists(imagePath))
-                {
-                    System.IO.File.Delete(imagePath);
-                }
             }
 
             var userId = _httpContext.HttpContext!.User.FindFirstValue("id");
@@ -1019,6 +1052,14 @@ namespace OS.App.Controllers
 
             if (file != null && file.Length > 0)
             {
+                string imageName = Path.GetFileName(product.ImageURL)!;
+                var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "Images", imageName);
+
+                if (System.IO.File.Exists(imagePath))
+                {
+                    System.IO.File.Delete(imagePath);
+                }
+
                 var fileExtension = Path.GetExtension(file.FileName);
                 var fileName = Guid.NewGuid().ToString() + fileExtension;
 
@@ -1033,14 +1074,6 @@ namespace OS.App.Controllers
                 var imageUrl = $"{baseUrl}/Images/{fileName}";
 
                 product.ImageURL = imageUrl;
-
-                string imageName = Path.GetFileName(product.ImageURL)!;
-                var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "Images", imageName);
-
-                if (System.IO.File.Exists(imagePath))
-                {
-                    System.IO.File.Delete(imagePath);
-                }
             }
 
             var userId = _httpContext.HttpContext!.User.FindFirstValue("id");
@@ -1155,6 +1188,7 @@ namespace OS.App.Controllers
         }
 
         [HttpPut("order/status/{orderId}")]
+        [Authorize(Policy = "Employee")]
         public async Task<IActionResult> UpdateOderStatus(OrderStatusDto orderStatusDto, string orderId)
         {
             var res = new ApiResult<bool>

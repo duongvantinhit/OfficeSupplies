@@ -335,5 +335,32 @@ namespace OS.Core.Domain.Reponsitories
                 return IdentityResult.Success;
             }
         }
+
+        public async Task<IdentityResult> UpdateUserAsync(UserDto userDto, string id)
+        {
+            var user = await userManager.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                return IdentityResult.Failed(new IdentityError { Description = "User not found." });
+            }
+
+            user.Email = userDto.Email;
+            user.FirstName = userDto.FirstName;
+            user.LastName = userDto.LastName;
+            user.PhoneNumber = userDto.PhoneNumber;
+            user.Address = userDto.Address;
+
+            var result = await userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                return result;
+            }
+            else
+            {
+                return IdentityResult.Success;
+            }
+        }
     }
 }

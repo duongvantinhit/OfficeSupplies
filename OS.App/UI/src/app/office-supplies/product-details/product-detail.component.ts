@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { OfficeSuppliesService } from '../services/office-supplies.service';
 import { Notice } from 'src/app/shared/const/notice.const';
 import { NotificationService } from 'src/app/shared/services/notification.service';
+import { Location } from '@angular/common';
 
 @Component({
     selector: 'app-product-detail',
@@ -15,16 +16,20 @@ export class ProductDetailComponent implements OnInit {
         private _actRoute: ActivatedRoute,
         private _router: Router,
         private _notiService: NotificationService,
+        private _location: Location,
     ) {}
 
     productId: any;
     product: any;
     quantity: number = 1;
     currentRoute: any;
+    fromProductPage: boolean | undefined;
+    pageNumber: any;
 
     ngOnInit() {
         let route = this._actRoute.snapshot.queryParams;
         this.productId = route['id'];
+        this.pageNumber = route['page'];
 
         this._apiServices.getData('/product', this.productId).subscribe((res) => {
             this.product = res.data;
@@ -37,6 +42,8 @@ export class ProductDetailComponent implements OnInit {
                 this.ngOnInit();
             }
         });
+
+        window.addEventListener('popstate', this.onBackButtonClicked.bind(this));
     }
 
     addProductToCart() {
@@ -61,5 +68,14 @@ export class ProductDetailComponent implements OnInit {
         this._router.navigate(['/checkout'], {
             queryParams: { id: this.productId, quantity: this.quantity },
         });
+    }
+
+    ngOnDestroy() {
+        window.removeEventListener('popstate', this.onBackButtonClicked.bind(this));
+    }
+
+    onBackButtonClicked(event: any) {
+        console.log('back');
+        this._apiServices.sendPageInfor(this.pageNumber);
     }
 }

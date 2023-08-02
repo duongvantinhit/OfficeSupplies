@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using OS.Core.Application;
 using OS.Core.Application.Dtos;
 using OS.Core.Domain.OfficeSupplies;
 using System.Data;
@@ -31,14 +33,17 @@ namespace OS.Core.Domain.Reponsitories
 
         public async Task<TokenDto> SigInAsync(SignIn model)
         {
-            var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
-            var user = await userManager.FindByEmailAsync(model.Email);
 
-            if (result.IsLockedOut)
+            var user = await userManager.FindByEmailAsync(model.Email);
+            var passwordHasher = new CaesarPasswordHasher();
+            var result = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, model.Password!);
+
+            if (await userManager.IsLockedOutAsync(user))
             {
                 return null!;
             }
-            else if (!result.Succeeded)
+            
+            if (result != PasswordVerificationResult.Success)
             {
                 await userManager.AccessFailedAsync(user);
                 var accessFailedCount = await userManager.GetAccessFailedCountAsync(user);
@@ -54,12 +59,6 @@ namespace OS.Core.Domain.Reponsitories
             {
                 await userManager.ResetAccessFailedCountAsync(user);
             }
-
-            if (!result.Succeeded)
-            {
-                return null!;
-            }
-
 
             var accessTokenString = await GenerateAccessTokenAsync(model.Email!, user);
             var refreshTokenString = await GenerateRefreshTokenAsync();
@@ -195,16 +194,16 @@ namespace OS.Core.Domain.Reponsitories
             }
             else
             {
-               /* var adminRole = await roleManager.FindByNameAsync("admin");
-                var employeeRole = await roleManager.FindByNameAsync("employee");
+                /* var adminRole = await roleManager.FindByNameAsync("admin");
+                 var employeeRole = await roleManager.FindByNameAsync("employee");
 
-                await roleManager.AddClaimAsync(adminRole, new Claim("ManageProducts", "true"));
-                await roleManager.AddClaimAsync(adminRole, new Claim("ManageOrders", "true"));
-                await roleManager.AddClaimAsync(adminRole, new Claim("ManageUsers", "true"));
+                 await roleManager.AddClaimAsync(adminRole, new Claim("ManageProducts", "true"));
+                 await roleManager.AddClaimAsync(adminRole, new Claim("ManageOrders", "true"));
+                 await roleManager.AddClaimAsync(adminRole, new Claim("ManageUsers", "true"));
 
-                await roleManager.AddClaimAsync(employeeRole, new Claim("ManageProducts", "true"));
-                await roleManager.AddClaimAsync(employeeRole, new Claim("ManageOrders", "true"));
-                await roleManager.AddClaimAsync(employeeRole, new Claim("ManageUsers", "false"));*/
+                 await roleManager.AddClaimAsync(employeeRole, new Claim("ManageProducts", "true"));
+                 await roleManager.AddClaimAsync(employeeRole, new Claim("ManageOrders", "true"));
+                 await roleManager.AddClaimAsync(employeeRole, new Claim("ManageUsers", "false"));*/
 
                 await userManager.AddToRoleAsync(user, roleName);
                 return IdentityResult.Success;

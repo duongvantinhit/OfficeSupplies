@@ -314,27 +314,16 @@ namespace OS.App.Controllers
 
         [HttpGet("statistics/today")]
         [Authorize(Policy = "Admin")]
-        public async Task<IActionResult> GetAllOrderOfDay()
+        public async Task<ActionResult> GetAllOrderOfDay()
         {
-            var res = new ApiResult<StatisticsDto>
+            var res = new ApiResult<OrderStatisticsDto>
             {
                 Successed = true,
                 ResponseCode = StatusCodes.Status200OK,
             };
 
-            var currentDate = DateTime.Today;
-
-            var query = _context.Orders
-                .Where(x => x.OrderDate.Date == currentDate)
-                .GroupBy(x => x.OrderDate.Date)
-                .Select(x => new StatisticsDto
-                {
-                    TotalRevenue = x.Sum(o => o.TotalCost),
-                    TotalOrder = x.Count(),
-                    TotalCustomer = x.Select(o => o.UserId).Distinct().Count()
-                });
-
-            res.Data = await query.FirstOrDefaultAsync();
+            var result = await Task.Run(() => _context.GetOrderStatisticsForToday());
+            res.Data = result;
 
             return Ok(res);
         }
@@ -970,7 +959,7 @@ namespace OS.App.Controllers
                 Successed = true,
                 ResponseCode = StatusCodes.Status200OK,
             };
-            
+
             IFormFile file = categoryDto.File!;
 
             var category = await _context.Categories.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);

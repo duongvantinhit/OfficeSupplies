@@ -29,7 +29,6 @@ export class StatisticsComponent implements OnInit {
         this.loadOrderDayOfMonth();
         this.loadOrderMonthOfYear();
         this._apiServices.getDataAll('/statistics/today').subscribe((res) => {
-            console.log(res.data);
             this.totalOrder = res.data.totalOrder;
             this.totalRevenue = res.data.totalRevenue;
             this.totalCustomer = res.data.totalCustomer;

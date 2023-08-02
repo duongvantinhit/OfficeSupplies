@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using OS.Core.Application.Dtos;
 using OS.Core.Domain.OfficeSupplies;
 
 namespace OS.Core.Infrastructure.Database
@@ -9,6 +10,31 @@ namespace OS.Core.Infrastructure.Database
         public OsDbContext(DbContextOptions<OsDbContext> opt) : base(opt)
         {
 
+        }
+
+        public OrderStatisticsDto GetOrderStatisticsForToday()
+        {
+            var statisticsDto = new OrderStatisticsDto();
+
+            using (var command = this.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "GetOrderStatisticsForToday";
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+
+                this.Database.OpenConnection();
+
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        statisticsDto.TotalRevenue = reader.GetDouble(0);
+                        statisticsDto.TotalOrder = reader.GetInt32(1);
+                        statisticsDto.TotalCustomer = reader.GetInt32(2);
+                    }
+                }
+            }
+
+            return statisticsDto;
         }
 
         public DbSet<Categories> Categories { get; set; }

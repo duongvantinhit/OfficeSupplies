@@ -28,8 +28,11 @@ export class HeaderComponent implements OnInit {
     accountVisible: boolean = false;
     categoryVisible: boolean = false;
     categories: any;
+    searchProduct: any;
+    searchVisible: boolean = false;
     carts: any;
     totalProducts: any;
+    searchText = '';
 
     accountMenu = [
         {
@@ -102,6 +105,10 @@ export class HeaderComponent implements OnInit {
                 this.cartVisible = true;
                 this.cdr.detectChanges();
                 break;
+            case 'search':
+                this.searchVisible = true;
+                this.cdr.detectChanges();
+                break;
         }
     }
 
@@ -115,6 +122,26 @@ export class HeaderComponent implements OnInit {
                 this.cartVisible = false;
                 this.cdr.detectChanges();
                 break;
+            case 'search':
+                this.searchVisible = false;
+                this.cdr.detectChanges();
+                break;
         }
+    }
+
+    search() {
+        if (this.searchText.length >= 3) {
+            this._apiServices.getData('/search/product', this.searchText).subscribe((res) => {
+                this.searchProduct = res.data;
+                this.searchVisible = true;
+            });
+        } else {
+            this.searchProduct = null;
+        }
+    }
+
+    deleteSearch() {
+        this.searchProduct = null;
+        this.searchText = '';
     }
 }

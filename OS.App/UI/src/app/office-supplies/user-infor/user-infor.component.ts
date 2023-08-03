@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AdminService } from 'src/app/admin/services/admin.service';
 import { AppMessages } from 'src/app/shared/const/messages.const';
 import { Notice } from 'src/app/shared/const/notice.const';
-import { decodeToken } from 'src/app/shared/helpers/jwt.helper';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { AuthService } from 'src/auth/services/auth.service';
 
@@ -18,11 +18,13 @@ export class UserInforComponent implements OnInit {
         private _fb: FormBuilder,
         private _notiService: NotificationService,
         private _apiServices: AdminService,
+        private _router: Router,
     ) {}
 
     userInforForm: any;
     loading = false;
     currentUser: any;
+    currentPage: any;
 
     ngOnInit() {
         this.currentUser = this._authServices.currentUser();
@@ -36,6 +38,7 @@ export class UserInforComponent implements OnInit {
         });
 
         this.setValue(this.currentUser);
+        this._router.routerState.snapshot.url.includes('admin') ? (this.currentPage = 'admin') : null;
     }
 
     setValue(data: any): void {
@@ -97,5 +100,13 @@ export class UserInforComponent implements OnInit {
                 this._notiService.error(Notice.err);
             }
         });
+    }
+
+    changePassword() {
+        if (this.currentPage == 'admin') {
+            this._router.navigate(['/admin/change-password']);
+        } else {
+            this._router.navigate(['/change-password']);
+        }
     }
 }

@@ -183,6 +183,22 @@ namespace OS.App.Controllers
             return Ok(res);
         }
 
+        [HttpGet("search/product/{name}")]
+        public async Task<IActionResult> SearchProduct(string name)
+        {
+            var res = new ApiResult<IEnumerable<Product>>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var query = _context.Products
+                .Where(x => x.ProductName!.Contains(name));
+
+            res.Data = await query.ToListAsync();
+            return Ok(res);
+        }
+
 
         [HttpGet("promotions")]
         public async Task<IActionResult> GetAllPromotions([FromQuery] ApiRequest request)
@@ -393,7 +409,6 @@ namespace OS.App.Controllers
                     orders = orders
                        .Where(x => x.OrderStatus!.OrderStatusName == "Đã hủy").ToList(); break;
             }
-
 
             var orderDtos = orders.Select(cart => new GetOrderDto
             {

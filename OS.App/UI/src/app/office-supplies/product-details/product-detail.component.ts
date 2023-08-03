@@ -75,7 +75,6 @@ export class ProductDetailComponent implements OnInit {
     }
 
     onBackButtonClicked(event: any) {
-        console.log('back');
         this._apiServices.sendPageInfor(this.pageNumber);
     }
 }

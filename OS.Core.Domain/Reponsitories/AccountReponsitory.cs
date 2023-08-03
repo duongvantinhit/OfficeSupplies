@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using OS.Core.Application;
 using OS.Core.Application.Dtos;
 using OS.Core.Domain.OfficeSupplies;
 using System.Data;
@@ -35,7 +33,7 @@ namespace OS.Core.Domain.Reponsitories
         {
 
             var user = await userManager.FindByEmailAsync(model.Email);
-            var passwordHasher = new CaesarPasswordHasher();
+            var passwordHasher = new CaesarPasswordHasher(configuration);
             var result = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, model.Password!);
 
             if (await userManager.IsLockedOutAsync(user))
@@ -171,7 +169,6 @@ namespace OS.Core.Domain.Reponsitories
 
             return await userManager.CreateAsync(user, model.Password);
         }
-
 
         public async Task<IdentityResult> CreateRoleAsync(string roleName)
         {

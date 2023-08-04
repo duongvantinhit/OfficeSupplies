@@ -28,8 +28,11 @@ export class HeaderComponent implements OnInit {
     accountVisible: boolean = false;
     categoryVisible: boolean = false;
     categories: any;
+    searchProduct: any;
+    searchVisible: boolean = false;
     carts: any;
     totalProducts: any;
+    searchText = '';
 
     accountMenu = [
         {
@@ -57,22 +60,20 @@ export class HeaderComponent implements OnInit {
     ];
 
     ngOnInit() {
-        this.login = this._authServices.isLoggedIn();
-
         this._apiServices.getDataAll('/categories/name').subscribe((res) => {
             this.categories = res.data;
         });
 
         this._apiServices.getDataAll('/carts').subscribe((res) => {
-            this.carts = res.data;
-            this.totalProducts = res.data.length;
+            this.carts = res.data.cartDetails;
+            this.totalProducts = res.data.cartDetails.length;
         });
 
         this._apiServices.getUpdateCart.subscribe((res) => {
             if (res) {
                 this._apiServices.getDataAll('/carts').subscribe((res) => {
-                    this.carts = res.data;
-                    this.totalProducts = res.data.length;
+                    this.carts = res.data.cartDetails;
+                    this.totalProducts = res.data.cartDetails.length;
                 });
             }
         });
@@ -104,6 +105,10 @@ export class HeaderComponent implements OnInit {
                 this.cartVisible = true;
                 this.cdr.detectChanges();
                 break;
+            case 'search':
+                this.searchVisible = true;
+                this.cdr.detectChanges();
+                break;
         }
     }
 
@@ -117,6 +122,26 @@ export class HeaderComponent implements OnInit {
                 this.cartVisible = false;
                 this.cdr.detectChanges();
                 break;
+            case 'search':
+                this.searchVisible = false;
+                this.cdr.detectChanges();
+                break;
         }
+    }
+
+    search() {
+        if (this.searchText.length >= 3) {
+            this._apiServices.getData('/search/product', this.searchText).subscribe((res) => {
+                this.searchProduct = res.data;
+                this.searchVisible = true;
+            });
+        } else {
+            this.searchProduct = null;
+        }
+    }
+
+    deleteSearch() {
+        this.searchProduct = null;
+        this.searchText = '';
     }
 }

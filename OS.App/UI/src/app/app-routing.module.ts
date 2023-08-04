@@ -13,8 +13,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
 import { SignUpComponent } from './pages/sign-up/sign-up.component';
 import { PromotionsComponent } from './office-supplies/promotions/promotions.component';
-import { OrderStatusComponent } from './office-supplies/order-status/order-status.component';
-import { OrderDetailsComponent } from './office-supplies/order-details/order-details.component';
+import { PurchaseComponent } from './office-supplies/purchase/purchase.component';
 import { UserInforComponent } from './office-supplies/user-infor/user-infor.component';
 import { ChangePasswordComponent } from './pages/change-password/change-password.component';
 import { AdminComponent } from './admin/admin.component';
@@ -29,6 +28,8 @@ import { AuthGuard } from './shared/guards/AuthGuard';
 import { RoleGuard } from './shared/guards/RoleGuard';
 import { AdminGuard } from './shared/guards/AdminGuard';
 import { CheckoutComponent } from './office-supplies/checkout/checkout.component';
+import { OrdersAdminComponent } from './admin/orders-admin/orders-admin.component';
+import { StatisticsComponent } from './admin/statistics/statistics.component';
 
 const routes: Routes = [
     {
@@ -39,8 +40,7 @@ const routes: Routes = [
             { path: '', component: OfficeSuppliesComponent },
             { path: 'user-infor', component: UserInforComponent },
             { path: 'change-password', component: ChangePasswordComponent },
-            { path: 'order-status', component: OrderStatusComponent },
-            { path: 'order-detail', component: OrderDetailsComponent },
+            { path: 'purchase', component: PurchaseComponent },
             { path: 'category', component: CategoryComponent },
             { path: 'products', component: ProductsComponent },
             { path: 'cart', component: CartsComponent },
@@ -66,6 +66,8 @@ const routes: Routes = [
             { path: 'users', component: UsersComponent, canActivate: [AdminGuard] },
             { path: 'user-infor', component: UserInforComponent },
             { path: 'change-password', component: ChangePasswordComponent },
+            { path: 'orders', component: OrdersAdminComponent },
+            { path: 'statistics', component: StatisticsComponent, canActivate: [AdminGuard] },
         ],
     },
     { path: 'login', component: LoginComponent },

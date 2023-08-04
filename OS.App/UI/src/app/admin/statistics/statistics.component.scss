@@ -1,0 +1,37 @@
+.statistics {
+    .select-month {
+        text-align: right;
+        padding: 0 10px;
+    }
+    .content {
+        h2 {
+            text-align: center;
+            color: var(--text-color);
+            margin: 0;
+        }
+    }
+    .intro {
+        display: flex;
+        .intro-content {
+            flex: 1;
+            height: 150px;
+            background-color: white;
+            border: 1px solid var(--surface-border);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            margin: 10px;
+            border-radius: 10px;
+            padding: 10px;
+            color: var(--text-color);
+            p {
+                text-align: center;
+                font-size: 30px;
+            }
+        }
+    }
+
+    .chart {
+        padding: 10px;
+        margin-bottom: 10px;
+        background-color: white;
+    }
+}

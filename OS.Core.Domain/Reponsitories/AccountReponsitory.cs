@@ -31,14 +31,17 @@ namespace OS.Core.Domain.Reponsitories
 
         public async Task<TokenDto> SigInAsync(SignIn model)
         {
-            var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
-            var user = await userManager.FindByEmailAsync(model.Email);
 
-            if (result.IsLockedOut)
+            var user = await userManager.FindByEmailAsync(model.Email);
+            var passwordHasher = new CaesarPasswordHasher(configuration);
+            var result = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, model.Password!);
+
+            if (await userManager.IsLockedOutAsync(user))
             {
                 return null!;
             }
-            else if (!result.Succeeded)
+            
+            if (result != PasswordVerificationResult.Success)
             {
                 await userManager.AccessFailedAsync(user);
                 var accessFailedCount = await userManager.GetAccessFailedCountAsync(user);
@@ -54,12 +57,6 @@ namespace OS.Core.Domain.Reponsitories
             {
                 await userManager.ResetAccessFailedCountAsync(user);
             }
-
-            if (!result.Succeeded)
-            {
-                return null!;
-            }
-
 
             var accessTokenString = await GenerateAccessTokenAsync(model.Email!, user);
             var refreshTokenString = await GenerateRefreshTokenAsync();
@@ -173,7 +170,6 @@ namespace OS.Core.Domain.Reponsitories
             return await userManager.CreateAsync(user, model.Password);
         }
 
-
         public async Task<IdentityResult> CreateRoleAsync(string roleName)
         {
             var roleExists = await roleManager.RoleExistsAsync(roleName);
@@ -188,11 +184,27 @@ namespace OS.Core.Domain.Reponsitories
         public async Task<IdentityResult> AssignUserRoleAsync(string userId, string roleName)
         {
             var user = await userManager.FindByIdAsync(userId);
-            if (user != null)
+
+            if (user == null)
             {
-                return await userManager.AddToRoleAsync(user, roleName);
+                return null!;
             }
-            return IdentityResult.Failed(new IdentityError { Description = $"Không tìm thấy người dùng với ID '{userId}'." });
+            else
+            {
+                /* var adminRole = await roleManager.FindByNameAsync("admin");
+                 var employeeRole = await roleManager.FindByNameAsync("employee");
+
+                 await roleManager.AddClaimAsync(adminRole, new Claim("ManageProducts", "true"));
+                 await roleManager.AddClaimAsync(adminRole, new Claim("ManageOrders", "true"));
+                 await roleManager.AddClaimAsync(adminRole, new Claim("ManageUsers", "true"));
+
+                 await roleManager.AddClaimAsync(employeeRole, new Claim("ManageProducts", "true"));
+                 await roleManager.AddClaimAsync(employeeRole, new Claim("ManageOrders", "true"));
+                 await roleManager.AddClaimAsync(employeeRole, new Claim("ManageUsers", "false"));*/
+
+                await userManager.AddToRoleAsync(user, roleName);
+                return IdentityResult.Success;
+            }
         }
 
         public async Task<UserDto> GetUserAsync(string userId)
@@ -287,7 +299,7 @@ namespace OS.Core.Domain.Reponsitories
             var user = await userManager.FindByIdAsync(userId);
             var roles = (await userManager.GetRolesAsync(user));
             var filteredRoles = roles?.Where(r => r != null).ToList();
-            if(filteredRoles!.Any())
+            if (filteredRoles!.Any())
             {
                 return filteredRoles!;
             }
@@ -316,6 +328,33 @@ namespace OS.Core.Domain.Reponsitories
                 await signInManager.SignOutAsync();
                 await userManager.UpdateSecurityStampAsync(user);
                 await userManager.RemoveAuthenticationTokenAsync(user, "Bearer", "refresh_token");
+                return IdentityResult.Success;
+            }
+        }
+
+        public async Task<IdentityResult> UpdateUserAsync(UserDto userDto, string id)
+        {
+            var user = await userManager.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                return IdentityResult.Failed(new IdentityError { Description = "User not found." });
+            }
+
+            user.Email = userDto.Email;
+            user.FirstName = userDto.FirstName;
+            user.LastName = userDto.LastName;
+            user.PhoneNumber = userDto.PhoneNumber;
+            user.Address = userDto.Address;
+
+            var result = await userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                return result;
+            }
+            else
+            {
                 return IdentityResult.Success;
             }
         }

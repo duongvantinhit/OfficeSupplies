@@ -78,12 +78,7 @@ export class AdminComponent implements OnInit {
                 {
                     label: 'Đơn hàng',
                     icon: 'pi pi-fw pi-cart-plus',
-                    routerLink: '/admin',
-                },
-                {
-                    label: 'Cập nhật trạng thái',
-                    icon: 'pi pi-fw pi-globe',
-                    routerLink: '/admin',
+                    routerLink: '/admin/orders',
                 },
             ],
         },
@@ -103,19 +98,9 @@ export class AdminComponent implements OnInit {
             icon: 'pi pi-fw pi-chart-line',
             items: [
                 {
-                    label: 'Tổng quan',
+                    label: 'Doanh thu',
                     icon: 'pi pi-fw pi-chart-bar',
-                    routerLink: '/admin',
-                },
-                {
-                    label: 'Ngày',
-                    icon: 'pi pi-fw pi-calendar',
-                    routerLink: '/admin',
-                },
-                {
-                    label: 'Tháng',
-                    icon: 'pi pi-fw pi-calendar-minus',
-                    routerLink: '/admin',
+                    routerLink: '/admin/statistics',
                 },
             ],
         },
@@ -124,21 +109,16 @@ export class AdminComponent implements OnInit {
             icon: 'pi pi-fw pi-lock',
             items: [
                 {
-                    label: 'Hồ sơ',
+                    label: 'Thông tin tài khoản',
                     icon: 'pi pi-fw pi-info-circle',
                     routerLink: '/admin/user-infor',
-                },
-                {
-                    label: 'Đổi mật khẩu',
-                    icon: 'pi pi-fw pi-refresh',
-                    routerLink: '/admin/change-password',
                 },
                 {
                     label: 'Đăng xuất',
                     icon: 'pi pi-fw pi-sign-out',
                     command: () => {
                         this._confirmationService.confirm({
-                            message: AppMessages.C_M_3,
+                            message: AppMessages.C_M_21,
                             header: 'Confirmation',
                             icon: 'pi pi-exclamation-triangle',
                             accept: () => {

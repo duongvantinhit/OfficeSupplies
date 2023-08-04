@@ -1,0 +1,80 @@
+<div class="office-supplies-admin">
+    <div class="statistics">
+        <div class="flex title">
+            <div class="tilte-right">
+                <h2>THỐNG KÊ</h2>
+            </div>
+        </div>
+
+        <div class="intro">
+            <div class="intro-content">
+                <h3>Đơn hàng</h3>
+                <p>{{ totalOrder }}</p>
+            </div>
+            <div class="intro-content">
+                <h3>Doanh thu</h3>
+                <p>{{ totalRevenue | number : '1.0-3' }}</p>
+            </div>
+            <div class="intro-content">
+                <h3>Khách hàng</h3>
+                <p>{{ totalCustomer }}</p>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="chart">
+                <h2>DOANH THU TRONG NĂM</h2>
+                <div class="card">
+                    <p-chart type="bar" [data]="revenueMonthOfYear" [options]="optionsMonthOfYear"></p-chart>
+                </div>
+            </div>
+
+            <div class="chart">
+                <h2>DOANH THU TRONG THÁNG</h2>
+                <div class="select-month">
+                    <span class="text-color">Chọn tháng: </span>
+                    <p-dropdown
+                        [options]="months"
+                        appendTo="body"
+                        placeholder="Chọn tháng"
+                        [virtualScrollItemSize]="38"
+                        styleClass="w-6rem text-center"
+                        (onChange)="changeMonthOfRevenue()"
+                        [(ngModel)]="selectMonthOfRevenue"
+                    ></p-dropdown>
+                </div>
+                <div class="card">
+                    <p-chart type="bar" [data]="revenueDayOfMonth" [options]="optionsDayOfMonth"></p-chart>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="chart">
+                <h2>ĐƠN HÀNG TRONG NĂM</h2>
+                <div class="card">
+                    <p-chart type="bar" [data]="orderMonthOfYear" [options]="optionsMonthOfYear"></p-chart>
+                </div>
+            </div>
+
+            <div class="chart">
+                <h2>ĐƠN HÀNG TRONG THÁNG</h2>
+                <div class="select-month">
+                    <span class="text-color">Chọn tháng: </span>
+                    <p-dropdown
+                        [options]="months"
+                        appendTo="body"
+                        placeholder="Chọn tháng"
+                        [virtualScrollItemSize]="38"
+                        styleClass="w-6rem text-center"
+                        (onChange)="changeMonthOfOrder()"
+                        [(ngModel)]="selectMonthOfOrder"
+                    ></p-dropdown>
+                </div>
+                <div class="card">
+                    <p-chart type="bar" [data]="orderDayOfMonth" [options]="optionsDayOfMonth"></p-chart>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

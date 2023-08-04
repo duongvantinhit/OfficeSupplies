@@ -19,5 +19,6 @@ namespace OS.Core.Domain.Reponsitories
         public Task<List<UserDto>> GetAllUsersAsync();
         public Task<IdentityResult> ChangePasswordAsync(ChangePasswordDto changePasswordDto);
         public Task<IdentityResult> RemoveUserRoleAsync(string userId, string roleName);
+        public Task<IdentityResult> UpdateUserAsync(UserDto userDto, string id);
     }
 }

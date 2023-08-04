@@ -74,6 +74,9 @@ export class UsersComponent implements OnInit {
             if (res.successed) {
                 this._notiService.success(Notice.addSuccessed, '', 'Thành công');
                 this.loadData();
+                this._authServices.getUserInfor().subscribe(async (res) => {
+                    localStorage.setItem('OS_CURRENT_USER', JSON.stringify(res.data));
+                });
             } else {
                 this._notiService.error(Notice.err);
             }

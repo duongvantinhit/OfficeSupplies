@@ -63,7 +63,7 @@ export class ProductsComponent implements OnInit {
 
     productDetail(productId: any) {
         this._router.navigate(['/product/detail'], {
-            queryParams: { id: productId },
+            queryParams: { id: productId, page: this.getPageNumber },
         });
     }
 }

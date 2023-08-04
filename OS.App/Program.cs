@@ -27,7 +27,9 @@ builder.Services.AddCors(option => option.AddDefaultPolicy(policy =>
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(option =>
 {
     option.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
-}).AddEntityFrameworkStores<OsDbContext>().AddDefaultTokenProviders();
+}).AddEntityFrameworkStores<OsDbContext>().AddDefaultTokenProviders().AddRoles<IdentityRole>();
+
+builder.Services.AddScoped<IPasswordHasher<ApplicationUser>, CaesarPasswordHasher>();
 
 builder.Services.AddDbContext<OsDbContext>(option =>
 {
@@ -105,6 +107,27 @@ builder.Services.AddAuthorization(options =>
     options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
         .RequireAuthenticatedUser()
         .Build();
+
+    options.AddPolicy("Admin", policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        //policy.RequireRole("admin");
+        policy.RequireAssertion(context =>
+           context.User.HasClaim(c =>
+               c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+               && c.Value.Contains("admin")
+           ));
+    });
+
+    options.AddPolicy("Employee", policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        policy.RequireAssertion(context =>
+           context.User.HasClaim(c =>
+               c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+               && (c.Value.Contains("employee") || c.Value.Contains("admin"))
+           ));
+    });
 });
 
 var app = builder.Build();
@@ -127,6 +150,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors(AllowSpecificOrigins);
 app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 

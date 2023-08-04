@@ -6,7 +6,6 @@ using OS.Core.Application.Dtos;
 using OS.Core.Domain.OfficeSupplies;
 using OS.Core.Infrastructure.Database;
 using System.Security.Claims;
-using System.Transactions;
 using UA.Core.Application.SeedWork;
 
 namespace OS.App.Controllers
@@ -14,6 +13,7 @@ namespace OS.App.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
+
     public class OSController : ControllerBase
     {
         private readonly OsDbContext _context;
@@ -183,6 +183,23 @@ namespace OS.App.Controllers
             return Ok(res);
         }
 
+        [HttpGet("search/product/{name}")]
+        public async Task<IActionResult> SearchProduct(string name)
+        {
+            var res = new ApiResult<IEnumerable<Product>>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var query = _context.Products
+                .Where(x => x.ProductName!.Contains(name));
+
+            res.Data = await query.ToListAsync();
+            return Ok(res);
+        }
+
+
         [HttpGet("promotions")]
         public async Task<IActionResult> GetAllPromotions([FromQuery] ApiRequest request)
         {
@@ -240,39 +257,247 @@ namespace OS.App.Controllers
         [HttpGet("carts")]
         public async Task<IActionResult> GetCarts()
         {
-            var res = new ApiResult<IEnumerable<CartsDto>>
+            var res = new ApiResult<CartDto>
             {
                 Successed = true,
                 ResponseCode = StatusCodes.Status200OK,
             };
 
             var userId = _httpContext.HttpContext!.User.FindFirstValue("id");
+            var cart = await _context.Carts
+               .Include(x => x.CartDetails!)
+               .ThenInclude(x => x.Product)
+               .FirstOrDefaultAsync(x => x.UserId == userId);
 
-            var query = from cart in _context.Carts
-                        join product in _context.Products
-                        on cart.ProductId equals product.Id
-                        where cart.UserId == userId
-                        select new
-                        {
-                            Cart = cart,
-                            Product = product
-                        };
-
-            var result = await query.Select(x => new CartsDto
+            var cartDto = new CartDto
             {
-                Id = x.Cart.Id,
-                UserId = x.Cart.UserId,
-                ProductId = x.Cart.ProductId,
-                Quantity = x.Cart.Quantity,
-                ProductName = x.Product.ProductName,
-                ImageURL = x.Product.ImageURL,
-                Price = x.Product.Price
-            }).ToListAsync();
+                UserId = cart!.UserId,
+                TotalPrice = cart.CartDetails!.Sum(x => x.Product!.Price * x.Quantity),
+                CartDetails = cart.CartDetails!.Select(x => new CartDetailDto
+                {
+                    ProductId = x.ProductId,
+                    Quantity = x.Quantity,
+                    Price = x.Product!.Price,
+                    ImageURL = x.Product.ImageURL,
+                    ProductName = x.Product.ProductName
+                }).ToList()
+            };
 
-            res.Data = result;
+            res.Data = cartDto;
             return Ok(res);
         }
 
+
+        [HttpGet("order/status")]
+        public async Task<IActionResult> GetAllOrderStatus()
+        {
+            var res = new ApiResult<IEnumerable<OrderStatus>>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var query = _context.OrderStatus;
+            res.Data = await query.ToListAsync();
+            return Ok(res);
+        }
+
+        [HttpGet("statistics/{month}")]
+        [Authorize(Policy = "Admin")]
+        public async Task<IActionResult> GetAllOrderOfYear(int month)
+        {
+            var res = new ApiResult<IEnumerable<StatisticsDto>>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var year = DateTime.Today.Year;
+            var query = _context.Orders
+                .Where(x => x.OrderDate.Month == month && x.OrderDate.Year == year)
+                .GroupBy(x => x.OrderDate.Day)
+                .Select(x => new StatisticsDto
+                {
+                    Day = x.Key,
+                    TotalRevenue = x.Sum(o => o.TotalCost),
+                    TotalOrder = x.Count()
+                });
+
+            res.Data = await query.ToListAsync();
+
+            return Ok(res);
+        }
+
+        [HttpGet("statistics/today")]
+        [Authorize(Policy = "Admin")]
+        public async Task<ActionResult> GetAllOrderOfDay()
+        {
+            var res = new ApiResult<OrderStatisticsDto>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var result = await Task.Run(() => _context.GetOrderStatisticsForToday());
+            res.Data = result;
+
+            return Ok(res);
+        }
+
+        [HttpGet("statistics")]
+        [Authorize(Policy = "Admin")]
+        public async Task<IActionResult> GetOrderRevenue()
+        {
+            var res = new ApiResult<IEnumerable<StatisticsDto>>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var currentYear = DateTime.Now.Year;
+
+            var query = _context.Orders
+                .Where(x => x.OrderDate.Year == currentYear)
+                .GroupBy(x => new { x.OrderDate.Month })
+                .Select(x => new StatisticsDto
+                {
+                    Month = "Tháng " + x.Key.Month,
+                    TotalRevenue = x.Sum(o => o.TotalCost),
+                    TotalOrder = x.Count()
+                });
+
+            res.Data = await query.ToListAsync();
+            return Ok(res);
+        }
+
+        [HttpGet("orders/user/{status}")]
+        public async Task<IActionResult> GetAllOrdersUser(string status)
+        {
+            var res = new ApiResult<IEnumerable<GetOrderDto>>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var userId = _httpContext.HttpContext!.User.FindFirstValue("id");
+            var query = _context.Orders.Where(x => x.UserId == userId).AsNoTracking();
+
+            var orders = await query
+               .Include(x => x.OrderStatus)
+               .Include(x => x.Promotion)
+               .Include(x => x.OrderDetails!)
+               .ThenInclude(x => x.Product)
+               .OrderByDescending(x => x.OrderDate)
+               .ToListAsync();
+
+            switch (status)
+            {
+                case "all":; break;
+                case "awaitingConfirmation":
+                    orders = orders
+                        .Where(x => x.OrderStatus!.OrderStatusName == "Chờ xác nhận").ToList(); break;
+                case "shipping":
+                    orders = orders
+                   .Where(x => x.OrderStatus!.OrderStatusName == "Vận chuyển").ToList(); break;
+                case "inTransit":
+                    orders = orders
+                       .Where(x => x.OrderStatus!.OrderStatusName == "Đang giao").ToList(); break;
+                case "completed":
+                    orders = orders
+                       .Where(x => x.OrderStatus!.OrderStatusName == "Hoàn thành").ToList(); break;
+                case "cancelled":
+                    orders = orders
+                       .Where(x => x.OrderStatus!.OrderStatusName == "Đã hủy").ToList(); break;
+            }
+
+            var orderDtos = orders.Select(cart => new GetOrderDto
+            {
+                Id = cart.Id,
+                OrderStatusName = cart.OrderStatus!.OrderStatusName,
+                DiscountPercent = cart.Promotion?.DiscountPercent ?? 0,
+                TotalCost = cart.TotalCost,
+                OrderDate = cart.OrderDate,
+                GetOrderDetails = cart.OrderDetails!.Select(x => new GetOrderDetailDto
+                {
+                    ImageURL = x.Product!.ImageURL,
+                    ProductName = x.Product.ProductName,
+                    Quantity = x.Quantity,
+                    UnitPrice = x.UnitPrice,
+                    Price = x.Product.Price,
+                }).ToList()
+            });
+
+            res.Data = orderDtos;
+            return Ok(res);
+        }
+
+        [HttpGet("orders/{status}")]
+        public async Task<IActionResult> GetAllOrders(string status)
+        {
+            var res = new ApiResult<IEnumerable<GetOrderDto>>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var userId = _httpContext.HttpContext!.User.FindFirstValue("id");
+            var query = _context.Orders;
+
+            var orders = await query
+               .Include(x => x.OrderStatus)
+               .Include(x => x.Promotion)
+               .Include(x => x.ApplicationUser)
+               .Include(x => x.OrderDetails!)
+               .ThenInclude(x => x.Product)
+               .OrderByDescending(x => x.OrderDate)
+               .ToListAsync();
+
+            switch (status)
+            {
+                case "all":; break;
+                case "awaitingConfirmation":
+                    orders = orders
+                        .Where(x => x.OrderStatus!.OrderStatusName == "Chờ xác nhận").ToList(); break;
+                case "shipping":
+                    orders = orders
+                   .Where(x => x.OrderStatus!.OrderStatusName == "Vận chuyển").ToList(); break;
+                case "inTransit":
+                    orders = orders
+                       .Where(x => x.OrderStatus!.OrderStatusName == "Đang giao").ToList(); break;
+                case "completed":
+                    orders = orders
+                       .Where(x => x.OrderStatus!.OrderStatusName == "Hoàn thành").ToList(); break;
+                case "cancelled":
+                    orders = orders
+                       .Where(x => x.OrderStatus!.OrderStatusName == "Đã hủy").ToList(); break;
+            }
+
+
+            var orderDtos = orders.Select(cart => new GetOrderDto
+            {
+                Id = cart.Id,
+                OrderStatusName = cart.OrderStatus!.OrderStatusName,
+                DiscountPercent = cart.Promotion?.DiscountPercent ?? 0,
+                TotalCost = cart.TotalCost,
+                OrderDate = cart.OrderDate,
+                UserName = cart.ApplicationUser!.FirstName + " " + cart.ApplicationUser.LastName,
+                Email = cart.ApplicationUser.Email,
+                PhoneNumber = cart.ApplicationUser.PhoneNumber,
+                Address = cart.ApplicationUser.Address,
+                OrderStatusId = cart.OrderStatusId,
+                GetOrderDetails = cart.OrderDetails!.Select(x => new GetOrderDetailDto
+                {
+                    ImageURL = x.Product!.ImageURL,
+                    ProductName = x.Product.ProductName,
+                    Quantity = x.Quantity,
+                    UnitPrice = x.UnitPrice,
+                    Price = x.Product.Price,
+                }).ToList()
+            });
+
+            res.Data = orderDtos;
+            return Ok(res);
+        }
 
         #endregion httpGET
 
@@ -438,7 +663,7 @@ namespace OS.App.Controllers
         }
 
         [HttpPost("cart")]
-        public async Task<IActionResult> CreateCart(Cart model)
+        public async Task<IActionResult> CreateCart(CartDetail model)
         {
             var res = new ApiResult<IEnumerable<Cart>>
             {
@@ -447,33 +672,55 @@ namespace OS.App.Controllers
             };
 
             var userId = _httpContext.HttpContext!.User.FindFirstValue("id");
-            var cart = await _context.Carts.AsNoTracking().FirstOrDefaultAsync(x => x.ProductId == model.ProductId && x.UserId == userId);
+            var cartId = Guid.NewGuid().ToString();
+            var cart = await _context.Carts.AsNoTracking().FirstOrDefaultAsync(x => x.UserId == userId);
 
+            using var transaction = _context.Database.BeginTransaction();
             try
             {
                 if (cart == null)
                 {
                     Cart createCart = new()
                     {
-                        Id = Guid.NewGuid().ToString(),
+                        Id = cartId,
                         UserId = userId,
-                        ProductId = model.ProductId,
-                        Quantity = model.Quantity
                     };
                     _context.Add(createCart);
+                    await _context.SaveChangesAsync();
                 }
                 else
                 {
-                    cart.Quantity = cart.Quantity + model.Quantity;
-                    _context.Update(cart);
+                    cartId = cart.Id;
                 }
 
-                await _context.SaveChangesAsync();
+                var cartDetail = await _context.CartDetails.AsNoTracking()
+                    .FirstOrDefaultAsync(x => x.CartId == cartId && x.ProductId == model.ProductId);
+
+                if (cartDetail == null)
+                {
+                    CartDetail createCartDetail = new()
+                    {
+                        CartId = cartId,
+                        ProductId = model.ProductId,
+                        Quantity = model.Quantity
+                    };
+                    _context.Add(createCartDetail);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    cartDetail.Quantity = cartDetail.Quantity + model.Quantity;
+                    _context.Update(cartDetail);
+                    await _context.SaveChangesAsync();
+                }
+
+                transaction.Commit();
                 res.Message = AppConsts.MSG_CREATED_SUCCESSFULL;
 
             }
             catch (Exception ex)
             {
+                transaction.Rollback();
                 res.Successed = false;
                 res.Message = ex.Message;
                 res.ResponseCode = StatusCodes.Status500InternalServerError;
@@ -484,7 +731,7 @@ namespace OS.App.Controllers
 
         [HttpPost("order")]
         public async Task<IActionResult> CreateOrder(OrderDto model)
-       {
+        {
             var res = new ApiResult<IEnumerable<Cart>>
             {
                 Successed = true,
@@ -495,16 +742,18 @@ namespace OS.App.Controllers
             var orderId = Guid.NewGuid().ToString();
             List<OrderDetailDto> orderDetails = model.OrderItems;
 
-            var orderDetailDB = new List<OrderDetail>();
-            var carts = await _context.Carts.Where(x => x.UserId == userId).ToListAsync();
+            var createOrderDetail = new List<OrderDetail>();
+            var cart = await _context.Carts.AsNoTracking().FirstOrDefaultAsync(x => x.UserId == userId);
+            var orderStatus = await _context.OrderStatus.AsNoTracking().FirstOrDefaultAsync(x => x.OrderStatusName == "Chờ xác nhận");
 
-            Order order = new()
+            Order createOrder = new()
             {
                 Id = orderId,
                 UserId = userId,
                 TotalCost = model.TotalCost,
                 OrderDate = model.OrderDate.ToLocalTime(),
-                PromotionId = model.PromotionId
+                PromotionId = model.PromotionId,
+                OrderStatusId = orderStatus!.Id
             };
 
             foreach (var item in orderDetails)
@@ -517,21 +766,24 @@ namespace OS.App.Controllers
                     UnitPrice = item.UnitPriceTemp
                 };
 
-                orderDetailDB.Add(orderDetail);
+                createOrderDetail.Add(orderDetail);
             }
 
             using var transaction = _context.Database.BeginTransaction();
             try
             {
-                _context.Add(order);
+                _context.Add(createOrder);
                 await _context.SaveChangesAsync();
 
-                if (carts != null && carts.Any() && orderDetails.Count > 1)
+                if (cart != null && orderDetails.Count > 1)
                 {
-                    _context.Carts.RemoveRange(carts);
+                    var cartDetail = await _context.CartDetails.Where(x => x.CartId == cart.Id).ToListAsync();
+                    _context.CartDetails.RemoveRange(cartDetail!);
+                    await _context.SaveChangesAsync();
+                    _context.Carts.Remove(cart);
                 }
 
-                _context.AddRange(orderDetailDB);
+                _context.AddRange(createOrderDetail);
                 await _context.SaveChangesAsync();
 
                 transaction.Commit();
@@ -550,11 +802,44 @@ namespace OS.App.Controllers
             return Ok(res);
         }
 
+        [HttpPost("order/status")]
+        public async Task<IActionResult> CreateOrderStatus(OrderStatus model)
+        {
+            var res = new ApiResult<IEnumerable<OrderStatus>>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+
+            OrderStatus createOrderStatus = new()
+            {
+                Id = Guid.NewGuid().ToString(),
+                OrderStatusName = model.OrderStatusName
+            };
+
+            try
+            {
+                _context.Add(createOrderStatus);
+                await _context.SaveChangesAsync();
+                res.Message = AppConsts.MSG_CREATED_SUCCESSFULL;
+
+            }
+            catch (Exception ex)
+            {
+                res.Successed = false;
+                res.Message = ex.Message;
+                res.ResponseCode = StatusCodes.Status500InternalServerError;
+            }
+            return Ok(res);
+        }
+
 
         #endregion httpPOST
 
         #region httpDELETE
         [HttpDelete("categories/{id}")]
+        [Authorize(Policy = "Employee")]
         public async Task<IActionResult> DeleteCategory(string id)
         {
             var res = new ApiResult<IEnumerable<Categories>>
@@ -589,6 +874,7 @@ namespace OS.App.Controllers
         }
 
         [HttpDelete("product/{id}")]
+        [Authorize(Policy = "Employee")]
         public async Task<IActionResult> DeleteProduct(string id)
         {
             var res = new ApiResult<IEnumerable<Product>>
@@ -623,6 +909,7 @@ namespace OS.App.Controllers
         }
 
         [HttpDelete("promotion/{id}")]
+        [Authorize(Policy = "Employee")]
         public async Task<IActionResult> DeletePromotion(string id)
         {
             var res = new ApiResult<IEnumerable<Promotion>>
@@ -648,8 +935,9 @@ namespace OS.App.Controllers
             return Ok(res);
         }
 
-        [HttpDelete("cart/{id}")]
-        public async Task<IActionResult> DeleteCart(string id)
+        [HttpDelete("cart/{productId}")]
+        [Authorize(Policy = "Employee")]
+        public async Task<IActionResult> DeleteCart(string productId)
         {
             var res = new ApiResult<IEnumerable<Cart>>
             {
@@ -657,11 +945,13 @@ namespace OS.App.Controllers
                 ResponseCode = StatusCodes.Status200OK,
             };
 
-            Cart cart = _context.Carts.Find(id)!;
+            var userId = _httpContext.HttpContext!.User.FindFirstValue("id");
+            var cart = await _context.Carts.AsNoTracking().FirstOrDefaultAsync(x => x.UserId == userId);
+            var cartDetail = await _context.CartDetails.AsNoTracking().FirstOrDefaultAsync(x => x.CartId == cart!.Id && x.ProductId == productId);
 
             try
             {
-                _context.Carts.Remove(cart);
+                _context.CartDetails.Remove(cartDetail!);
                 await _context.SaveChangesAsync();
                 res.Message = AppConsts.MSG_UPDATED_SUCCESSFULL;
             }
@@ -697,6 +987,14 @@ namespace OS.App.Controllers
 
             if (file != null && file.Length > 0)
             {
+                string imageName = Path.GetFileName(category.ImageURL)!;
+                var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "Images", imageName);
+
+                if (System.IO.File.Exists(imagePath))
+                {
+                    System.IO.File.Delete(imagePath);
+                }
+
                 var fileExtension = Path.GetExtension(file.FileName);
                 var fileName = Guid.NewGuid().ToString() + fileExtension;
 
@@ -711,14 +1009,6 @@ namespace OS.App.Controllers
                 var imageUrl = $"{baseUrl}/Images/{fileName}";
 
                 category.ImageURL = imageUrl;
-
-                string imageName = Path.GetFileName(category.ImageURL)!;
-                var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "Images", imageName);
-
-                if (System.IO.File.Exists(imagePath))
-                {
-                    System.IO.File.Delete(imagePath);
-                }
             }
 
             var userId = _httpContext.HttpContext!.User.FindFirstValue("id");
@@ -766,6 +1056,14 @@ namespace OS.App.Controllers
 
             if (file != null && file.Length > 0)
             {
+                string imageName = Path.GetFileName(product.ImageURL)!;
+                var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "Images", imageName);
+
+                if (System.IO.File.Exists(imagePath))
+                {
+                    System.IO.File.Delete(imagePath);
+                }
+
                 var fileExtension = Path.GetExtension(file.FileName);
                 var fileName = Guid.NewGuid().ToString() + fileExtension;
 
@@ -780,14 +1078,6 @@ namespace OS.App.Controllers
                 var imageUrl = $"{baseUrl}/Images/{fileName}";
 
                 product.ImageURL = imageUrl;
-
-                string imageName = Path.GetFileName(product.ImageURL)!;
-                var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "Images", imageName);
-
-                if (System.IO.File.Exists(imagePath))
-                {
-                    System.IO.File.Delete(imagePath);
-                }
             }
 
             var userId = _httpContext.HttpContext!.User.FindFirstValue("id");
@@ -864,8 +1154,8 @@ namespace OS.App.Controllers
             return Ok(res);
         }
 
-        [HttpPut("cart/{id}")]
-        public async Task<IActionResult> UpdateCart(UpdateCartDto cartDto, string id)
+        [HttpPut("cart/{productId}")]
+        public async Task<IActionResult> UpdateCart(UpdateCartDto cartDto, string productId)
         {
             var res = new ApiResult<bool>
             {
@@ -873,19 +1163,57 @@ namespace OS.App.Controllers
                 ResponseCode = StatusCodes.Status200OK,
             };
 
-            var cart = await _context.Carts.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            var userId = _httpContext.HttpContext!.User.FindFirstValue("id");
+            var cart = await _context.Carts.AsNoTracking().FirstOrDefaultAsync(x => x.UserId == userId);
+            var cartDetail = await _context.CartDetails.AsNoTracking().FirstOrDefaultAsync(x => x.CartId == cart!.Id && x.ProductId == productId);
 
-            if (cart == null || cartDto == null)
+            if (cartDetail == null || cartDto == null || cart == null)
             {
                 res.Message = AppConsts.MSG_FIND_NOT_FOUND_DATA;
                 return Ok(res);
             }
 
-            cart.Quantity = cartDto.Quantity;
+            cartDetail.Quantity = cartDto.Quantity;
 
             try
             {
-                _context.Update(cart);
+                _context.Update(cartDetail);
+                await _context.SaveChangesAsync();
+                res.Message = AppConsts.MSG_UPDATED_SUCCESSFULL;
+            }
+            catch (Exception ex)
+            {
+                res.Successed = false;
+                res.Message = ex.Message;
+                res.ResponseCode = StatusCodes.Status500InternalServerError;
+            }
+
+            return Ok(res);
+        }
+
+        [HttpPut("order/status/{orderId}")]
+        [Authorize(Policy = "Employee")]
+        public async Task<IActionResult> UpdateOderStatus(OrderStatusDto orderStatusDto, string orderId)
+        {
+            var res = new ApiResult<bool>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var order = await _context.Orders.AsNoTracking().FirstOrDefaultAsync(x => x.Id == orderId);
+
+            if (order == null)
+            {
+                res.Message = AppConsts.MSG_FIND_NOT_FOUND_DATA;
+                return Ok(res);
+            }
+
+            order.OrderStatusId = orderStatusDto.OrderStatusId;
+
+            try
+            {
+                _context.Update(order);
                 await _context.SaveChangesAsync();
                 res.Message = AppConsts.MSG_UPDATED_SUCCESSFULL;
             }

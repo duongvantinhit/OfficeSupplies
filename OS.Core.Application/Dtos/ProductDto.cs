@@ -27,4 +27,10 @@ namespace OS.Core.Application.Dtos
     {
         public DateTime? ModifiedDate { get; set; }
     }
+
+    public class SearchProductDto
+    {
+        public string? ProductName { get; set; }
+        public string? Id { get; set; }
+    }
 }

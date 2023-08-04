@@ -17,7 +17,7 @@
                             <img src="{{ item.imageURL }}" alt="" />
                             <span>
                                 <p>{{ item.productName }}</p>
-                                <p (click)="deleteCart(item.id, $event)">
+                                <p (click)="deleteCart(item, $event)">
                                     <i class="pi pi-trash pr-2 text-red-600"></i>Xóa sản phẩm
                                 </p>
                             </span>
@@ -31,11 +31,12 @@
                                     buttonLayout="horizontal"
                                     spinnerMode="horizontal"
                                     inputId="horizontal"
+                                    [min]="1"
                                     decrementButtonClass="p-button-secondary"
                                     incrementButtonClass="p-button-secondary"
                                     incrementButtonIcon="pi pi-plus"
                                     decrementButtonIcon="pi pi-minus"
-                                    (onInput)="updateCart(carts, item.id, item.quantity)"
+                                    (onInput)="updateCart(carts, item)"
                                 ></p-inputNumber>
                             </div>
                         </td>
@@ -52,6 +53,7 @@
                 </div>
                 <div class="card flex justify-content-center pb-4">
                     <button
+                        [disabled]="!carts"
                         routerLink="/checkout"
                         class="bg-orange-400 border-orange-400"
                         pButton
@@ -61,5 +63,6 @@
                 </div>
             </div>
         </div>
+        <app-products></app-products>
     </div>
 </div>

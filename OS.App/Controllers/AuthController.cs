@@ -233,6 +233,7 @@ namespace OS.App.Controllers
 
         [HttpPost("assign/user/role")]
         [Authorize]
+        [Authorize(Policy = "Admin")]
         public async Task<IActionResult> AssignUserRole(UserRolesDto dto)
         {
             var res = new ApiResult<string>
@@ -284,12 +285,39 @@ namespace OS.App.Controllers
             return Ok(res);
         }
 
+        [HttpPut("change-user/infor")]
+        [Authorize]
+        public async Task<IActionResult> UpdateUser([FromBody] UserDto userDto)
+        {
+            var res = new ApiResult<UserDto>
+            {
+                Successed = false,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var userId = _httpContext.HttpContext!.User.FindFirstValue("id");
+            var result = await _accountRepo.UpdateUserAsync(userDto, userId);
+
+            if (!result.Succeeded)
+            {
+                res.Message = AppConsts.MSG_FIND_NOT_FOUND_DATA;
+            }
+            else
+            {
+                res.Successed = true;
+                res.Message = AppConsts.MSG_CHANGE_PASSWORD_SUCCESSFULL;
+            }
+
+            return Ok(res);
+        }
+
         #endregion
 
         #region httpDELETE
 
         [HttpDelete("remove/{userId}/{role}")]
         [Authorize]
+        [Authorize(Policy = "Admin")]
         public async Task<IActionResult> RemoveUserRole(string userId, string role)
         {
             var res = new ApiResult<UserDto>

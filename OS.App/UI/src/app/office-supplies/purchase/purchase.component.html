@@ -1,0 +1,77 @@
+<div class="office-supplies">
+    <div class="width">
+        <div class="order-status">
+            <div class="card">
+                <p-tabView (onChange)="changeTab($event)">
+                    <p-tabPanel *ngFor="let item of statusHeader">
+                        <ng-template pTemplate="header">
+                            <span>{{ item }}</span>
+                        </ng-template>
+                        <div *ngIf="orderAll && orderAll.length == 0">
+                            <app-no-orders></app-no-orders>
+                        </div>
+                        <div class="all-order" *ngFor="let item of orderAll">
+                            <div class="product-infor">
+                                <div class="order-header">
+                                    <p class="uppercase"><b>MÃ ĐƠN HÀNG:</b> {{ item.id }}</p>
+                                    <p class="text-primary uppercase">{{ item.orderStatusName }}</p>
+                                </div>
+                                <div class="flex justify-content-between relative product-infor-content">
+                                    <div>
+                                        <div class="content" *ngFor="let orderDtail of item.getOrderDetails">
+                                            <img class="border-img" src="{{ orderDtail.imageURL }}" alt="" />
+                                            <div class="px-2 flex flex-column justify-content-between">
+                                                <div class="flex justify-content-between">
+                                                    <p>{{ orderDtail.productName }}</p>
+                                                </div>
+                                                <div class="flex justify-content-between">
+                                                    <span
+                                                        >Tổng tiền:
+                                                        {{ orderDtail.unitPrice | number : '1.0-3' }} VND</span
+                                                    >
+                                                </div>
+                                                <p>
+                                                    <span>Số lượng: {{ orderDtail.quantity }}</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="cost">
+                                        <div class="cost-infor">
+                                            <p>Ngày đặt</p>
+                                            <span>
+                                                <p class="w-20rem text-right">
+                                                    {{ item.orderDate | date : 'dd/MM/yyyy HH:mm:ss' }}
+                                                </p>
+                                            </span>
+                                        </div>
+                                        <div class="cost-infor">
+                                            <p>Voucher giảm giá</p>
+                                            <span>
+                                                <p class="w-20rem text-right">
+                                                    {{
+                                                        item.totalCost * item.discountPercent * 0.01 | number : '1.0-3'
+                                                    }}
+                                                    VND
+                                                </p>
+                                            </span>
+                                        </div>
+
+                                        <div class="cost-infor">
+                                            <p class="text-orange-500 text-xl">Thành tiền</p>
+                                            <span>
+                                                <p class="w-20rem text-right text-orange-500 text-xl">
+                                                    {{ item.totalCost | number : '1.0-3' }} VND
+                                                </p>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </p-tabPanel>
+                </p-tabView>
+            </div>
+        </div>
+    </div>
+</div>

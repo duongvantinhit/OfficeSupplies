@@ -10,5 +10,7 @@ namespace OS.Core.Domain.OfficeSupplies
         public string? ProductId { get; set; }
         public int Quantity { get; set; }
         public double UnitPrice { get; set; }
+        public Order? Order { get; set; }
+        public Product? Product { get; set; }
     }
 }

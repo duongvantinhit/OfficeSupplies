@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AdminService } from 'src/app/admin/services/admin.service';
 import { AppMessages } from 'src/app/shared/const/messages.const';
 import { Notice } from 'src/app/shared/const/notice.const';
-import { decodeToken } from 'src/app/shared/helpers/jwt.helper';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { AuthService } from 'src/auth/services/auth.service';
 
@@ -18,11 +18,13 @@ export class UserInforComponent implements OnInit {
         private _fb: FormBuilder,
         private _notiService: NotificationService,
         private _apiServices: AdminService,
+        private _router: Router,
     ) {}
 
     userInforForm: any;
     loading = false;
     currentUser: any;
+    currentPage: any;
 
     ngOnInit() {
         this.currentUser = this._authServices.currentUser();
@@ -32,9 +34,11 @@ export class UserInforComponent implements OnInit {
             lastName: ['', [Validators.required]],
             email: ['', [Validators.required, Validators.email]],
             phoneNumber: ['', [Validators.required]],
+            address: ['', [Validators.required]],
         });
 
         this.setValue(this.currentUser);
+        this._router.routerState.snapshot.url.includes('admin') ? (this.currentPage = 'admin') : null;
     }
 
     setValue(data: any): void {
@@ -43,6 +47,7 @@ export class UserInforComponent implements OnInit {
             lastName: data.lastName,
             email: data.email,
             phoneNumber: data.phoneNumber,
+            address: data.address,
         });
     }
 
@@ -69,6 +74,10 @@ export class UserInforComponent implements OnInit {
             errorMessages.push(AppMessages.PLEASE_ENTER('Số điện thoại', Notice.messageEnter));
         }
 
+        if (!this.userInforForm.controls?.address?.valid) {
+            errorMessages.push(AppMessages.PLEASE_ENTER('Địa chỉ', Notice.messageEnter));
+        }
+
         return errorMessages;
     }
 
@@ -78,6 +87,26 @@ export class UserInforComponent implements OnInit {
         if (errorMessages.length > 0) {
             this._notiService.error(errorMessages.join('<br/>'), 'ua-toast');
             return;
+        }
+
+        this._authServices.putData('/change-user/infor', this.userInforForm.value, '').subscribe((res) => {
+            if (res.successed) {
+                this._notiService.success(Notice.updateSuccessed, '', 'Thành công');
+                this._authServices.getUserInfor().subscribe(async (res) => {
+                    localStorage.setItem('OS_CURRENT_USER', JSON.stringify(res.data));
+                    this.ngOnInit();
+                });
+            } else {
+                this._notiService.error(Notice.err);
+            }
+        });
+    }
+
+    changePassword() {
+        if (this.currentPage == 'admin') {
+            this._router.navigate(['/admin/change-password']);
+        } else {
+            this._router.navigate(['/change-password']);
         }
     }
 }

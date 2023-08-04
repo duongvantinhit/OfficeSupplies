@@ -25,21 +25,19 @@ export class CartsComponent implements OnInit {
 
     ngOnInit() {
         this._apiServices.getDataAll('/carts').subscribe((res) => {
-            this.carts = res.data;
-            this.updateCart(res.data);
+            this.carts = res.data.cartDetails;
+            this.totalPrice = res.data.totalPrice;
         });
     }
 
-    updateCart(item: any, id: any = null, quantity: any = null) {
-        this.totalPrice = this.carts.reduce((acc: any, cur: any) => acc + cur.price * cur.quantity, 0);
-        console.log(id, quantity);
-        if (id && quantity) {
-            this._apiServices.putData('/cart', { quantity: quantity }, id).subscribe((res) => {
-                if (!res.successed) {
-                    this._notiService.error(Notice.addFail);
-                }
-            });
-        }
+    updateCart(cart: any, item: any = null) {
+        this._apiServices.putData('/cart', { quantity: item.quantity }, item.productId).subscribe((res) => {
+            if (!res.successed) {
+                this._notiService.error(Notice.addFail);
+            } else {
+                this.ngOnInit();
+            }
+        });
     }
 
     productDetail(productId: any) {
@@ -48,7 +46,7 @@ export class CartsComponent implements OnInit {
         });
     }
 
-    deleteCart(id: any, event: any) {
+    deleteCart(item: any, event: any) {
         event.stopPropagation();
 
         this._confirmationService.confirm({
@@ -56,7 +54,7 @@ export class CartsComponent implements OnInit {
             header: 'Confirmation',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
-                this._apiServices.deleteData('/cart', id).subscribe((res) => {
+                this._apiServices.deleteData('/cart', item.productId).subscribe((res) => {
                     if (res.successed) {
                         this.ngOnInit();
                         this._notiService.success(Notice.deleteSuccessed, '', 'Thành công');

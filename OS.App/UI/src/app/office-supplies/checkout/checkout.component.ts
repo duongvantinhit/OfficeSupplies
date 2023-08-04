@@ -49,8 +49,8 @@ export class CheckoutComponent implements OnInit {
 
         if (!this.pageType) {
             this._apiServices.getDataAll('/carts').subscribe((res) => {
-                this.carts = res.data;
-                this.subtotal = this.carts.reduce((acc: any, cur: any) => acc + cur.price * cur.quantity, 0);
+                this.carts = res.data.cartDetails;
+                this.subtotal = res.data.totalPrice;
                 this.totalCost = this.subtotal;
             });
         } else {

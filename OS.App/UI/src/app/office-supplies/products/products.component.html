@@ -1,9 +1,9 @@
 <div class="office-supplies">
-    <div class="products">
-        <div class="width">
-            <p-divider align="center">
-                <span class="p-tag">SẢN PHẨM</span>
-            </p-divider>
+    <div class="width">
+        <p-divider align="center">
+            <span class="p-tag">SẢN PHẨM</span>
+        </p-divider>
+        <div class="products">
             <div class="products-content">
                 <div class="col-3" *ngFor="let item of products">
                     <div (click)="productDetail(item.id)">
@@ -17,15 +17,15 @@
                     </div>
                 </div>
             </div>
-            <div class="card flex justify-content-center m-2" *ngIf="pageType">
-                <p-paginator
-                    (onPageChange)="loadProducts($event)"
-                    [first]="first"
-                    [rows]="8"
-                    [totalRecords]="totalRecords"
-                    [rowsPerPageOptions]="[15, 30, 45]"
-                ></p-paginator>
-            </div>
+        </div>
+        <div class="card flex justify-content-center m-2" *ngIf="pageType">
+            <p-paginator
+                (onPageChange)="loadProducts($event)"
+                [first]="first"
+                [rows]="8"
+                [totalRecords]="totalRecords"
+                [rowsPerPageOptions]="[15, 30, 45]"
+            ></p-paginator>
         </div>
     </div>
 </div>

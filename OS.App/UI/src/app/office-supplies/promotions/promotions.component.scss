@@ -1,12 +1,12 @@
 .promotion {
     margin: 10px 0;
+    height: 568px;
     .voucher {
         display: flex;
         flex-wrap: wrap;
-        background-color: aqua;
         color: var(--text-color);
         .col3 {
-            width: calc(33.33% - 10px);
+            width: calc(50% - 10px);
             cursor: pointer;
             display: inline-block;
             background-color: white;
@@ -27,13 +27,13 @@
                     margin: 0;
                     font-size: 18px;
                     line-height: 24px;
-                    width: 223px;
+                    width: 420px;
                 }
                 span {
                     font-size: 13px;
                     line-height: 20px;
                     display: block;
-                    width: 223px;
+                    width: 420px;
                 }
                 p {
                     margin: 0;

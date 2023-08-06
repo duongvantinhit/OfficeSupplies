@@ -33,4 +33,14 @@ namespace OS.Core.Application.Dtos
         public string? ProductName { get; set; }
         public string? Id { get; set; }
     }
+
+    public class TopProductDto
+    {
+        public string? Id { get; set; }
+        public string? ProductName { get; set; }
+        public string? ProductDescription { get; set; }
+        public double Price { get; set; }
+        public string? ImageURL { get; set; }
+        public int Quantity { get; set; }
+    }
 }

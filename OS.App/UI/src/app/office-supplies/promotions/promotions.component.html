@@ -1,10 +1,10 @@
 <div class="office-supplies">
-    <div class="promotion">
-        <div class="width">
-            <p-divider align="center">
-                <span class="p-tag">MÃ GIẢM GIÁ MỚI NHẤT</span>
-            </p-divider>
+    <div class="width">
+        <p-divider align="center">
+            <span class="p-tag">MÃ GIẢM GIÁ MỚI NHẤT</span>
+        </p-divider>
 
+        <div class="promotion">
             <div class="voucher">
                 <div class="col3 flex" *ngFor="let item of promotions">
                     <img src="https://inhungphat.com/Uploads/2132/images/DICH%20VU/price-tag.png" alt="" />
@@ -19,15 +19,15 @@
                     </div>
                 </div>
             </div>
-            <div class="card flex justify-content-center m-2">
-                <p-paginator
-                    (onPageChange)="loadPromotions($event)"
-                    [first]="first"
-                    [rows]="8"
-                    [totalRecords]="totalRecords"
-                    [rowsPerPageOptions]="[9, 18, 27]"
-                ></p-paginator>
-            </div>
+        </div>
+        <div class="card flex justify-content-center m-2">
+            <p-paginator
+                (onPageChange)="loadPromotions($event)"
+                [first]="first"
+                [rows]="8"
+                [totalRecords]="totalRecords"
+                [rowsPerPageOptions]="[8, 16, 32]"
+            ></p-paginator>
         </div>
     </div>
 </div>

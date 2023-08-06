@@ -23,18 +23,47 @@ namespace OS.Core.Infrastructure.Database
 
                 this.Database.OpenConnection();
 
-                using (var reader = command.ExecuteReader())
+                using var reader = command.ExecuteReader();
+                if (reader.Read())
                 {
-                    if (reader.Read())
-                    {
-                        statisticsDto.TotalRevenue = reader.GetDouble(0);
-                        statisticsDto.TotalOrder = reader.GetInt32(1);
-                        statisticsDto.TotalCustomer = reader.GetInt32(2);
-                    }
+                    statisticsDto.TotalRevenue = reader.GetDouble(0);
+                    statisticsDto.TotalOrder = reader.GetInt32(1);
+                    statisticsDto.TotalCustomer = reader.GetInt32(2);
                 }
             }
 
             return statisticsDto;
+        }
+
+        public List<TopProductDto> TopProduct()
+        {
+            var topProducts = new List<TopProductDto>();
+
+            using (var command = this.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SP_TOP_PRODUCT";
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+
+                this.Database.OpenConnection();
+
+                using var reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    var topProduct = new TopProductDto
+                    {
+                        Id = reader.GetString(0),
+                        ProductName = reader.GetString(1),
+                        ProductDescription = reader.GetString(2),
+                        Price = reader.GetDouble(3),
+                        ImageURL = reader.GetString(4),
+                        Quantity = reader.GetInt32(5)
+                    };
+
+                    topProducts.Add(topProduct);
+                }
+            }
+
+            return topProducts;
         }
 
         public DbSet<Categories> Categories { get; set; }

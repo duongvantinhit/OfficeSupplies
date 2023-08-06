@@ -15,5 +15,10 @@ namespace OS.Core.Domain.OfficeSupplies
         public Promotion? Promotion { get; set; }
         public ApplicationUser? ApplicationUser { get; set; }
         public OrderStatus? OrderStatus { get; set; }
+
+        public int Count()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

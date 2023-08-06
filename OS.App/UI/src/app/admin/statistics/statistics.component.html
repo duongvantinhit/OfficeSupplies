@@ -21,6 +21,21 @@
             </div>
         </div>
 
+        <div class="flex order-status">
+            <div class="content">
+                <h2>TRẠNG THÁI ĐƠN HÀNG HÔM NAY</h2>
+                <div class="card flex justify-content-center">
+                    <p-chart type="pie" [data]="orderStatusToday" [options]="options"></p-chart>
+                </div>
+            </div>
+            <div class="content">
+                <h2>TRẠNG THÁI ĐƠN HÀNG THÁNG NÀY</h2>
+                <div class="card flex justify-content-center">
+                    <p-chart type="pie" [data]="orderStatusMonth" [options]="options"></p-chart>
+                </div>
+            </div>
+        </div>
+
         <div class="content">
             <div class="chart">
                 <h2>DOANH THU TRONG NĂM</h2>

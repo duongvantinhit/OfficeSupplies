@@ -52,11 +52,11 @@ export class CrudProductComponent implements OnInit {
 
         this.productForm = this._fb.group({
             productName: ['', [Validators.required]],
-            quantityInStock: ['', [Validators.required]],
+            quantityInStock: [1, [Validators.required]],
             categoryId: ['', [Validators.required]],
             trademark: ['', [Validators.required]],
             productDescription: ['', [Validators.required]],
-            price: ['', [Validators.required]],
+            price: [1, [Validators.required]],
             status: ['', [Validators.required]],
             countryOfOrigin: ['', [Validators.required]],
             warranty: ['', [Validators.required]],

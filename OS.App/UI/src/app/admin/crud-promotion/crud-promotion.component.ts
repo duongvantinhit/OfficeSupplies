@@ -89,7 +89,7 @@ export class CrudPromotionComponent implements OnInit {
         return errorMessages;
     }
 
-    create() {
+    create(): void {
         let errorMessages = this.formValidate();
 
         if (errorMessages.length > 0) {
@@ -107,7 +107,7 @@ export class CrudPromotionComponent implements OnInit {
         });
     }
 
-    edit() {
+    edit(): void {
         let errorMessages = this.formValidate();
 
         if (errorMessages.length > 0) {

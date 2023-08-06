@@ -30,6 +30,12 @@ export class OrdersAdminComponent implements OnInit {
     updateOrderStatusForm: any;
     orderStatus: any;
     orderId: any;
+    currentTab = 0;
+    first = 0;
+    totalRecords: number = 0;
+    getPageNumber = 1;
+    setPageNumber: any;
+    currentPage = 'all';
 
     ngOnInit() {
         this.loadData();
@@ -37,42 +43,68 @@ export class OrdersAdminComponent implements OnInit {
             status: ['', [Validators.required]],
         });
         this._apiServices.getDataAll('/order/status').subscribe((res) => {
-            console.log(res);
             this.orderStatus = res.data;
         });
     }
 
-    loadData(status = 'all') {
-        this._apiServices.getDataAll(`/orders/${status}`).subscribe((res) => {
-            this.orderAll = res.data;
-        });
+    loadData(event: any = null, status = 'all') {
+        let loadPageForm = {
+            pageIndex: event ? event.first / event.rows + 1 : 1,
+            pageSize: event ? event.rows : 8,
+        };
+
+        if (!event) {
+            this.first = 0;
+            this._apiServices.loadPages(loadPageForm, `/orders/${status}`).subscribe((res) => {
+                this.totalRecords = res?.totalRows;
+                this.orderAll = res.data;
+                this.first = 0;
+            });
+        } else {
+            this._apiServices.loadPages(loadPageForm, `/orders/${this.currentPage}`).subscribe((res) => {
+                this.totalRecords = res?.totalRows;
+                this.orderAll = res.data;
+            });
+        }
     }
 
     changeTab(e: any): void {
         switch (e.index) {
             case 0:
                 this._apiServices.sendPurchaseStatus('all');
-                this.loadData('all');
+                this.loadData(null, 'all');
+                this.currentTab = 0;
+                this.currentPage = 'all';
                 break;
             case 1:
                 this._apiServices.sendPurchaseStatus('awaitingConfirmation');
-                this.loadData('awaitingConfirmation');
+                this.loadData(null, 'awaitingConfirmation');
+                this.currentTab = 1;
+                this.currentPage = 'awaitingConfirmation';
                 break;
             case 2:
                 this._apiServices.sendPurchaseStatus('shipping');
-                this.loadData('shipping');
+                this.loadData(null, 'shipping');
+                this.currentTab = 2;
+                this.currentPage = 'shipping';
                 break;
             case 3:
                 this._apiServices.sendPurchaseStatus('inTransit');
-                this.loadData('inTransit');
+                this.loadData(null, 'inTransit');
+                this.currentTab = 3;
+                this.currentPage = 'inTransit';
                 break;
             case 4:
                 this._apiServices.sendPurchaseStatus('completed');
-                this.loadData('completed');
+                this.loadData(null, 'completed');
+                this.currentTab = 3;
+                this.currentPage = 'completed';
                 break;
             case 5:
                 this._apiServices.sendPurchaseStatus('cancelled');
-                this.loadData('cancelled');
+                this.loadData(null, 'cancelled');
+                this.currentTab = 4;
+                this.currentPage = 'cancelled';
                 break;
         }
     }
@@ -104,6 +136,29 @@ export class OrdersAdminComponent implements OnInit {
         });
     }
 
+    reloadData() {
+        switch (this.currentTab) {
+            case 0:
+                this.loadData(null, 'all');
+                break;
+            case 1:
+                this.loadData(null, 'awaitingConfirmation');
+                break;
+            case 2:
+                this.loadData(null, 'shipping');
+                break;
+            case 3:
+                this.loadData(null, 'inTransit');
+                break;
+            case 4:
+                this.loadData(null, 'completed');
+                break;
+            case 5:
+                this.loadData(null, 'cancelled');
+                break;
+        }
+    }
+
     updateOrderStatus() {
         this.visibleUpdate = false;
         let errorMessages = this.formValidate();
@@ -122,7 +177,7 @@ export class OrdersAdminComponent implements OnInit {
                 this._apiServices.putData('/order/status', updateForm, this.orderId).subscribe((res) => {
                     if (res.successed) {
                         this._notiService.success(Notice.updateSuccessed, '', 'Thành công');
-                        this.loadData();
+                        this.reloadData();
                     } else {
                         this._notiService.error(Notice.err);
                     }

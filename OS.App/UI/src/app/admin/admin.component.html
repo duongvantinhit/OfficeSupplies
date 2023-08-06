@@ -8,27 +8,17 @@
         </div>
         <div class="admin-right">
             <header class="flex">
-                <div class="header-left flex">
+                <div class="header-left flex cursor-pointer" routerLink="/admin">
                     <img src="../../assets/img/pen.png" alt="" />
                     <div>
                         <h2>OFFICE SUPPLIES</h2>
                         <h4>Thiết bị văn phòng</h4>
                     </div>
                 </div>
-                <div class="header-center">
-                    <span class="p-input-icon-right relative m-auto">
-                        <input type="text" pInputText placeholder="Tìm kiếm chức năng" />
-                        <i class="pi pi-search"></i>
-                    </span>
-                </div>
-                <div class="user">
-                    <div class="col-12 md:col-4 m-auto pr-6">
-                        <p-avatar
-                            icon="pi pi-user"
-                            styleClass="mr-2 cursor-pointer"
-                            [style]="{ 'background-color': '#9c27b0', color: '#ffffff' }"
-                            shape="circle"
-                        ></p-avatar>
+                <div class="user" routerLink="/admin/user-infor">
+                    <div class="user-infor">
+                        <p>{{ currentUser.firstName + ' ' + currentUser.lastName }}</p>
+                        <span><i class="pi pi-unlock"></i>{{ currentUser.roles[0] }}</span>
                     </div>
                 </div>
             </header>

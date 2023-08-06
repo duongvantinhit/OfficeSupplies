@@ -15,4 +15,10 @@
         public int TotalOrder { get; set; }
         public int TotalCustomer { get; set; }
     }
+
+    public class OrderStatusStatisticsDto
+    {
+        public string OrderStatusName { get; set; }
+        public int Quantity { get; set; }
+    }
 }

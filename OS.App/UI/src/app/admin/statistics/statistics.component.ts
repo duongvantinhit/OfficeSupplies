@@ -23,15 +23,106 @@ export class StatisticsComponent implements OnInit {
     totalRevenue: any;
     totalCustomer: any;
 
+    options: any;
+    orderStatusToday: any;
+    orderStatusMonth: any;
+
     ngOnInit() {
         this.loadRevenueDayOfMonth();
         this.loadRevenueMonthOfYear();
         this.loadOrderDayOfMonth();
         this.loadOrderMonthOfYear();
+        this.loadOrderStatusToday();
+        this.loadOrderStatusMonth();
+
         this._apiServices.getDataAll('/statistics/today').subscribe((res) => {
             this.totalOrder = res.data.totalOrder;
             this.totalRevenue = res.data.totalRevenue;
             this.totalCustomer = res.data.totalCustomer;
+        });
+    }
+
+    loadOrderStatusToday() {
+        this._apiServices.getDataAll('/order/status/statistics/day').subscribe((res) => {
+            const labels = res.data.map((item: any) => item.orderStatusName);
+            const quantity = res.data.map((item: any) => item.quantity);
+
+            const documentStyle = getComputedStyle(document.documentElement);
+            const textColor = documentStyle.getPropertyValue('--text-color');
+
+            this.orderStatusToday = {
+                labels: labels,
+                datasets: [
+                    {
+                        data: quantity,
+                        backgroundColor: [
+                            documentStyle.getPropertyValue('--blue-500'),
+                            documentStyle.getPropertyValue('--yellow-500'),
+                            documentStyle.getPropertyValue('--green-500'),
+                            documentStyle.getPropertyValue('--pink-500'),
+                        ],
+                        hoverBackgroundColor: [
+                            documentStyle.getPropertyValue('--blue-400'),
+                            documentStyle.getPropertyValue('--yellow-400'),
+                            documentStyle.getPropertyValue('--green-400'),
+                            documentStyle.getPropertyValue('--pink-500'),
+                        ],
+                    },
+                ],
+            };
+
+            this.options = {
+                plugins: {
+                    legend: {
+                        labels: {
+                            usePointStyle: true,
+                            color: textColor,
+                        },
+                    },
+                },
+            };
+        });
+    }
+
+    loadOrderStatusMonth() {
+        this._apiServices.getDataAll('/order/status/statistics/month').subscribe((res) => {
+            const labels = res.data.map((item: any) => item.orderStatusName);
+            const quantity = res.data.map((item: any) => item.quantity);
+
+            const documentStyle = getComputedStyle(document.documentElement);
+            const textColor = documentStyle.getPropertyValue('--text-color');
+
+            this.orderStatusMonth = {
+                labels: labels,
+                datasets: [
+                    {
+                        data: quantity,
+                        backgroundColor: [
+                            documentStyle.getPropertyValue('--blue-500'),
+                            documentStyle.getPropertyValue('--yellow-500'),
+                            documentStyle.getPropertyValue('--green-500'),
+                            documentStyle.getPropertyValue('--pink-500'),
+                        ],
+                        hoverBackgroundColor: [
+                            documentStyle.getPropertyValue('--blue-400'),
+                            documentStyle.getPropertyValue('--yellow-400'),
+                            documentStyle.getPropertyValue('--green-400'),
+                            documentStyle.getPropertyValue('--pink-500'),
+                        ],
+                    },
+                ],
+            };
+
+            this.options = {
+                plugins: {
+                    legend: {
+                        labels: {
+                            usePointStyle: true,
+                            color: textColor,
+                        },
+                    },
+                },
+            };
         });
     }
 

@@ -10,79 +10,94 @@
                         <div *ngIf="orderAll && orderAll.length == 0">
                             <app-no-orders></app-no-orders>
                         </div>
-                        <div class="all-order cursor-pointer" *ngFor="let item of orderAll">
-                            <div class="product-infor" (click)="showDialog(item)">
-                                <div class="order-header">
-                                    <p class="uppercase"><b>MÃ ĐƠN HÀNG:</b> {{ item.id }}</p>
-                                    <p
-                                        *ngIf="i != 0"
-                                        class="text-primary cursor-pointer"
-                                        (click)="showDialogUpdate(item, $event)"
-                                    >
-                                        <b>CẬP NHẬT TRẠNG THÁI</b>
-                                    </p>
-                                    <p *ngIf="i === 0" class="text-primary uppercase">
-                                        {{ item.orderStatusName }}
-                                    </p>
-                                </div>
-                                <div class="flex justify-content-between relative product-infor-content">
-                                    <div>
-                                        <div class="content">
-                                            <img
-                                                class="border-img"
-                                                src="{{ item.getOrderDetails[0].imageURL }}"
-                                                alt=""
-                                            />
-                                            <div class="px-2 flex flex-column justify-content-between">
-                                                <div class="flex justify-content-between">
-                                                    <p>{{ item.getOrderDetails[0].productName }}</p>
-                                                </div>
-                                                <div class="flex justify-content-between">
-                                                    <span
-                                                        >Tổng tiền:
-                                                        {{ item.getOrderDetails[0].unitPrice | number : '1.0-3' }}
-                                                        VND</span
-                                                    >
-                                                </div>
-                                                <p>
-                                                    <span>Số lượng: {{ item.getOrderDetails[0].quantity }}</span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <em>Nhấn để xem chi tiết đơn hàng</em>
+                        <div class="orders-admin-content">
+                            <div class="all-order cursor-pointer" *ngFor="let item of orderAll">
+                                <div class="product-infor" (click)="showDialog(item)">
+                                    <div class="order-header">
+                                        <p class="uppercase"><b>MÃ ĐƠN HÀNG:</b> {{ item.id }}</p>
+                                        <p
+                                            *ngIf="i != 0"
+                                            class="text-primary cursor-pointer"
+                                            (click)="showDialogUpdate(item, $event)"
+                                        >
+                                            <b>CẬP NHẬT TRẠNG THÁI</b>
+                                        </p>
+                                        <p *ngIf="i === 0" class="text-primary uppercase">
+                                            {{ item.orderStatusName }}
+                                        </p>
                                     </div>
-                                    <div class="cost">
-                                        <div class="cost-infor">
-                                            <p>Ngày đặt</p>
-                                            <span>
-                                                <p class="w-20rem text-right">
-                                                    {{ item.orderDate | date : 'dd/MM/yyyy HH:mm:ss' }}
-                                                </p>
-                                            </span>
+                                    <div class="flex justify-content-between relative product-infor-content">
+                                        <div>
+                                            <div class="content">
+                                                <img
+                                                    class="border-img"
+                                                    src="{{ item.getOrderDetails[0].imageURL }}"
+                                                    alt=""
+                                                />
+                                                <div class="px-2 flex flex-column justify-content-between">
+                                                    <div class="flex justify-content-between">
+                                                        <p class="text-overflow">
+                                                            {{ item.getOrderDetails[0].productName }}
+                                                        </p>
+                                                    </div>
+                                                    <div class="flex justify-content-between">
+                                                        <span
+                                                            >Tổng tiền:
+                                                            {{ item.getOrderDetails[0].unitPrice | number : '1.0-3' }}
+                                                            VND</span
+                                                        >
+                                                    </div>
+                                                    <p>
+                                                        <span>Số lượng: {{ item.getOrderDetails[0].quantity }}</span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <em>Nhấn để xem chi tiết đơn hàng</em>
                                         </div>
-                                        <div class="cost-infor">
-                                            <p>Voucher giảm giá</p>
-                                            <span>
-                                                <p class="w-20rem text-right">
-                                                    {{
-                                                        item.totalCost * item.discountPercent * 0.01 | number : '1.0-3'
-                                                    }}
-                                                    VND
-                                                </p>
-                                            </span>
-                                        </div>
+                                        <div class="cost">
+                                            <div class="cost-infor">
+                                                <p>Ngày đặt</p>
+                                                <span>
+                                                    <p class="w-20rem text-right">
+                                                        {{ item.orderDate | date : 'dd/MM/yyyy HH:mm:ss' }}
+                                                    </p>
+                                                </span>
+                                            </div>
+                                            <div class="cost-infor">
+                                                <p>Voucher giảm giá</p>
+                                                <span>
+                                                    <p class="w-20rem text-right">
+                                                        {{
+                                                            item.totalCost * item.discountPercent * 0.01
+                                                                | number : '1.0-3'
+                                                        }}
+                                                        VND
+                                                    </p>
+                                                </span>
+                                            </div>
 
-                                        <div class="cost-infor">
-                                            <p class="text-orange-500 text-xl">Thành tiền</p>
-                                            <span>
-                                                <p class="w-20rem text-right text-orange-500 text-xl">
-                                                    {{ item.totalCost | number : '1.0-3' }} VND
-                                                </p>
-                                            </span>
+                                            <div class="cost-infor">
+                                                <p class="text-orange-500 text-xl">Thành tiền</p>
+                                                <span>
+                                                    <p class="w-20rem text-right text-orange-500 text-xl">
+                                                        {{ item.totalCost | number : '1.0-3' }} VND
+                                                    </p>
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="card flex justify-content-center m-2">
+                            <p-paginator
+                                (onPageChange)="loadData($event)"
+                                [first]="first"
+                                [rows]="8"
+                                [totalRecords]="totalRecords"
+                                [rowsPerPageOptions]="[8, 16, 24]"
+                            ></p-paginator>
                         </div>
                     </p-tabPanel>
                 </p-tabView>
@@ -101,7 +116,7 @@
                                 <img class="border-img" src="{{ item.imageURL }}" alt="" />
                                 <div class="px-2 flex flex-column justify-content-between">
                                     <div class="flex justify-content-between">
-                                        <p>{{ item.productName }}</p>
+                                        <p class="text-overflow">{{ item.productName }}</p>
                                     </div>
                                     <div class="flex justify-content-between">
                                         <span>Tổng tiền: {{ item.unitPrice | number : '1.0-3' }} VND</span>

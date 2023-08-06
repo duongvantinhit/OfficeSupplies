@@ -20,7 +20,12 @@ export class AdminComponent implements OnInit {
         private _confirmationService: ConfirmationService,
         private _notiService: NotificationService,
     ) {}
-    ngOnInit(): void {}
+
+    currentUser: any;
+
+    ngOnInit(): void {
+        this.currentUser = this._authServices.currentUser();
+    }
 
     function = [
         {
@@ -74,62 +79,81 @@ export class AdminComponent implements OnInit {
         {
             label: 'Đơn hàng',
             icon: 'pi pi-fw pi-cart-plus',
-            items: [
-                {
-                    label: 'Đơn hàng',
-                    icon: 'pi pi-fw pi-cart-plus',
-                    routerLink: '/admin/orders',
-                },
-            ],
+            routerLink: '/admin/orders',
+            // items: [
+            //     {
+            //         label: 'Đơn hàng',
+            //         icon: 'pi pi-fw pi-cart-plus',
+            //         routerLink: '/admin/orders',
+            //     },
+            // ],
         },
         {
             label: 'Người dùng',
             icon: 'pi pi-fw pi-user',
-            items: [
-                {
-                    label: 'Danh sách người dùng',
-                    icon: 'pi pi-fw  pi-list',
-                    routerLink: '/admin/users',
-                },
-            ],
+            routerLink: '/admin/users',
+            // items: [
+            //     {
+            //         label: 'Danh sách người dùng',
+            //         icon: 'pi pi-fw  pi-list',
+            //         routerLink: '/admin/users',
+            //     },
+            // ],
         },
         {
             label: 'Thống kê',
             icon: 'pi pi-fw pi-chart-line',
-            items: [
-                {
-                    label: 'Doanh thu',
-                    icon: 'pi pi-fw pi-chart-bar',
-                    routerLink: '/admin/statistics',
-                },
-            ],
+            routerLink: '/admin/statistics',
+            // items: [
+            //     {
+            //         label: 'Doanh thu',
+            //         icon: 'pi pi-fw pi-chart-bar',
+            //         routerLink: '/admin/statistics',
+            //     },
+            // ],
         },
         {
-            label: 'Tài khoản của tôi',
-            icon: 'pi pi-fw pi-lock',
-            items: [
-                {
-                    label: 'Thông tin tài khoản',
-                    icon: 'pi pi-fw pi-info-circle',
-                    routerLink: '/admin/user-infor',
-                },
-                {
-                    label: 'Đăng xuất',
-                    icon: 'pi pi-fw pi-sign-out',
-                    command: () => {
-                        this._confirmationService.confirm({
-                            message: AppMessages.C_M_21,
-                            header: 'Confirmation',
-                            icon: 'pi pi-exclamation-triangle',
-                            accept: () => {
-                                this._router.navigate(['/login']);
-                                this._authServices.logout();
-                                this._notiService.success(Notice.logoutSuccessed, '', 'Thành công');
-                            },
-                        });
+            label: 'Đăng xuất',
+            icon: 'pi pi-fw pi-sign-out',
+            command: () => {
+                this._confirmationService.confirm({
+                    message: AppMessages.C_M_21,
+                    header: 'Confirmation',
+                    icon: 'pi pi-exclamation-triangle',
+                    accept: () => {
+                        this._router.navigate(['/login']);
+                        this._authServices.logout();
+                        this._notiService.success(Notice.logoutSuccessed, '', 'Thành công');
                     },
-                },
-            ],
+                });
+            },
         },
+        // {
+        //     label: 'Tài khoản của tôi',
+        //     icon: 'pi pi-fw pi-lock',
+        //     items: [
+        //         {
+        //             label: 'Thông tin tài khoản',
+        //             icon: 'pi pi-fw pi-info-circle',
+        //             routerLink: '/admin/user-infor',
+        //         },
+        //         {
+        //             label: 'Đăng xuất',
+        //             icon: 'pi pi-fw pi-sign-out',
+        //             command: () => {
+        //                 this._confirmationService.confirm({
+        //                     message: AppMessages.C_M_21,
+        //                     header: 'Confirmation',
+        //                     icon: 'pi pi-exclamation-triangle',
+        //                     accept: () => {
+        //                         this._router.navigate(['/login']);
+        //                         this._authServices.logout();
+        //                         this._notiService.success(Notice.logoutSuccessed, '', 'Thành công');
+        //                     },
+        //                 });
+        //             },
+        //         },
+        //     ],
+        // },
     ];
 }

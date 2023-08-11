@@ -56,7 +56,7 @@ export class ChangePasswordComponent implements OnInit {
         return errorMessages;
     }
 
-    changePassword() {
+    changePassword(): void {
         let errorMessages = this.formValidate();
 
         if (errorMessages.length > 0) {

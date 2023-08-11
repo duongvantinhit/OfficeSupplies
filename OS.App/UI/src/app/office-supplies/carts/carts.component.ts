@@ -30,7 +30,7 @@ export class CartsComponent implements OnInit {
         });
     }
 
-    updateCart(cart: any, item: any = null) {
+    updateCart(cart: any, item: any = null): void {
         this._apiServices.putData('/cart', { quantity: item.quantity }, item.productId).subscribe((res) => {
             if (!res.successed) {
                 this._notiService.error(Notice.addFail);
@@ -40,13 +40,13 @@ export class CartsComponent implements OnInit {
         });
     }
 
-    productDetail(productId: any) {
+    productDetail(productId: any): void {
         this._router.navigate(['/product/detail'], {
             queryParams: { id: productId },
         });
     }
 
-    deleteCart(item: any, event: any) {
+    deleteCart(item: any, event: any): void {
         event.stopPropagation();
 
         this._confirmationService.confirm({

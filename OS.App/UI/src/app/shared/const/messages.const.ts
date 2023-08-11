@@ -11,6 +11,7 @@ export class AppMessages {
     static readonly C_M_20 = 'Bạn có chắc chắn muốn thay đổi trạng thái?';
     static readonly C_M_21 = 'Bạn có chắc chắn muốn đăng xuất không?';
     static readonly C_M_22 = 'Bạn có chắc chắn muốn xóa không?';
+    static readonly C_M_23 = 'Bạn có chắc chắn muốn hủy đơn hàng này không?';
 
     static readonly NO_INTERNET_CONNECTION = 'No internet connection.';
 

@@ -29,7 +29,7 @@ export class ProductsAdminComponent implements OnInit {
         this.loadProducts();
     }
 
-    loadProducts(event: any = null) {
+    loadProducts(event: any = null): void {
         let loadPageForm = {
             pageIndex: event ? event.first / event.rows + 1 : 1,
             pageSize: event ? event.rows : 8,
@@ -61,13 +61,13 @@ export class ProductsAdminComponent implements OnInit {
         }
     }
 
-    editProduct(id: any) {
+    editProduct(id: any): void {
         this._router.navigate(['/admin/product'], {
             queryParams: { id: id, type: 'edit', page: this.getPageNumber },
         });
     }
 
-    deleteProduct(id: any, event: any) {
+    deleteProduct(id: any, event: any): void {
         event.stopPropagation();
 
         this._confirmationService.confirm({

@@ -5,6 +5,7 @@ using OS.Core.Application;
 using OS.Core.Application.Dtos;
 using OS.Core.Domain.OfficeSupplies;
 using OS.Core.Infrastructure.Database;
+using System.Linq;
 using System.Security.Claims;
 using UA.Core.Application.SeedWork;
 
@@ -209,7 +210,7 @@ namespace OS.App.Controllers
             };
 
             var query = _context.Promotions.AsNoTracking();
-            var sortedDatas = await query.OrderBy(post => post.PromotionName).ToListAsync();
+            var sortedDatas = await query.OrderByDescending(post => post.EndDate).ToListAsync();
 
             res.TotalRows = sortedDatas.Count;
             int skip = request.PageSize * (request.PageIndex - 1);
@@ -228,7 +229,7 @@ namespace OS.App.Controllers
 
             var now = DateTime.Now;
             var query = _context.Promotions.Where(x => x.StartDate < now && x.EndDate > now);
-            var sortedDatas = await query.OrderBy(post => post.PromotionName).ToListAsync();
+            var sortedDatas = await query.OrderByDescending(post => post.DiscountPercent).ToListAsync();
 
             res.Data = sortedDatas;
             return Ok(res);
@@ -284,7 +285,6 @@ namespace OS.App.Controllers
             return Ok(res);
         }
 
-
         [HttpGet("order/status")]
         public async Task<IActionResult> GetAllOrderStatus()
         {
@@ -294,8 +294,26 @@ namespace OS.App.Controllers
                 ResponseCode = StatusCodes.Status200OK,
             };
 
-            var query = _context.OrderStatus;
+            var query = _context.OrderStatus
+                        .Where(x => x.OrderStatusName != "Chờ xác nhận");
+
             res.Data = await query.ToListAsync();
+            return Ok(res);
+        }
+
+        [HttpGet("order/status/{name}")]
+        public async Task<IActionResult> GetOrderStatusName(string name)
+        {
+            var res = new ApiResult<OrderStatus>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var query = _context.OrderStatus
+                .Where(x => x.OrderStatusName == name);
+
+            res.Data = await query.FirstOrDefaultAsync();
             return Ok(res);
         }
 
@@ -353,7 +371,8 @@ namespace OS.App.Controllers
 
             var year = DateTime.Today.Year;
             var query = _context.Orders
-                .Where(x => x.OrderDate.Month == month && x.OrderDate.Year == year)
+                .Include(x => x.OrderStatus)
+                .Where(x => x.OrderDate.Month == month && x.OrderDate.Year == year && x.OrderStatus!.OrderStatusName != "Hủy")
                 .GroupBy(x => x.OrderDate.Day)
                 .Select(x => new StatisticsDto
                 {
@@ -396,7 +415,8 @@ namespace OS.App.Controllers
             var currentYear = DateTime.Now.Year;
 
             var query = _context.Orders
-                .Where(x => x.OrderDate.Year == currentYear)
+                .Include(x => x.OrderStatus)
+                .Where(x => x.OrderDate.Year == currentYear && x.OrderStatus!.OrderStatusName != "Hủy")
                 .GroupBy(x => new { x.OrderDate.Month })
                 .Select(x => new StatisticsDto
                 {
@@ -446,7 +466,7 @@ namespace OS.App.Controllers
                        .Where(x => x.OrderStatus!.OrderStatusName == "Hoàn thành").ToList(); break;
                 case "cancelled":
                     orders = orders
-                       .Where(x => x.OrderStatus!.OrderStatusName == "Đã hủy").ToList(); break;
+                       .Where(x => x.OrderStatus!.OrderStatusName == "Hủy").ToList(); break;
             }
 
             var orderDtos = orders.Select(cart => new GetOrderDto
@@ -508,7 +528,7 @@ namespace OS.App.Controllers
                        .Where(x => x.OrderStatus!.OrderStatusName == "Hoàn thành").ToList(); break;
                 case "cancelled":
                     orders = orders
-                       .Where(x => x.OrderStatus!.OrderStatusName == "Đã hủy").ToList(); break;
+                       .Where(x => x.OrderStatus!.OrderStatusName == "Hủy").ToList(); break;
             }
 
             var orderDtos = orders.Select(cart => new GetOrderDto
@@ -517,6 +537,7 @@ namespace OS.App.Controllers
                 OrderStatusName = cart.OrderStatus!.OrderStatusName,
                 DiscountPercent = cart.Promotion?.DiscountPercent ?? 0,
                 TotalCost = cart.TotalCost,
+                Subtotal = cart.OrderDetails!.Sum(x => x.UnitPrice),
                 OrderDate = cart.OrderDate,
                 UserName = cart.ApplicationUser!.FirstName + " " + cart.ApplicationUser.LastName,
                 Email = cart.ApplicationUser.Email,
@@ -531,7 +552,7 @@ namespace OS.App.Controllers
                     UnitPrice = x.UnitPrice,
                     Price = x.Product.Price,
                 }).ToList()
-            });
+            }); ;
 
             res.TotalRows = orderDtos.Count();
             int skip = request.PageSize * (request.PageIndex - 1);
@@ -1230,7 +1251,6 @@ namespace OS.App.Controllers
         }
 
         [HttpPut("order/status/{orderId}")]
-        [Authorize(Policy = "Employee")]
         public async Task<IActionResult> UpdateOderStatus(OrderStatusDto orderStatusDto, string orderId)
         {
             var res = new ApiResult<bool>

@@ -16,13 +16,22 @@
                                     <div class="order-header">
                                         <p class="uppercase"><b>MÃ ĐƠN HÀNG:</b> {{ item.id }}</p>
                                         <p
-                                            *ngIf="i != 0"
+                                            *ngIf="i > 1 && i < 5"
                                             class="text-primary cursor-pointer"
                                             (click)="showDialogUpdate(item, $event)"
                                         >
                                             <b>CẬP NHẬT TRẠNG THÁI</b>
                                         </p>
-                                        <p *ngIf="i === 0" class="text-primary uppercase">
+
+                                        <p
+                                            *ngIf="i === 1"
+                                            class="text-primary cursor-pointer"
+                                            (click)="confirmation($event, item.id)"
+                                        >
+                                            <b>XÁC NHẬN</b>
+                                        </p>
+
+                                        <p *ngIf="i === 0 || i == 5" class="text-primary uppercase">
                                             {{ item.orderStatusName }}
                                         </p>
                                     </div>
@@ -68,7 +77,7 @@
                                                 <span>
                                                     <p class="w-20rem text-right">
                                                         {{
-                                                            item.totalCost * item.discountPercent * 0.01
+                                                            item.discountPercent * item.subtotal * 0.01
                                                                 | number : '1.0-3'
                                                         }}
                                                         VND
@@ -108,7 +117,9 @@
                 <div class="product-infor" *ngIf="orderDetail">
                     <div class="order-header">
                         <p class="uppercase"><b>MÃ ĐƠN HÀNG:</b> {{ orderDetail.id }}</p>
-                        <p class="text-primary uppercase">{{ orderDetail.orderStatusName }}</p>
+                        <p class="text-primary uppercase cursor-pointer">
+                            {{ orderDetail.orderStatusName }}
+                        </p>
                     </div>
                     <div class="flex justify-content-between relative product-infor-content">
                         <div>
@@ -174,12 +185,21 @@
                             </div>
 
                             <div class="cost-infor">
+                                <p>Tạm tính</p>
+                                <span>
+                                    <p class="w-20rem text-right">
+                                        {{ orderDetail.subtotal | number : '1.0-3' }}
+                                        VND
+                                    </p>
+                                </span>
+                            </div>
+
+                            <div class="cost-infor">
                                 <p>Voucher giảm giá</p>
                                 <span>
                                     <p class="w-20rem text-right">
                                         {{
-                                            orderDetail.totalCost * orderDetail.discountPercent * 0.01
-                                                | number : '1.0-3'
+                                            orderDetail.discountPercent * orderDetail.subtotal * 0.01 | number : '1.0-3'
                                         }}
                                         VND
                                     </p>
@@ -198,6 +218,11 @@
                     </div>
                 </div>
             </div>
+            <ng-template pTemplate="footer">
+                <div class="card flex justify-content-end mt-4" *ngIf="currentTab != 1 && currentTab != 5">
+                    <p-button (click)="showDialogUpdate(orderDetail, $event)" label="Cập nhật trạng thái"></p-button>
+                </div>
+            </ng-template>
         </p-dialog>
         <div class="card flex justify-content-center">
             <p-dialog

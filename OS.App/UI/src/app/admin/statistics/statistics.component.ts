@@ -42,7 +42,7 @@ export class StatisticsComponent implements OnInit {
         });
     }
 
-    loadOrderStatusToday() {
+    loadOrderStatusToday(): void {
         this._apiServices.getDataAll('/order/status/statistics/day').subscribe((res) => {
             const labels = res.data.map((item: any) => item.orderStatusName);
             const quantity = res.data.map((item: any) => item.quantity);
@@ -60,12 +60,14 @@ export class StatisticsComponent implements OnInit {
                             documentStyle.getPropertyValue('--yellow-500'),
                             documentStyle.getPropertyValue('--green-500'),
                             documentStyle.getPropertyValue('--pink-500'),
+                            documentStyle.getPropertyValue('--red-500'),
                         ],
                         hoverBackgroundColor: [
                             documentStyle.getPropertyValue('--blue-400'),
                             documentStyle.getPropertyValue('--yellow-400'),
                             documentStyle.getPropertyValue('--green-400'),
                             documentStyle.getPropertyValue('--pink-500'),
+                            documentStyle.getPropertyValue('--red-500'),
                         ],
                     },
                 ],
@@ -84,7 +86,7 @@ export class StatisticsComponent implements OnInit {
         });
     }
 
-    loadOrderStatusMonth() {
+    loadOrderStatusMonth(): void {
         this._apiServices.getDataAll('/order/status/statistics/month').subscribe((res) => {
             const labels = res.data.map((item: any) => item.orderStatusName);
             const quantity = res.data.map((item: any) => item.quantity);
@@ -101,12 +103,14 @@ export class StatisticsComponent implements OnInit {
                             documentStyle.getPropertyValue('--blue-500'),
                             documentStyle.getPropertyValue('--yellow-500'),
                             documentStyle.getPropertyValue('--green-500'),
+                            documentStyle.getPropertyValue('--red-500'),
                             documentStyle.getPropertyValue('--pink-500'),
                         ],
                         hoverBackgroundColor: [
                             documentStyle.getPropertyValue('--blue-400'),
                             documentStyle.getPropertyValue('--yellow-400'),
                             documentStyle.getPropertyValue('--green-400'),
+                            documentStyle.getPropertyValue('--red-500'),
                             documentStyle.getPropertyValue('--pink-500'),
                         ],
                     },
@@ -126,7 +130,7 @@ export class StatisticsComponent implements OnInit {
         });
     }
 
-    loadRevenueDayOfMonth() {
+    loadRevenueDayOfMonth(): void {
         this._apiServices.getDataAll(`/statistics/${this.selectMonthOfRevenue}`).subscribe((res) => {
             const labels = res.data.map((item: any) => item.day);
             const totalRevenue = res.data.map((item: any) => item.totalRevenue);
@@ -183,7 +187,7 @@ export class StatisticsComponent implements OnInit {
         };
     }
 
-    loadOrderDayOfMonth() {
+    loadOrderDayOfMonth(): void {
         this._apiServices.getDataAll(`/statistics/${this.selectMonthOfOrder}`).subscribe((res) => {
             const labels = res.data.map((item: any) => item.day);
             const totalRevenue = res.data.map((item: any) => item.totalOrder);
@@ -240,7 +244,7 @@ export class StatisticsComponent implements OnInit {
         };
     }
 
-    loadRevenueMonthOfYear() {
+    loadRevenueMonthOfYear(): void {
         this._apiServices.getDataAll('/statistics').subscribe((res) => {
             const labels = res.data.map((item: any) => item.month);
             const totalRevenue = res.data.map((item: any) => item.totalRevenue);
@@ -296,7 +300,7 @@ export class StatisticsComponent implements OnInit {
         };
     }
 
-    loadOrderMonthOfYear() {
+    loadOrderMonthOfYear(): void {
         this._apiServices.getDataAll('/statistics').subscribe((res) => {
             const labels = res.data.map((item: any) => item.month);
             const totalRevenue = res.data.map((item: any) => item.totalOrder);
@@ -352,11 +356,11 @@ export class StatisticsComponent implements OnInit {
         };
     }
 
-    changeMonthOfRevenue() {
+    changeMonthOfRevenue(): void {
         this.loadRevenueDayOfMonth();
     }
 
-    changeMonthOfOrder() {
+    changeMonthOfOrder(): void {
         this.loadOrderDayOfMonth();
     }
 }

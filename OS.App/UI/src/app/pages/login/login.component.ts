@@ -47,7 +47,7 @@ export class LoginComponent implements OnInit {
         return errorMessages;
     }
 
-    login() {
+    login(): void {
         let errorMessages = this.formValidate();
 
         if (errorMessages.length > 0) {

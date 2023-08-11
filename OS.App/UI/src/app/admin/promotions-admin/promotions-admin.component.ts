@@ -61,7 +61,7 @@ export class PromotionsAdminComponent implements OnInit {
         }
     }
 
-    deletePromotion(id: any, event: any) {
+    deletePromotion(id: any, event: any): void {
         event.stopPropagation();
 
         this._confirmationService.confirm({
@@ -81,7 +81,7 @@ export class PromotionsAdminComponent implements OnInit {
         });
     }
 
-    editPromotion(id: any) {
+    editPromotion(id: any): void {
         this._router.navigate(['/admin/promotion'], {
             queryParams: { id: id, type: 'edit', page: this.getPageNumber },
         });

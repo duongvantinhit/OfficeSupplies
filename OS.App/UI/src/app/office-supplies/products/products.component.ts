@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { OfficeSuppliesService } from '../services/office-supplies.service';
 
 @Component({
@@ -8,11 +8,7 @@ import { OfficeSuppliesService } from '../services/office-supplies.service';
     styleUrls: ['./products.component.scss'],
 })
 export class ProductsComponent implements OnInit {
-    constructor(
-        private _apiServices: OfficeSuppliesService,
-        private _actRoute: ActivatedRoute,
-        private _router: Router,
-    ) {}
+    constructor(private _apiServices: OfficeSuppliesService, private _router: Router) {}
 
     first = 0;
     totalRecords: number = 0;
@@ -25,7 +21,7 @@ export class ProductsComponent implements OnInit {
         this.loadProducts();
     }
 
-    loadProducts(event: any = null) {
+    loadProducts(event: any = null): void {
         let loadPageForm = {
             pageIndex: event ? event.first / event.rows + 1 : 1,
             pageSize: event ? event.rows : 15,
@@ -61,7 +57,7 @@ export class ProductsComponent implements OnInit {
         }
     }
 
-    productDetail(productId: any) {
+    productDetail(productId: any): void {
         this._router.navigate(['/product/detail'], {
             queryParams: { id: productId, page: this.getPageNumber },
         });

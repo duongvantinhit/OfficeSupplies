@@ -40,7 +40,7 @@ export class HeaderComponent implements OnInit {
             icon: 'pi pi-sign-in',
             command: () => {
                 this._confirmationService.confirm({
-                    message: AppMessages.C_M_3,
+                    message: AppMessages.C_M_21,
                     header: 'Confirmation',
                     icon: 'pi pi-exclamation-triangle',
                     accept: () => {
@@ -79,23 +79,23 @@ export class HeaderComponent implements OnInit {
         });
     }
 
-    product(item: any) {
+    product(item: any): void {
         this._router.navigate(['/category'], {
             queryParams: { id: item.id, name: item.categoryName },
         });
     }
 
-    productDetail(productId: any) {
+    productDetail(productId: any): void {
         this._router.navigate(['/product/detail'], {
             queryParams: { id: productId },
         });
     }
 
-    goToCarts() {
+    goToCarts(): void {
         this._router.navigate(['/cart']);
     }
 
-    onMouseEnter(type: any) {
+    onMouseEnter(type: any): void {
         switch (type) {
             case 'category':
                 this.categoryVisible = true;
@@ -112,7 +112,7 @@ export class HeaderComponent implements OnInit {
         }
     }
 
-    onMouseLeave(type: any) {
+    onMouseLeave(type: any): void {
         switch (type) {
             case 'category':
                 this.categoryVisible = false;
@@ -129,7 +129,7 @@ export class HeaderComponent implements OnInit {
         }
     }
 
-    search() {
+    search(): void {
         if (this.searchText.length >= 3) {
             this._apiServices.getData('/search/product', this.searchText).subscribe((res) => {
                 this.searchProduct = res.data;
@@ -140,7 +140,7 @@ export class HeaderComponent implements OnInit {
         }
     }
 
-    deleteSearch() {
+    deleteSearch(): void {
         this.searchProduct = null;
         this.searchText = '';
     }

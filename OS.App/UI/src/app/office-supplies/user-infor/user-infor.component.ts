@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AdminService } from 'src/app/admin/services/admin.service';
 import { AppMessages } from 'src/app/shared/const/messages.const';
 import { Notice } from 'src/app/shared/const/notice.const';
 import { NotificationService } from 'src/app/shared/services/notification.service';
@@ -17,7 +16,6 @@ export class UserInforComponent implements OnInit {
         private _authServices: AuthService,
         private _fb: FormBuilder,
         private _notiService: NotificationService,
-        private _apiServices: AdminService,
         private _router: Router,
     ) {}
 
@@ -81,7 +79,7 @@ export class UserInforComponent implements OnInit {
         return errorMessages;
     }
 
-    edit() {
+    edit(): void {
         let errorMessages = this.lineLeadFormValidate();
 
         if (errorMessages.length > 0) {
@@ -102,7 +100,7 @@ export class UserInforComponent implements OnInit {
         });
     }
 
-    changePassword() {
+    changePassword(): void {
         if (this.currentPage == 'admin') {
             this._router.navigate(['/admin/change-password']);
         } else {

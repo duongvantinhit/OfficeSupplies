@@ -71,17 +71,17 @@ export class CheckoutComponent implements OnInit {
         }
     }
 
-    showDialog() {
+    showDialog(): void {
         this.voucherVisible = true;
     }
 
-    apply() {
+    apply(): void {
         this.voucherVisible = false;
         this.discount = (this.selectedVoucher.discountPercent / 100) * this.subtotal;
         this.totalCost = this.subtotal - this.discount;
     }
 
-    order() {
+    order(): void {
         let promotionId = this.selectedVoucher ? this.selectedVoucher.id : null;
         let orderForm = {
             TotalCost: this.totalCost,

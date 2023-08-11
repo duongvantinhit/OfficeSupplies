@@ -39,7 +39,7 @@ export class CategoryComponent implements OnInit {
         });
     }
 
-    loadProducts(event: any = null) {
+    loadProducts(event: any = null): void {
         let loadPageForm = {
             pageIndex: event ? event.first / event.rows + 1 : 1,
             pageSize: event ? event.rows : 8,
@@ -71,7 +71,7 @@ export class CategoryComponent implements OnInit {
         }
     }
 
-    productDetail(productId: any) {
+    productDetail(productId: any): void {
         this._router.navigate(['/product/detail'], {
             queryParams: { id: productId },
         });

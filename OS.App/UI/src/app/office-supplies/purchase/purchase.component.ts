@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { OfficeSuppliesService } from '../services/office-supplies.service';
 import { Consts } from 'src/app/shared/const/consts';
+import { ConfirmationService } from 'primeng/api';
+import { AppMessages } from 'src/app/shared/const/messages.const';
+import { Notice } from 'src/app/shared/const/notice.const';
+import { NotificationService } from 'src/app/shared/services/notification.service';
 
 @Component({
     selector: 'app-order-status',
@@ -9,7 +12,11 @@ import { Consts } from 'src/app/shared/const/consts';
     styleUrls: ['./purchase.component.scss'],
 })
 export class PurchaseComponent implements OnInit {
-    constructor(private _router: Router, private _apiServices: OfficeSuppliesService) {}
+    constructor(
+        private _apiServices: OfficeSuppliesService,
+        private _confirmationService: ConfirmationService,
+        private _notiService: NotificationService,
+    ) {}
 
     orderAll: any;
     statusHeader = Consts.orderStatus;
@@ -18,9 +25,33 @@ export class PurchaseComponent implements OnInit {
         this.loadData();
     }
 
-    loadData(status = 'all') {
+    loadData(status = 'all'): void {
         this._apiServices.getDataAll(`/orders/user/${status}`).subscribe((res) => {
             this.orderAll = res.data;
+        });
+    }
+
+    cancelled(item: any): void {
+        this._apiServices.getData('/order/status', 'Hủy').subscribe((res) => {
+            let updateForm = {
+                OrderStatusId: res.data.id,
+            };
+
+            this._confirmationService.confirm({
+                message: AppMessages.C_M_23,
+                header: 'Confirmation',
+                icon: 'pi pi-exclamation-triangle',
+                accept: () => {
+                    this._apiServices.putData('/order/status', updateForm, item.id).subscribe((res) => {
+                        if (res.successed) {
+                            this._notiService.success(Notice.cancelledSuccessed, '', 'Thành công');
+                            this.loadData('awaitingConfirmation');
+                        } else {
+                            this._notiService.error(Notice.err);
+                        }
+                    });
+                },
+            });
         });
     }
 

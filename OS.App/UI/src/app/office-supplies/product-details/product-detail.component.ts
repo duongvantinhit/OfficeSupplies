@@ -46,7 +46,7 @@ export class ProductDetailComponent implements OnInit {
         window.addEventListener('popstate', this.onBackButtonClicked.bind(this));
     }
 
-    addProductToCart() {
+    addProductToCart(): void {
         let cartForm = {
             UserId: this.productId,
             ProductId: this.productId,
@@ -64,17 +64,17 @@ export class ProductDetailComponent implements OnInit {
         });
     }
 
-    checkout() {
+    checkout(): void {
         this._router.navigate(['/checkout'], {
             queryParams: { id: this.productId, quantity: this.quantity },
         });
     }
 
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         window.removeEventListener('popstate', this.onBackButtonClicked.bind(this));
     }
 
-    onBackButtonClicked(event: any) {
+    onBackButtonClicked(event: any): void {
         this._apiServices.sendPageInfor(this.pageNumber);
     }
 }

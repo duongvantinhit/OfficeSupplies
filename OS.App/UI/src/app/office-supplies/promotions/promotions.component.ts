@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { ConfirmationService } from 'primeng/api';
 import { AdminService } from 'src/app/admin/services/admin.service';
-import { NotificationService } from 'src/app/shared/services/notification.service';
 
 @Component({
     selector: 'app-promotions',
@@ -10,12 +7,7 @@ import { NotificationService } from 'src/app/shared/services/notification.servic
     styleUrls: ['./promotions.component.scss'],
 })
 export class PromotionsComponent implements OnInit {
-    constructor(
-        private _apiServices: AdminService,
-        private _router: Router,
-        private _confirmationService: ConfirmationService,
-        private _notiService: NotificationService,
-    ) {}
+    constructor(private _apiServices: AdminService) {}
 
     first = 0;
     totalRecords: number = 0;

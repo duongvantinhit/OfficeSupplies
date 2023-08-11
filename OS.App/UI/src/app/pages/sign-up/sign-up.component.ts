@@ -72,7 +72,7 @@ export class SignUpComponent implements OnInit {
         return errorMessages;
     }
 
-    signUp() {
+    signUp(): void {
         let errorMessages = this.formValidate();
 
         if (errorMessages.length > 0) {
@@ -82,7 +82,7 @@ export class SignUpComponent implements OnInit {
 
         this._authServices.postData('/sign-up', this.signUpForm.value).subscribe((res) => {
             if (res.successed) {
-                this._notiService.success(Notice.addSuccessed, '', 'Thành công');
+                this._notiService.success(Notice.signUpSuccessed, '', 'Thành công');
             } else {
                 this._notiService.error(Notice.err);
             }

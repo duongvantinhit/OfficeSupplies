@@ -27,6 +27,7 @@
         public string? OrderStatusId { get; set; }
         public double DiscountPercent { get; set; }
         public double TotalCost { get; set; }
+        public double Subtotal { get; set; }
         public DateTime OrderDate { get; set; }
         public string? UserName { get; set; }
         public string? Email { get; set; }

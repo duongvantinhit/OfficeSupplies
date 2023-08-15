@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OS.Core.Application;
 using OS.Core.Application.Dtos;
@@ -160,7 +161,8 @@ namespace OS.App.Controllers
             };
 
             string refreshToken = HttpContext.Request.Cookies["refresh_token"]!;
-            var tokenDto = await _accountRepo.RefreshTokenAsync(model.Email!, refreshToken!);
+            string email = HttpContext.Request.Cookies["email"]!;
+            var tokenDto = await _accountRepo.RefreshTokenAsync(email, refreshToken!);
 
             if (tokenDto == null)
             {
@@ -200,7 +202,7 @@ namespace OS.App.Controllers
             }
             else
             {
-                SetAuthCookies(result.AccessToken!, result.RefreshToken!);
+                SetAuthCookies(result.AccessToken!, result.RefreshToken!, signin.Email!);
                 res.Successed = true;
             }
             return Ok(res);
@@ -341,9 +343,17 @@ namespace OS.App.Controllers
             return Ok(res);
         }
 
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            Response.Cookies.Delete("access_token");
+            Response.Cookies.Delete("refresh_token");
+            return Ok();
+        }
+
         #endregion
 
-        private void SetAuthCookies(string accessToken, string refreshToken)
+        private void SetAuthCookies(string accessToken, string refreshToken, string email = null!)
         {
             var cookieOptions = new CookieOptions
             {
@@ -356,6 +366,10 @@ namespace OS.App.Controllers
 
             Response.Cookies.Append("access_token", accessToken, cookieOptions);
             Response.Cookies.Append("refresh_token", refreshToken, cookieOptions);
+            if (email != null)
+            {
+                Response.Cookies.Append("email", email, cookieOptions);
+            }
         }
     }
 }

@@ -65,6 +65,7 @@ const routes: Routes = [
             { path: 'promotion', component: CrudPromotionComponent },
             { path: 'users', component: UsersComponent, canActivate: [AdminGuard] },
             { path: 'user-infor', component: UserInforComponent },
+            { path: 'sign-up', component: SignUpComponent },
             { path: 'change-password', component: ChangePasswordComponent },
             { path: 'orders', component: OrdersAdminComponent },
             { path: 'statistics', component: StatisticsComponent, canActivate: [AdminGuard] },

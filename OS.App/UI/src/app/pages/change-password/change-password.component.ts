@@ -19,36 +19,37 @@ export class ChangePasswordComponent implements OnInit {
         private _route: Router,
     ) {}
 
-    forgotPasswordForm: any;
+    changePasswordForm: any;
 
     ngOnInit() {
-        let email = this._authServices.currentUser().email;
-        this.forgotPasswordForm = this._fb.group({
-            email: [email, [Validators.required, Validators.email]],
-            oldPassword: ['', [Validators.required]],
-            newPassword: ['', [Validators.required]],
-            confirmNewPassword: ['', [Validators.required]],
+        this._authServices.getUserInfor().subscribe((res) => {
+            this.changePasswordForm = this._fb.group({
+                email: [res.data.email, [Validators.required, Validators.email]],
+                oldPassword: ['', [Validators.required]],
+                newPassword: ['', [Validators.required]],
+                confirmNewPassword: ['', [Validators.required]],
+            });
         });
     }
 
     private formValidate(): any[] {
         const errorMessages = [];
 
-        if (!this.forgotPasswordForm.controls?.oldPassword?.value) {
+        if (!this.changePasswordForm.controls?.oldPassword?.value) {
             errorMessages.push(AppMessages.PLEASE_ENTER('Mật khẩu cũ', Notice.messageEnter));
         }
 
-        if (!this.forgotPasswordForm.controls?.newPassword?.value) {
+        if (!this.changePasswordForm.controls?.newPassword?.value) {
             errorMessages.push(AppMessages.PLEASE_ENTER('Mật khẩu mới', Notice.messageEnter));
         }
 
-        if (!this.forgotPasswordForm.controls?.confirmNewPassword?.valid) {
+        if (!this.changePasswordForm.controls?.confirmNewPassword?.valid) {
             errorMessages.push(AppMessages.PLEASE_ENTER('Nhập lại mật khẩu mới', Notice.messageEnter));
         }
 
         if (
-            this.forgotPasswordForm.controls?.confirmNewPassword?.value !=
-            this.forgotPasswordForm.controls?.newPassword?.value
+            this.changePasswordForm.controls?.confirmNewPassword?.value !=
+            this.changePasswordForm.controls?.newPassword?.value
         ) {
             errorMessages.push(AppMessages.PLEASE_ENTER('Mật khẩu không trùng khớp'));
         }
@@ -64,7 +65,7 @@ export class ChangePasswordComponent implements OnInit {
             return;
         }
 
-        this._authServices.putData('/change-password', this.forgotPasswordForm.value, '').subscribe((res) => {
+        this._authServices.putData('/change-password', this.changePasswordForm.value, '').subscribe((res) => {
             if (res.successed) {
                 this._notiService.success(Notice.saveSuccessed, '', 'Thành công');
                 this._authServices.logout();

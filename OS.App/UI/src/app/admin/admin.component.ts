@@ -22,7 +22,9 @@ export class AdminComponent implements OnInit {
     currentUser: any;
 
     ngOnInit(): void {
-        this.currentUser = this._authServices.currentUser();
+        this._authServices.getUserInfor().subscribe((res) => {
+            this.currentUser = res.data;
+        });
     }
 
     function = [
@@ -75,14 +77,25 @@ export class AdminComponent implements OnInit {
             ],
         },
         {
+            label: 'Người dùng',
+            icon: 'pi pi-fw pi-user',
+            items: [
+                {
+                    label: 'Người dùng',
+                    icon: 'pi pi-user',
+                    routerLink: '/admin/users',
+                },
+                {
+                    label: 'Thêm người dùng',
+                    icon: 'pi pi-user-plus',
+                    routerLink: '/admin/sign-up',
+                },
+            ],
+        },
+        {
             label: 'Đơn hàng',
             icon: 'pi pi-fw pi-cart-plus',
             routerLink: '/admin/orders',
-        },
-        {
-            label: 'Người dùng',
-            icon: 'pi pi-fw pi-user',
-            routerLink: '/admin/users',
         },
         {
             label: 'Thống kê',

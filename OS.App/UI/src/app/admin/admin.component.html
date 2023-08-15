@@ -16,7 +16,7 @@
                     </div>
                 </div>
                 <div class="user" routerLink="/admin/user-infor">
-                    <div class="user-infor">
+                    <div class="user-infor" *ngIf="currentUser">
                         <p>{{ currentUser.firstName + ' ' + currentUser.lastName }}</p>
                         <span><i class="pi pi-unlock"></i>{{ currentUser.roles[0] }}</span>
                     </div>

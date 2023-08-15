@@ -21,11 +21,12 @@ export class UserInforComponent implements OnInit {
 
     userInforForm: any;
     loading = false;
-    currentUser: any;
     currentPage: any;
 
     ngOnInit() {
-        this.currentUser = this._authServices.currentUser();
+        this._authServices.getUserInfor().subscribe((res) => {
+            this.setValue(res.data);
+        });
 
         this.userInforForm = this._fb.group({
             firstName: ['', [Validators.required]],
@@ -35,7 +36,6 @@ export class UserInforComponent implements OnInit {
             address: ['', [Validators.required]],
         });
 
-        this.setValue(this.currentUser);
         this._router.routerState.snapshot.url.includes('admin') ? (this.currentPage = 'admin') : null;
     }
 
@@ -90,10 +90,7 @@ export class UserInforComponent implements OnInit {
         this._authServices.putData('/change-user/infor', this.userInforForm.value, '').subscribe((res) => {
             if (res.successed) {
                 this._notiService.success(Notice.updateSuccessed, '', 'Thành công');
-                this._authServices.getUserInfor().subscribe(async (res) => {
-                    localStorage.setItem('OS_CURRENT_USER', JSON.stringify(res.data));
-                    this.ngOnInit();
-                });
+                this.ngOnInit();
             } else {
                 this._notiService.error(Notice.err);
             }

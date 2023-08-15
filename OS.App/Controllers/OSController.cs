@@ -318,6 +318,7 @@ namespace OS.App.Controllers
         }
 
         [HttpGet("order/status/statistics/{time}")]
+        [Authorize(Policy = "Admin")]
         public async Task<IActionResult> GetOrderStatusStatistics(string time)
         {
             var res = new ApiResult<IEnumerable<OrderStatusStatisticsDto>>
@@ -491,6 +492,7 @@ namespace OS.App.Controllers
         }
 
         [HttpGet("orders/{status}")]
+        [Authorize(Policy = "Employee")]
         public async Task<IActionResult> GetAllOrders(string status, [FromQuery] ApiRequest request)
         {
             var res = new ApiResult<IEnumerable<GetOrderDto>>

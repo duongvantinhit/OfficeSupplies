@@ -31,9 +31,13 @@ namespace OS.Core.Domain.Reponsitories
 
         public async Task<TokenDto> SigInAsync(SignIn model)
         {
-
             var user = await userManager.FindByEmailAsync(model.Email);
-            var passwordHasher = new CaesarPasswordHasher(configuration);
+
+            if(user == null)
+            {
+                return null!;
+            }
+            var passwordHasher = new PasswordHasher(configuration);
             var result = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, model.Password!);
 
             if (await userManager.IsLockedOutAsync(user))

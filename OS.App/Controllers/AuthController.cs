@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OS.Core.Application;
 using OS.Core.Application.Dtos;
@@ -150,7 +149,6 @@ namespace OS.App.Controllers
             return Ok(res);
         }
 
-
         [HttpPost("refreshtoken")]
         public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequestDto model)
         {
@@ -162,12 +160,20 @@ namespace OS.App.Controllers
 
             string refreshToken = HttpContext.Request.Cookies["refresh_token"]!;
             string email = HttpContext.Request.Cookies["email"]!;
+
+            if(email == null)
+            {
+                res.ResponseCode = StatusCodes.Status401Unauthorized;
+                return Ok(res);
+            }
+
             var tokenDto = await _accountRepo.RefreshTokenAsync(email, refreshToken!);
 
             if (tokenDto == null)
             {
                 Response.Cookies.Delete("refresh_token");
                 Response.Cookies.Delete("access_token");
+                Response.Cookies.Delete("email");
                 res.ResponseCode = StatusCodes.Status401Unauthorized;
             }
             else
@@ -203,6 +209,36 @@ namespace OS.App.Controllers
             else
             {
                 SetAuthCookies(result.AccessToken!, result.RefreshToken!, signin.Email!);
+                res.Successed = true;
+            }
+            return Ok(res);
+        }
+
+        [HttpPost("check-password")]
+        public async Task<IActionResult> CheckPassword(CheckPasswordDto checkPassword)
+        {
+            var res = new ApiResult<string>
+            {
+                Successed = false,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            string email = HttpContext.Request.Cookies["email"]!;
+
+            if (email == null)
+            {
+                res.ResponseCode = StatusCodes.Status401Unauthorized;
+                return Ok(res);
+            }
+
+            var result = await _accountRepo.CheckPasswordAsync(email,checkPassword.Password!);
+
+            if (result == null)
+            {
+                res.ResponseCode = StatusCodes.Status401Unauthorized;
+            }
+            else
+            {
                 res.Successed = true;
             }
             return Ok(res);
@@ -348,6 +384,7 @@ namespace OS.App.Controllers
         {
             Response.Cookies.Delete("access_token");
             Response.Cookies.Delete("refresh_token");
+            Response.Cookies.Delete("email");
             return Ok();
         }
 

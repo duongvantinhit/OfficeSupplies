@@ -17,7 +17,7 @@ export class RoleGuard {
                     return of(false);
                 }
 
-                if (res.data.roles.indexOf('admin') !== -1 || res.data.indexOf('employee') !== -1) {
+                if (res.data.roles.indexOf('admin') !== -1 || res.data.roles.indexOf('employee') !== -1) {
                     return of(true);
                 } else {
                     this._router.navigate(['']);

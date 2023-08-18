@@ -43,14 +43,14 @@ export class ProductsComponent implements OnInit {
                 pageSize: event ? event.rows : 15,
             };
 
-            this._apiServices.loadPages(loadPageForm, `/products`).subscribe((res) => {
+            this._apiServices.loadPages(loadPageForm, `/products/user`).subscribe((res) => {
                 this.totalRecords = res?.totalRows;
                 this.products = res.data;
                 this.first = (this.setPageNumber - 1) * 15;
                 this.getPageNumber = this.setPageNumber;
             });
         } else {
-            this._apiServices.loadPages(loadPageForm, `/products`).subscribe((res) => {
+            this._apiServices.loadPages(loadPageForm, `/products/user`).subscribe((res) => {
                 this.totalRecords = res?.totalRows;
                 this.products = res.data;
             });

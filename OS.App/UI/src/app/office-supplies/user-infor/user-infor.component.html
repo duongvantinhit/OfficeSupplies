@@ -42,9 +42,26 @@
                     ></textarea>
                 </div>
 
-                <p-button (onClick)="edit()" styleClass="m-3" label="Lưu"></p-button>
+                <p-button (onClick)="visibleEdit = true" styleClass="m-3" label="Lưu"></p-button>
                 <p><span (click)="changePassword()">Đổi mật khẩu</span></p>
             </form>
+            <p-dialog
+                header="Nhập mật khẩu"
+                [draggable]="false"
+                [(visible)]="visibleEdit"
+                [modal]="true"
+                [style]="{ width: '30vw' }"
+            >
+                <div class="card flex justify-content-center block">
+                    <p-password
+                        [toggleMask]="true"
+                        [feedback]="false"
+                        [(ngModel)]="password"
+                        placeholder="Mật khẩu"
+                    ></p-password>
+                </div>
+                <p-button (onClick)="edit()" styleClass="m-3" label="Gửi"></p-button>
+            </p-dialog>
         </div>
     </div>
 </div>

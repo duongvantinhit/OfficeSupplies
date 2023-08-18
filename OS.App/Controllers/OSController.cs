@@ -108,7 +108,7 @@ namespace OS.App.Controllers
                 ResponseCode = StatusCodes.Status200OK,
             };
 
-            var query = _context.Products.Where(x => x.CategoryId == caterogyId).AsNoTracking();
+            var query = _context.Products.Where(x => x.CategoryId == caterogyId && x.QuantityInStock > 0).AsNoTracking();
             var sortedDatas = await query.OrderBy(post => post.ProductName).ToListAsync();
 
             res.TotalRows = sortedDatas.Count;
@@ -127,6 +127,24 @@ namespace OS.App.Controllers
             };
 
             var query = _context.Products.AsNoTracking();
+            var sortedDatas = await query.OrderBy(post => post.ProductName).ToListAsync();
+
+            res.TotalRows = sortedDatas.Count;
+            int skip = request.PageSize * (request.PageIndex - 1);
+            res.Data = sortedDatas.Skip(skip).Take(request.PageSize);
+            return Ok(res);
+        }
+
+        [HttpGet("products/user")]
+        public async Task<IActionResult> GetAllProductsUser([FromQuery] ApiRequest request)
+        {
+            var res = new ApiResult<IEnumerable<Product>>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var query = _context.Products.Where(x => x.QuantityInStock > 0);
             var sortedDatas = await query.OrderBy(post => post.ProductName).ToListAsync();
 
             res.TotalRows = sortedDatas.Count;
@@ -159,7 +177,7 @@ namespace OS.App.Controllers
                 ResponseCode = StatusCodes.Status200OK,
             };
 
-            var query = _context.Products.AsNoTracking();
+            var query = _context.Products.Where(x => x.QuantityInStock > 0);
             var sortedDatas = await query.OrderByDescending(post => post.CreatedDate).Take(4).ToListAsync();
 
             res.Data = sortedDatas;
@@ -193,7 +211,7 @@ namespace OS.App.Controllers
             };
 
             var query = _context.Products
-                .Where(x => x.ProductName!.Contains(name));
+                .Where(x => x.ProductName!.Contains(name) && x.QuantityInStock > 0);
 
             res.Data = await query.ToListAsync();
             return Ok(res);

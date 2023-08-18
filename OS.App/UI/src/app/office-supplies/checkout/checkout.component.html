@@ -4,7 +4,7 @@
             <span class="p-tag">THANH TOÁN ĐƠN HÀNG</span>
         </p-divider>
         <div class="checkout">
-            <div class="checkout-left">
+            <div class="checkout-left" *ngIf="userInfor">
                 <h4>Thông tin nhận hàng</h4>
                 <ul>
                     <li>Họ tên: {{ userInfor.lastName }} {{ userInfor.firstName }}</li>

@@ -43,5 +43,5 @@ public class PasswordHasher : PasswordHasher<ApplicationUser>
         using var encryptor = des.CreateEncryptor();
         var encryptedBytes = encryptor.TransformFinalBlock(Encoding.UTF8.GetBytes(plainText), 0, plainText.Length);
         return Convert.ToBase64String(encryptedBytes);
-    }
+    } 
 }

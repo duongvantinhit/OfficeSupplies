@@ -22,10 +22,14 @@ export class UserInforComponent implements OnInit {
     userInforForm: any;
     loading = false;
     currentPage: any;
+    visibleEdit = false;
+    userInfor: any;
+    password: any;
 
     ngOnInit() {
         this._authServices.getUserInfor().subscribe((res) => {
             this.setValue(res.data);
+            this.userInfor = res.data;
         });
 
         this.userInforForm = this._fb.group({
@@ -80,19 +84,30 @@ export class UserInforComponent implements OnInit {
     }
 
     edit(): void {
-        let errorMessages = this.lineLeadFormValidate();
+        let formCheckPassword = {
+            password: this.password,
+        };
 
-        if (errorMessages.length > 0) {
-            this._notiService.error(errorMessages.join('<br/>'), 'ua-toast');
-            return;
-        }
-
-        this._authServices.putData('/change-user/infor', this.userInforForm.value, '').subscribe((res) => {
+        this._authServices.postData('/check-password', formCheckPassword).subscribe((res) => {
             if (res.successed) {
-                this._notiService.success(Notice.updateSuccessed, '', 'Thành công');
-                this.ngOnInit();
+                let errorMessages = this.lineLeadFormValidate();
+
+                if (errorMessages.length > 0) {
+                    this._notiService.error(errorMessages.join('<br/>'), 'ua-toast');
+                    return;
+                }
+
+                this._authServices.putData('/change-user/infor', this.userInforForm.value, '').subscribe((res) => {
+                    if (res.successed) {
+                        this._notiService.success(Notice.updateSuccessed, '', 'Thành công');
+                        this.visibleEdit = false;
+                        this.ngOnInit();
+                    } else {
+                        this._notiService.error(Notice.err);
+                    }
+                });
             } else {
-                this._notiService.error(Notice.err);
+                this._notiService.error(Notice.wrongPassword);
             }
         });
     }

@@ -90,7 +90,7 @@ export class UsersComponent implements OnInit {
 
     deleteUserRole(role: any): void {
         this._confirmationService.confirm({
-            message: AppMessages.C_M_1,
+            message: AppMessages.C_M_22,
             header: 'Confirmation',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
@@ -104,5 +104,9 @@ export class UsersComponent implements OnInit {
                 });
             },
         });
+    }
+
+    clear(table: any) {
+        table.clear();
     }
 }

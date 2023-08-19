@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AppMessages } from 'src/app/shared/const/messages.const';
 import { Notice } from 'src/app/shared/const/notice.const';
 import { NotificationService } from 'src/app/shared/services/notification.service';
@@ -15,9 +16,11 @@ export class SignUpComponent implements OnInit {
         private _fb: FormBuilder,
         private _notiService: NotificationService,
         private _authServices: AuthService,
+        private _router: Router,
     ) {}
 
     signUpForm: any;
+    currentPage: any;
 
     ngOnInit() {
         this.signUpForm = this._fb.group({
@@ -29,6 +32,10 @@ export class SignUpComponent implements OnInit {
             confirmPassword: ['', [Validators.required]],
             address: ['', [Validators.required]],
         });
+
+        if (this._router.routerState.snapshot.url.includes('admin')) {
+            this.currentPage = 'admin';
+        }
     }
 
     private formValidate(): any[] {
@@ -72,7 +79,7 @@ export class SignUpComponent implements OnInit {
         return errorMessages;
     }
 
-    signUp() {
+    signUp(): void {
         let errorMessages = this.formValidate();
 
         if (errorMessages.length > 0) {
@@ -82,7 +89,12 @@ export class SignUpComponent implements OnInit {
 
         this._authServices.postData('/sign-up', this.signUpForm.value).subscribe((res) => {
             if (res.successed) {
-                this._notiService.success(Notice.addSuccessed, '', 'Thành công');
+                this._notiService.success(Notice.signUpSuccessed, '', 'Thành công');
+                if (this.currentPage) {
+                    this.ngOnInit();
+                } else {
+                    this._router.navigate(['login']);
+                }
             } else {
                 this._notiService.error(Notice.err);
             }

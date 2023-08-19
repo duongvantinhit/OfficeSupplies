@@ -30,23 +30,30 @@ export class CartsComponent implements OnInit {
         });
     }
 
-    updateCart(cart: any, item: any = null) {
-        this._apiServices.putData('/cart', { quantity: item.quantity }, item.productId).subscribe((res) => {
-            if (!res.successed) {
-                this._notiService.error(Notice.addFail);
+    updateCart(cart: any, item: any = null): void {
+        this._apiServices.getData('/product', item.productId).subscribe((res) => {
+            if (item.quantity > res.data.quantityInStock) {
+                this._notiService.error(AppMessages.PLEASE_ENTER('Số lượng hợp lệ', Notice.messageEnter));
+                return;
             } else {
-                this.ngOnInit();
+                this._apiServices.putData('/cart', { quantity: item.quantity }, item.productId).subscribe((res) => {
+                    if (!res.successed) {
+                        this._notiService.error(Notice.addFail);
+                    } else {
+                        this.ngOnInit();
+                    }
+                });
             }
         });
     }
 
-    productDetail(productId: any) {
+    productDetail(productId: any): void {
         this._router.navigate(['/product/detail'], {
             queryParams: { id: productId },
         });
     }
 
-    deleteCart(item: any, event: any) {
+    deleteCart(item: any, event: any): void {
         event.stopPropagation();
 
         this._confirmationService.confirm({

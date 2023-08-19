@@ -23,11 +23,18 @@ export class StatisticsComponent implements OnInit {
     totalRevenue: any;
     totalCustomer: any;
 
+    options: any;
+    orderStatusToday: any;
+    orderStatusMonth: any;
+
     ngOnInit() {
         this.loadRevenueDayOfMonth();
         this.loadRevenueMonthOfYear();
         this.loadOrderDayOfMonth();
         this.loadOrderMonthOfYear();
+        this.loadOrderStatusToday();
+        this.loadOrderStatusMonth();
+
         this._apiServices.getDataAll('/statistics/today').subscribe((res) => {
             this.totalOrder = res.data.totalOrder;
             this.totalRevenue = res.data.totalRevenue;
@@ -35,7 +42,95 @@ export class StatisticsComponent implements OnInit {
         });
     }
 
-    loadRevenueDayOfMonth() {
+    loadOrderStatusToday(): void {
+        this._apiServices.getDataAll('/order/status/statistics/day').subscribe((res) => {
+            const labels = res.data.map((item: any) => item.orderStatusName);
+            const quantity = res.data.map((item: any) => item.quantity);
+
+            const documentStyle = getComputedStyle(document.documentElement);
+            const textColor = documentStyle.getPropertyValue('--text-color');
+
+            this.orderStatusToday = {
+                labels: labels,
+                datasets: [
+                    {
+                        data: quantity,
+                        backgroundColor: [
+                            documentStyle.getPropertyValue('--blue-500'),
+                            documentStyle.getPropertyValue('--yellow-500'),
+                            documentStyle.getPropertyValue('--green-500'),
+                            documentStyle.getPropertyValue('--pink-500'),
+                            documentStyle.getPropertyValue('--red-500'),
+                        ],
+                        hoverBackgroundColor: [
+                            documentStyle.getPropertyValue('--blue-400'),
+                            documentStyle.getPropertyValue('--yellow-400'),
+                            documentStyle.getPropertyValue('--green-400'),
+                            documentStyle.getPropertyValue('--pink-500'),
+                            documentStyle.getPropertyValue('--red-500'),
+                        ],
+                    },
+                ],
+            };
+
+            this.options = {
+                plugins: {
+                    legend: {
+                        labels: {
+                            usePointStyle: true,
+                            color: textColor,
+                        },
+                    },
+                },
+            };
+        });
+    }
+
+    loadOrderStatusMonth(): void {
+        this._apiServices.getDataAll('/order/status/statistics/month').subscribe((res) => {
+            const labels = res.data.map((item: any) => item.orderStatusName);
+            const quantity = res.data.map((item: any) => item.quantity);
+
+            const documentStyle = getComputedStyle(document.documentElement);
+            const textColor = documentStyle.getPropertyValue('--text-color');
+
+            this.orderStatusMonth = {
+                labels: labels,
+                datasets: [
+                    {
+                        data: quantity,
+                        backgroundColor: [
+                            documentStyle.getPropertyValue('--blue-500'),
+                            documentStyle.getPropertyValue('--yellow-500'),
+                            documentStyle.getPropertyValue('--green-500'),
+                            documentStyle.getPropertyValue('--red-500'),
+                            documentStyle.getPropertyValue('--pink-500'),
+                        ],
+                        hoverBackgroundColor: [
+                            documentStyle.getPropertyValue('--blue-400'),
+                            documentStyle.getPropertyValue('--yellow-400'),
+                            documentStyle.getPropertyValue('--green-400'),
+                            documentStyle.getPropertyValue('--red-500'),
+                            documentStyle.getPropertyValue('--pink-500'),
+                        ],
+                    },
+                ],
+            };
+
+            this.options = {
+                plugins: {
+                    legend: {
+                        labels: {
+                            usePointStyle: true,
+                            color: textColor,
+                        },
+                    },
+                },
+            };
+        });
+    }
+
+    loadRevenueDayOfMonth(): void {
         this._apiServices.getDataAll(`/statistics/${this.selectMonthOfRevenue}`).subscribe((res) => {
             const labels = res.data.map((item: any) => item.day);
             const totalRevenue = res.data.map((item: any) => item.totalRevenue);
@@ -92,7 +187,7 @@ export class StatisticsComponent implements OnInit {
         };
     }
 
-    loadOrderDayOfMonth() {
+    loadOrderDayOfMonth(): void {
         this._apiServices.getDataAll(`/statistics/${this.selectMonthOfOrder}`).subscribe((res) => {
             const labels = res.data.map((item: any) => item.day);
             const totalRevenue = res.data.map((item: any) => item.totalOrder);
@@ -149,7 +244,7 @@ export class StatisticsComponent implements OnInit {
         };
     }
 
-    loadRevenueMonthOfYear() {
+    loadRevenueMonthOfYear(): void {
         this._apiServices.getDataAll('/statistics').subscribe((res) => {
             const labels = res.data.map((item: any) => item.month);
             const totalRevenue = res.data.map((item: any) => item.totalRevenue);
@@ -205,7 +300,7 @@ export class StatisticsComponent implements OnInit {
         };
     }
 
-    loadOrderMonthOfYear() {
+    loadOrderMonthOfYear(): void {
         this._apiServices.getDataAll('/statistics').subscribe((res) => {
             const labels = res.data.map((item: any) => item.month);
             const totalRevenue = res.data.map((item: any) => item.totalOrder);
@@ -261,11 +356,11 @@ export class StatisticsComponent implements OnInit {
         };
     }
 
-    changeMonthOfRevenue() {
+    changeMonthOfRevenue(): void {
         this.loadRevenueDayOfMonth();
     }
 
-    changeMonthOfOrder() {
+    changeMonthOfOrder(): void {
         this.loadOrderDayOfMonth();
     }
 }

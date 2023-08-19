@@ -1,62 +1,68 @@
-.all-order {
-    margin-bottom: 10px;
-    background-color: white;
-    padding: 0 20px;
-    padding-bottom: 5px;
-    min-height: 100px;
-    .product-infor {
-        .order-header {
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 1px solid var(--surface-border);
-        }
-        .product-infor-content {
-            min-height: 160px;
-            .content {
+.orders-admin-content {
+    // min-height: 1822px;
+    // display: block;
+    min-height: 1822px;
+    .all-order {
+        margin-bottom: 10px;
+        background-color: white;
+        padding: 0 20px;
+        padding-bottom: 5px;
+        min-height: 100px;
+        .product-infor {
+            .order-header {
                 display: flex;
-                padding: 10px 0;
+                justify-content: space-between;
                 border-bottom: 1px solid var(--surface-border);
-                img {
-                    height: 80px;
-                    width: 80px;
-                    object-fit: cover;
-                }
-                p {
-                    font-size: 17px;
-                    line-height: 22px;
-                    margin: 0;
-                    color: black;
+            }
+            .product-infor-content {
+                min-height: 160px;
+                .content {
+                    display: flex;
+                    padding: 10px 0;
+                    border-bottom: 1px solid var(--surface-border);
+                    img {
+                        height: 80px;
+                        width: 80px;
+                        object-fit: cover;
+                    }
+                    p {
+                        width: 390px;
+                        font-size: 17px;
+                        line-height: 22px;
+                        margin: 0;
+                        color: black;
+                        span {
+                            line-height: 22px;
+                        }
+                    }
                     span {
+                        font-size: 15px;
                         line-height: 22px;
                     }
                 }
-                span {
-                    font-size: 15px;
-                    line-height: 22px;
+                .content:last-child {
+                    border: none;
                 }
-            }
-            .content:last-child {
-                border: none;
-            }
-            .cost {
-                position: absolute;
-                right: 0;
-                bottom: 10px;
-                width: 470px;
-                .cost-infor {
-                    display: flex;
-                    justify-content: space-between;
-                    border-bottom: 1px dashed var(--surface-500);
-                    p {
-                        flex: 1;
-                        text-align: right;
-                        border-right: 1px dashed var(--surface-500);
-                        font-size: 15px;
-                        margin: 0;
-                        padding: 10px;
-                        color: var(--text-color);
-                        span {
-                            line-height: 22px;
+                .cost {
+                    position: absolute;
+                    right: 0;
+                    bottom: 10px;
+                    width: 470px;
+                    .cost-infor {
+                        display: flex;
+                        justify-content: space-between;
+                        border-bottom: 1px dashed var(--surface-500);
+                        p {
+                            flex: 1;
+                            text-align: right;
+                            border-right: 1px dashed var(--surface-500);
+                            font-size: 15px;
+                            margin: 0;
+                            padding: 10px;
+                            color: var(--text-color);
+                            span {
+                                line-height: 22px;
+                            }
                         }
                     }
                 }
@@ -75,7 +81,7 @@
             border-bottom: 1px solid var(--surface-border);
         }
         .product-infor-content {
-            min-height: 320px;
+            min-height: 355px;
             .content {
                 display: flex;
                 padding: 10px 0;
@@ -86,6 +92,7 @@
                     object-fit: cover;
                 }
                 p {
+                    width: 400px;
                     font-size: 17px;
                     line-height: 22px;
                     margin: 0;

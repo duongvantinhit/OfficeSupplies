@@ -71,27 +71,6 @@ export class OfficeSuppliesComponent implements OnInit {
     first: number = 0;
     rows: number = 10;
 
-    onPageChange(event: any) {
-        this.first = event.first;
-        this.rows = event.rows;
-    }
-
-    product(item: any) {
-        this._router.navigate(['/category'], {
-            queryParams: { id: item.id, name: item.categoryName },
-        });
-    }
-
-    productDetail(productId: any) {
-        this._router.navigate(['/product/detail'], {
-            queryParams: { id: productId },
-        });
-    }
-
-    viewProducts() {
-        this._router.navigate(['/products']);
-    }
-
     ngOnInit() {
         this._apiServices.getDataAll('/top/categories').subscribe((res) => {
             this.topCategories = res.data;
@@ -104,5 +83,26 @@ export class OfficeSuppliesComponent implements OnInit {
         this._apiServices.getDataAll('/top/products').subscribe((res) => {
             this.topProducts = res.data;
         });
+    }
+
+    onPageChange(event: any): void {
+        this.first = event.first;
+        this.rows = event.rows;
+    }
+
+    product(item: any): void {
+        this._router.navigate(['/category'], {
+            queryParams: { id: item.id, name: item.categoryName },
+        });
+    }
+
+    productDetail(productId: any): void {
+        this._router.navigate(['/product/detail'], {
+            queryParams: { id: productId },
+        });
+    }
+
+    viewProducts(): void {
+        this._router.navigate(['/products']);
     }
 }

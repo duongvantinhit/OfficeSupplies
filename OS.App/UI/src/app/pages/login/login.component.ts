@@ -47,7 +47,7 @@ export class LoginComponent implements OnInit {
         return errorMessages;
     }
 
-    login() {
+    login(): void {
         let errorMessages = this.formValidate();
 
         if (errorMessages.length > 0) {
@@ -56,23 +56,21 @@ export class LoginComponent implements OnInit {
         }
 
         this.loading = true;
-
         this._authServices.postData('/sign-in', this.loginForm.value).subscribe((res) => {
             if (res.successed) {
-                this._notiService.success(Notice.loginSuccessed, '', 'Thành công');
+                this._notiService.success(Notice.loginSuccessed, '', 'Chào mừng bạn');
                 this._authServices.getUserInfor().subscribe(async (res) => {
-                    localStorage.setItem('OS_CURRENT_USER', JSON.stringify(res.data));
-                    let roles = await this._authServices.currentUser().roles;
-
-                    if (!roles) {
-                        this._router.navigate(['']);
-                    } else {
-                        if (roles.indexOf('admin') !== -1 || roles.indexOf('employee') !== -1) {
-                            this._router.navigate(['/admin']);
-                        } else {
+                    this._authServices.getUserInfor().subscribe((user) => {
+                        if (!user.data.roles) {
                             this._router.navigate(['']);
+                        } else {
+                            if (user.data.roles.indexOf('admin') !== -1 || user.data.roles.indexOf('employee') !== -1) {
+                                this._router.navigate(['/admin']);
+                            } else {
+                                this._router.navigate(['']);
+                            }
                         }
-                    }
+                    });
                 });
 
                 this.loading = false;

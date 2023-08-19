@@ -34,7 +34,10 @@ export class CheckoutComponent implements OnInit {
     userId: any;
 
     ngOnInit() {
-        this.userInfor = this._authServices.currentUser();
+        this._authServices.getUserInfor().subscribe((res) => {
+            this.userInfor = res.data;
+        });
+
         let route = this._actRoute.snapshot.queryParams;
         this.productId = route['id'];
         this.quantity = route['quantity'];
@@ -71,17 +74,17 @@ export class CheckoutComponent implements OnInit {
         }
     }
 
-    showDialog() {
+    showDialog(): void {
         this.voucherVisible = true;
     }
 
-    apply() {
+    apply(): void {
         this.voucherVisible = false;
         this.discount = (this.selectedVoucher.discountPercent / 100) * this.subtotal;
         this.totalCost = this.subtotal - this.discount;
     }
 
-    order() {
+    order(): void {
         let promotionId = this.selectedVoucher ? this.selectedVoucher.id : null;
         let orderForm = {
             TotalCost: this.totalCost,

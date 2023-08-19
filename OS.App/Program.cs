@@ -29,7 +29,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(option =>
     option.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
 }).AddEntityFrameworkStores<OsDbContext>().AddDefaultTokenProviders().AddRoles<IdentityRole>();
 
-builder.Services.AddScoped<IPasswordHasher<ApplicationUser>, CaesarPasswordHasher>();
+builder.Services.AddScoped<IPasswordHasher<ApplicationUser>, PasswordHasher>();
 
 builder.Services.AddDbContext<OsDbContext>(option =>
 {
@@ -111,7 +111,6 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("Admin", policy =>
     {
         policy.RequireAuthenticatedUser();
-        //policy.RequireRole("admin");
         policy.RequireAssertion(context =>
            context.User.HasClaim(c =>
                c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"

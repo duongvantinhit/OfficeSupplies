@@ -23,9 +23,9 @@
             </div>
         </div>
         <div class="header-center width">
-            <div routerLink="" class="header-logo">
-                <img src="../../../assets/img/pen.png" alt="" />
-                <div class="header-slogan">
+            <div class="header-logo">
+                <img routerLink="" src="../../../assets/img/pen.png" alt="" />
+                <div routerLink="" class="header-slogan">
                     <p class="text-orange-500">Office Supplies</p>
                     <span>Thiết bị văn phòng</span>
                 </div>
@@ -70,7 +70,7 @@
                     </div>
                 </div>
                 <div class="flex justify-content-between">
-                    <div class="search" (mouseenter)="onMouseEnter('search')" (mouseleave)="onMouseLeave('search')">
+                    <div class="search" (mouseleave)="onMouseLeave('search')">
                         <span class="p-input-icon-right relative">
                             <input
                                 (click)="searchVisible = true"
@@ -103,7 +103,7 @@
                         </span>
                     </div>
                     <div
-                        class="cart relative pb-3"
+                        class="cart relative pb-4 pl-8"
                         (mouseenter)="onMouseEnter('cart')"
                         (mouseleave)="onMouseLeave('cart')"
                     >

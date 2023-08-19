@@ -4,11 +4,11 @@ using OS.Core.Domain.OfficeSupplies;
 using System.Security.Cryptography;
 using System.Text;
 
-public class CaesarPasswordHasher : PasswordHasher<ApplicationUser>
+public class PasswordHasher : PasswordHasher<ApplicationUser>
 {
     private readonly IConfiguration _configuration;
 
-    public CaesarPasswordHasher(IConfiguration configuration)
+    public PasswordHasher(IConfiguration configuration)
     {
         _configuration = configuration;
     }
@@ -43,5 +43,5 @@ public class CaesarPasswordHasher : PasswordHasher<ApplicationUser>
         using var encryptor = des.CreateEncryptor();
         var encryptedBytes = encryptor.TransformFinalBlock(Encoding.UTF8.GetBytes(plainText), 0, plainText.Length);
         return Convert.ToBase64String(encryptedBytes);
-    }
+    } 
 }

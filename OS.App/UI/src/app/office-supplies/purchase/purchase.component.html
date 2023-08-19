@@ -3,7 +3,7 @@
         <div class="order-status">
             <div class="card">
                 <p-tabView (onChange)="changeTab($event)">
-                    <p-tabPanel *ngFor="let item of statusHeader">
+                    <p-tabPanel *ngFor="let item of statusHeader; let i = index">
                         <ng-template pTemplate="header">
                             <span>{{ item }}</span>
                         </ng-template>
@@ -22,7 +22,7 @@
                                             <img class="border-img" src="{{ orderDtail.imageURL }}" alt="" />
                                             <div class="px-2 flex flex-column justify-content-between">
                                                 <div class="flex justify-content-between">
-                                                    <p>{{ orderDtail.productName }}</p>
+                                                    <p class="text-overflow">{{ orderDtail.productName }}</p>
                                                 </div>
                                                 <div class="flex justify-content-between">
                                                     <span
@@ -67,6 +67,9 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div *ngIf="i == 1" class="card flex justify-content-end mt-4">
+                                <p-button (onClick)="cancelled(item)" label="HỦY ĐƠN HÀNG"></p-button>
                             </div>
                         </div>
                     </p-tabPanel>

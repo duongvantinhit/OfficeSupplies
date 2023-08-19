@@ -61,7 +61,7 @@ export class CategoriesAdminComponent implements OnInit {
         }
     }
 
-    deleteCategory(id: any, event: any) {
+    deleteCategory(id: any, event: any): void {
         event.stopPropagation();
 
         this._confirmationService.confirm({
@@ -81,7 +81,7 @@ export class CategoriesAdminComponent implements OnInit {
         });
     }
 
-    editCategory(id: any) {
+    editCategory(id: any): void {
         this._router.navigate(['/admin/category'], {
             queryParams: { id: id, type: 'edit', page: this.getPageNumber },
         });

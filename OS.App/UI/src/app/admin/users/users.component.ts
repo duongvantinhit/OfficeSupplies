@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { AdminService } from '../services/admin.service';
 import { AuthService } from 'src/auth/services/auth.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AppMessages } from 'src/app/shared/const/messages.const';
@@ -27,7 +26,13 @@ export class UsersComponent implements OnInit {
     userRoles: any;
     userAuthorizatonForm: any;
 
-    showDialog(user: any) {
+    ngOnInit() {
+        this._authServices.getDataAll('/users').subscribe((res) => {
+            this.users = res.data;
+        });
+    }
+
+    showDialog(user: any): void {
         this.visible = true;
         this.userId = user.id;
 
@@ -39,7 +44,7 @@ export class UsersComponent implements OnInit {
         this.loadData();
     }
 
-    private loadData() {
+    private loadData(): void {
         this._authServices.getData('/user/roles', this.userId).subscribe((res) => {
             this.userRoles = res.data;
 
@@ -62,7 +67,7 @@ export class UsersComponent implements OnInit {
         return errorMessages;
     }
 
-    userAuthorization() {
+    userAuthorization(): void {
         let errorMessages = this.formValidate();
 
         if (errorMessages.length > 0) {
@@ -83,9 +88,9 @@ export class UsersComponent implements OnInit {
         });
     }
 
-    deleteUserRole(role: any) {
+    deleteUserRole(role: any): void {
         this._confirmationService.confirm({
-            message: AppMessages.C_M_1,
+            message: AppMessages.C_M_22,
             header: 'Confirmation',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
@@ -101,9 +106,7 @@ export class UsersComponent implements OnInit {
         });
     }
 
-    ngOnInit() {
-        this._authServices.getDataAll('/users').subscribe((res) => {
-            this.users = res.data;
-        });
+    clear(table: any) {
+        table.clear();
     }
 }

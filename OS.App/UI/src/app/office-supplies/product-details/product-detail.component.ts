@@ -4,6 +4,7 @@ import { OfficeSuppliesService } from '../services/office-supplies.service';
 import { Notice } from 'src/app/shared/const/notice.const';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { Location } from '@angular/common';
+import { AppMessages } from 'src/app/shared/const/messages.const';
 
 @Component({
     selector: 'app-product-detail',
@@ -46,7 +47,12 @@ export class ProductDetailComponent implements OnInit {
         window.addEventListener('popstate', this.onBackButtonClicked.bind(this));
     }
 
-    addProductToCart() {
+    addProductToCart(): void {
+        if (this.quantity > this.product.quantityInStock) {
+            this._notiService.error(AppMessages.PLEASE_ENTER('Số lượng hợp lệ', Notice.messageEnter));
+            return;
+        }
+
         let cartForm = {
             UserId: this.productId,
             ProductId: this.productId,
@@ -64,17 +70,22 @@ export class ProductDetailComponent implements OnInit {
         });
     }
 
-    checkout() {
+    checkout(): void {
+        if (this.quantity > this.product.quantityInStock) {
+            this._notiService.error(AppMessages.PLEASE_ENTER('Số lượng hợp lệ', Notice.messageEnter));
+            return;
+        }
+
         this._router.navigate(['/checkout'], {
             queryParams: { id: this.productId, quantity: this.quantity },
         });
     }
 
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         window.removeEventListener('popstate', this.onBackButtonClicked.bind(this));
     }
 
-    onBackButtonClicked(event: any) {
+    onBackButtonClicked(event: any): void {
         this._apiServices.sendPageInfor(this.pageNumber);
     }
 }

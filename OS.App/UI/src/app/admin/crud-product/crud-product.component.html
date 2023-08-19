@@ -70,7 +70,7 @@
 
                 <div class="col-3 p-number">
                     <span class="font-bold block mb-2">Số lượng</span>
-                    <p-inputNumber inputId="integeronly" formControlName="quantityInStock"> </p-inputNumber>
+                    <p-inputNumber [min]="1" inputId="integeronly" formControlName="quantityInStock"> </p-inputNumber>
                 </div>
 
                 <div class="col-3">
@@ -97,7 +97,7 @@
 
                 <div class="col-3 p-number">
                     <span class="font-bold block mb-2">Giá sản phẩm (VND)</span>
-                    <p-inputNumber inputId="integeronly" formControlName="price"> </p-inputNumber>
+                    <p-inputNumber [min]="1" inputId="integeronly" formControlName="price"> </p-inputNumber>
                 </div>
 
                 <div class="col-3">

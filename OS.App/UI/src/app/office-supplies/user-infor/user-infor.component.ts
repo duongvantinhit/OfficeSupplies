@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AdminService } from 'src/app/admin/services/admin.service';
 import { AppMessages } from 'src/app/shared/const/messages.const';
 import { Notice } from 'src/app/shared/const/notice.const';
 import { NotificationService } from 'src/app/shared/services/notification.service';
@@ -17,17 +16,21 @@ export class UserInforComponent implements OnInit {
         private _authServices: AuthService,
         private _fb: FormBuilder,
         private _notiService: NotificationService,
-        private _apiServices: AdminService,
         private _router: Router,
     ) {}
 
     userInforForm: any;
     loading = false;
-    currentUser: any;
     currentPage: any;
+    visibleEdit = false;
+    userInfor: any;
+    password: any;
 
     ngOnInit() {
-        this.currentUser = this._authServices.currentUser();
+        this._authServices.getUserInfor().subscribe((res) => {
+            this.setValue(res.data);
+            this.userInfor = res.data;
+        });
 
         this.userInforForm = this._fb.group({
             firstName: ['', [Validators.required]],
@@ -37,7 +40,6 @@ export class UserInforComponent implements OnInit {
             address: ['', [Validators.required]],
         });
 
-        this.setValue(this.currentUser);
         this._router.routerState.snapshot.url.includes('admin') ? (this.currentPage = 'admin') : null;
     }
 
@@ -81,28 +83,36 @@ export class UserInforComponent implements OnInit {
         return errorMessages;
     }
 
-    edit() {
-        let errorMessages = this.lineLeadFormValidate();
+    edit(): void {
+        let formCheckPassword = {
+            password: this.password,
+        };
 
-        if (errorMessages.length > 0) {
-            this._notiService.error(errorMessages.join('<br/>'), 'ua-toast');
-            return;
-        }
-
-        this._authServices.putData('/change-user/infor', this.userInforForm.value, '').subscribe((res) => {
+        this._authServices.postData('/check-password', formCheckPassword).subscribe((res) => {
             if (res.successed) {
-                this._notiService.success(Notice.updateSuccessed, '', 'Thành công');
-                this._authServices.getUserInfor().subscribe(async (res) => {
-                    localStorage.setItem('OS_CURRENT_USER', JSON.stringify(res.data));
-                    this.ngOnInit();
+                let errorMessages = this.lineLeadFormValidate();
+
+                if (errorMessages.length > 0) {
+                    this._notiService.error(errorMessages.join('<br/>'), 'ua-toast');
+                    return;
+                }
+
+                this._authServices.putData('/change-user/infor', this.userInforForm.value, '').subscribe((res) => {
+                    if (res.successed) {
+                        this._notiService.success(Notice.updateSuccessed, '', 'Thành công');
+                        this.visibleEdit = false;
+                        this.ngOnInit();
+                    } else {
+                        this._notiService.error(Notice.err);
+                    }
                 });
             } else {
-                this._notiService.error(Notice.err);
+                this._notiService.error(Notice.wrongPassword);
             }
         });
     }
 
-    changePassword() {
+    changePassword(): void {
         if (this.currentPage == 'admin') {
             this._router.navigate(['/admin/change-password']);
         } else {

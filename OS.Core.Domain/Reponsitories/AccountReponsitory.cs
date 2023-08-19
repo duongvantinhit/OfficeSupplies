@@ -31,9 +31,13 @@ namespace OS.Core.Domain.Reponsitories
 
         public async Task<TokenDto> SigInAsync(SignIn model)
         {
-
             var user = await userManager.FindByEmailAsync(model.Email);
-            var passwordHasher = new CaesarPasswordHasher(configuration);
+
+            if(user == null)
+            {
+                return null!;
+            }
+            var passwordHasher = new PasswordHasher(configuration);
             var result = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, model.Password!);
 
             if (await userManager.IsLockedOutAsync(user))
@@ -191,17 +195,6 @@ namespace OS.Core.Domain.Reponsitories
             }
             else
             {
-                /* var adminRole = await roleManager.FindByNameAsync("admin");
-                 var employeeRole = await roleManager.FindByNameAsync("employee");
-
-                 await roleManager.AddClaimAsync(adminRole, new Claim("ManageProducts", "true"));
-                 await roleManager.AddClaimAsync(adminRole, new Claim("ManageOrders", "true"));
-                 await roleManager.AddClaimAsync(adminRole, new Claim("ManageUsers", "true"));
-
-                 await roleManager.AddClaimAsync(employeeRole, new Claim("ManageProducts", "true"));
-                 await roleManager.AddClaimAsync(employeeRole, new Claim("ManageOrders", "true"));
-                 await roleManager.AddClaimAsync(employeeRole, new Claim("ManageUsers", "false"));*/
-
                 await userManager.AddToRoleAsync(user, roleName);
                 return IdentityResult.Success;
             }
@@ -356,6 +349,28 @@ namespace OS.Core.Domain.Reponsitories
             else
             {
                 return IdentityResult.Success;
+            }
+        }
+
+        public async Task<IdentityResult> CheckPasswordAsync(string email, string password)
+        {
+            var user = await userManager.FindByEmailAsync(email);
+
+            if (user == null)
+            {
+                return null!;
+            }
+
+            var passwordHasher = new PasswordHasher(configuration);
+            var result = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, password);
+
+            if (result == PasswordVerificationResult.Success)
+            {
+                return IdentityResult.Success;
+            }
+            else
+            {
+                return null!;
             }
         }
     }

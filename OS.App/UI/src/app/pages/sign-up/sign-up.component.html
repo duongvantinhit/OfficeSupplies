@@ -60,6 +60,7 @@
                         pInputTextarea
                         placeholder="Nhập địa chỉ"
                         formControlName="address"
+                        (keydown.enter)="signUp()"
                     ></textarea>
                 </div>
                 <p-button styleClass="m-3 " label="Đăng ký" (onClick)="signUp()"></p-button>

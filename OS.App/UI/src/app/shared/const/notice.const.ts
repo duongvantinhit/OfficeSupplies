@@ -15,4 +15,5 @@ export class Notice {
     static readonly logoutSuccessed = 'Đăng xuất thành công';
     static readonly checkOutSuccessed = 'Đặt hàng thành công';
     static readonly cancelledSuccessed = 'Hủy đơn hàng thành công';
+    static readonly notAllow = 'Không được phép';
 }

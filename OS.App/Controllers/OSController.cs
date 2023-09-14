@@ -5,7 +5,6 @@ using OS.Core.Application;
 using OS.Core.Application.Dtos;
 using OS.Core.Domain.OfficeSupplies;
 using OS.Core.Infrastructure.Database;
-using System.Linq;
 using System.Security.Claims;
 using UA.Core.Application.SeedWork;
 
@@ -578,6 +577,23 @@ namespace OS.App.Controllers
             int skip = request.PageSize * (request.PageIndex - 1);
             res.Data = orderDtos.Skip(skip).Take(request.PageSize);
 
+            return Ok(res);
+        }
+
+        //Thử nghiệm
+        [HttpGet("users/role")]
+        [Authorize]
+        public async Task<IActionResult> GetRoles()
+        {
+            var res = new ApiResult<IEnumerable<AppRoles>>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var query = _context.AppRoles;
+
+            res.Data = await query.ToListAsync();
             return Ok(res);
         }
 

@@ -66,6 +66,8 @@ namespace OS.Core.Infrastructure.Database
             return topProducts;
         }
 
+        public DbSet<ApplicationUser> AppUsers { get; set; }
+        public DbSet<AppRoles> AppRoles { get; set; }
         public DbSet<Categories> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Promotion> Promotions { get; set; }

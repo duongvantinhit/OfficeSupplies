@@ -13,6 +13,7 @@
                         [feedback]="false"
                         placeholder="Mật khẩu"
                         formControlName="password"
+                        (keydown.enter)="login()"
                     ></p-password>
                 </div>
                 <p-button (onClick)="login()" styleClass="m-3" label="Đăng nhập"></p-button>

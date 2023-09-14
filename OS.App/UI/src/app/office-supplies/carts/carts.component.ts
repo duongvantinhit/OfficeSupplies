@@ -57,7 +57,7 @@ export class CartsComponent implements OnInit {
         event.stopPropagation();
 
         this._confirmationService.confirm({
-            message: AppMessages.C_M_1,
+            message: AppMessages.C_M_22,
             header: 'Confirmation',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {

@@ -175,7 +175,7 @@ namespace OS.Core.Domain.Reponsitories
         }
 
         public async Task<IdentityResult> CreateRoleAsync(string roleName)
-        {
+        {   
             var roleExists = await roleManager.RoleExistsAsync(roleName);
             if (!roleExists)
             {

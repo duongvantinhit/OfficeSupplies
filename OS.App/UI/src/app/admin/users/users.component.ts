@@ -5,6 +5,7 @@ import { AppMessages } from 'src/app/shared/const/messages.const';
 import { Notice } from 'src/app/shared/const/notice.const';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { ConfirmationService } from 'primeng/api';
+import { AdminService } from '../services/admin.service';
 
 @Component({
     selector: 'app-users',
@@ -14,6 +15,7 @@ import { ConfirmationService } from 'primeng/api';
 export class UsersComponent implements OnInit {
     constructor(
         private _authServices: AuthService,
+        private _apiServices: AdminService,
         private _fb: FormBuilder,
         private _notiService: NotificationService,
         private _confirmationService: ConfirmationService,
@@ -29,6 +31,11 @@ export class UsersComponent implements OnInit {
     ngOnInit() {
         this._authServices.getDataAll('/users').subscribe((res) => {
             this.users = res.data;
+        });
+
+        //Thử nghiệm
+        this._apiServices.getDataAll('/users/role').subscribe((res) => {
+            console.log(res);
         });
     }
 
@@ -90,7 +97,7 @@ export class UsersComponent implements OnInit {
 
     deleteUserRole(role: any): void {
         this._confirmationService.confirm({
-            message: AppMessages.C_M_1,
+            message: AppMessages.C_M_22,
             header: 'Confirmation',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
@@ -104,5 +111,9 @@ export class UsersComponent implements OnInit {
                 });
             },
         });
+    }
+
+    clear(table: any) {
+        table.clear();
     }
 }

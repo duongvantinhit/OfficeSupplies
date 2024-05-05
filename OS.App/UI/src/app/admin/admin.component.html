@@ -8,15 +8,15 @@
         </div>
         <div class="admin-right">
             <header class="flex">
-                <div class="header-left flex cursor-pointer" routerLink="/admin">
-                    <img src="../../assets/img/pen.png" alt="" />
-                    <div>
+                <div class="header-left flex" routerLink="/admin">
+                    <img class="cursor-pointer" src="../../assets/img/pen.png" alt="" />
+                    <div class="cursor-pointer">
                         <h2>OFFICE SUPPLIES</h2>
                         <h4>Thiết bị văn phòng</h4>
                     </div>
                 </div>
                 <div class="user" routerLink="/admin/user-infor">
-                    <div class="user-infor">
+                    <div class="user-infor" *ngIf="currentUser">
                         <p>{{ currentUser.firstName + ' ' + currentUser.lastName }}</p>
                         <span><i class="pi pi-unlock"></i>{{ currentUser.roles[0] }}</span>
                     </div>

@@ -31,11 +31,18 @@ export class CartsComponent implements OnInit {
     }
 
     updateCart(cart: any, item: any = null): void {
-        this._apiServices.putData('/cart', { quantity: item.quantity }, item.productId).subscribe((res) => {
-            if (!res.successed) {
-                this._notiService.error(Notice.addFail);
+        this._apiServices.getData('/product', item.productId).subscribe((res) => {
+            if (item.quantity > res.data.quantityInStock) {
+                this._notiService.error(AppMessages.PLEASE_ENTER('Số lượng hợp lệ', Notice.messageEnter));
+                return;
             } else {
-                this.ngOnInit();
+                this._apiServices.putData('/cart', { quantity: item.quantity }, item.productId).subscribe((res) => {
+                    if (!res.successed) {
+                        this._notiService.error(Notice.addFail);
+                    } else {
+                        this.ngOnInit();
+                    }
+                });
             }
         });
     }
@@ -50,7 +57,7 @@ export class CartsComponent implements OnInit {
         event.stopPropagation();
 
         this._confirmationService.confirm({
-            message: AppMessages.C_M_1,
+            message: AppMessages.C_M_22,
             header: 'Confirmation',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {

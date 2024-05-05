@@ -6,6 +6,7 @@ export class Notice {
     static readonly addFail = 'Thêm thất bại';
     static readonly loginSuccessed = 'Đăng nhập thành công';
     static readonly loginFail = 'Đăng nhập thất bại';
+    static readonly wrongPassword = 'Mật khẩu không đúng';
     static readonly signUpSuccessed = 'Đăng ký thành công';
     static readonly err = 'Có lỗi xảy ra';
     static readonly loadFail = 'Tải không thành công';
@@ -14,4 +15,5 @@ export class Notice {
     static readonly logoutSuccessed = 'Đăng xuất thành công';
     static readonly checkOutSuccessed = 'Đặt hàng thành công';
     static readonly cancelledSuccessed = 'Hủy đơn hàng thành công';
+    static readonly notAllow = 'Không được phép';
 }

@@ -29,7 +29,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(option =>
     option.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
 }).AddEntityFrameworkStores<OsDbContext>().AddDefaultTokenProviders().AddRoles<IdentityRole>();
 
-builder.Services.AddScoped<IPasswordHasher<ApplicationUser>, CaesarPasswordHasher>();
+builder.Services.AddScoped<IPasswordHasher<ApplicationUser>, PasswordHasher>();
+builder.Services.AddScoped<IAccountReponsitory, AccountReponsitory>();
 
 builder.Services.AddDbContext<OsDbContext>(option =>
 {
@@ -49,8 +50,6 @@ builder.Services.AddCors(opt =>
 });
 
 builder.Services.AddAutoMapper(typeof(Program));
-
-builder.Services.AddScoped<IAccountReponsitory, AccountReponsitory>();
 
 builder.Services.AddAuthentication(options =>
 {

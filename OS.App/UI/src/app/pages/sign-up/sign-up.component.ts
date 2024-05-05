@@ -33,7 +33,6 @@ export class SignUpComponent implements OnInit {
             address: ['', [Validators.required]],
         });
 
-        console.log(this._router.routerState.snapshot.url);
         if (this._router.routerState.snapshot.url.includes('admin')) {
             this.currentPage = 'admin';
         }
@@ -91,6 +90,11 @@ export class SignUpComponent implements OnInit {
         this._authServices.postData('/sign-up', this.signUpForm.value).subscribe((res) => {
             if (res.successed) {
                 this._notiService.success(Notice.signUpSuccessed, '', 'Thành công');
+                if (this.currentPage) {
+                    this.ngOnInit();
+                } else {
+                    this._router.navigate(['login']);
+                }
             } else {
                 this._notiService.error(Notice.err);
             }

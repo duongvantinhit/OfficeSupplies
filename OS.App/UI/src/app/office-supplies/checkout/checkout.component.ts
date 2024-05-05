@@ -34,7 +34,10 @@ export class CheckoutComponent implements OnInit {
     userId: any;
 
     ngOnInit() {
-        this.userInfor = this._authServices.currentUser();
+        this._authServices.getUserInfor().subscribe((res) => {
+            this.userInfor = res.data;
+        });
+
         let route = this._actRoute.snapshot.queryParams;
         this.productId = route['id'];
         this.quantity = route['quantity'];

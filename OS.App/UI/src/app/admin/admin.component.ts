@@ -22,7 +22,9 @@ export class AdminComponent implements OnInit {
     currentUser: any;
 
     ngOnInit(): void {
-        this.currentUser = this._authServices.currentUser();
+        this._authServices.getUserInfor().subscribe((res) => {
+            this.currentUser = res.data;
+        });
     }
 
     function = [

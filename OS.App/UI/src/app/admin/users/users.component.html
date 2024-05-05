@@ -6,7 +6,39 @@
             </div>
         </div>
         <div class="users">
-            <p-table [value]="users" [tableStyle]="{ 'min-width': '50rem' }">
+            <p-table
+                [value]="users"
+                [tableStyle]="{ 'min-width': '50rem' }"
+                #dt1
+                dataKey="id"
+                [rows]="10"
+                [showCurrentPageReport]="true"
+                [rowsPerPageOptions]="[10, 25, 50]"
+                [paginator]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [globalFilterFields]="['firstName', 'phoneNumber', 'email', 'address']"
+            >
+                <ng-template pTemplate="caption">
+                    <div class="flex">
+                        <button
+                            pButton
+                            label="Clear"
+                            class="p-button-outlined"
+                            icon="pi pi-filter-slash"
+                            (click)="clear(dt1)"
+                        ></button>
+                        <span class="p-input-icon-left ml-auto">
+                            <i class="pi pi-search"></i>
+                            <input
+                                pInputText
+                                class="text-center"
+                                type="text"
+                                (input)="dt1.filterGlobal($any($event.target).value, 'contains')"
+                                placeholder="Tìm kiếm"
+                            />
+                        </span>
+                    </div>
+                </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
                         <th>Họ Tên</th>

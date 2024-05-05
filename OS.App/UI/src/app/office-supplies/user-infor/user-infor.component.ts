@@ -21,11 +21,16 @@ export class UserInforComponent implements OnInit {
 
     userInforForm: any;
     loading = false;
-    currentUser: any;
     currentPage: any;
+    visibleEdit = false;
+    userInfor: any;
+    password: any;
 
     ngOnInit() {
-        this.currentUser = this._authServices.currentUser();
+        this._authServices.getUserInfor().subscribe((res) => {
+            this.setValue(res.data);
+            this.userInfor = res.data;
+        });
 
         this.userInforForm = this._fb.group({
             firstName: ['', [Validators.required]],
@@ -35,7 +40,6 @@ export class UserInforComponent implements OnInit {
             address: ['', [Validators.required]],
         });
 
-        this.setValue(this.currentUser);
         this._router.routerState.snapshot.url.includes('admin') ? (this.currentPage = 'admin') : null;
     }
 
@@ -80,22 +84,30 @@ export class UserInforComponent implements OnInit {
     }
 
     edit(): void {
-        let errorMessages = this.lineLeadFormValidate();
+        let formCheckPassword = {
+            password: this.password,
+        };
 
-        if (errorMessages.length > 0) {
-            this._notiService.error(errorMessages.join('<br/>'), 'ua-toast');
-            return;
-        }
-
-        this._authServices.putData('/change-user/infor', this.userInforForm.value, '').subscribe((res) => {
+        this._authServices.postData('/check-password', formCheckPassword).subscribe((res) => {
             if (res.successed) {
-                this._notiService.success(Notice.updateSuccessed, '', 'Thành công');
-                this._authServices.getUserInfor().subscribe(async (res) => {
-                    localStorage.setItem('OS_CURRENT_USER', JSON.stringify(res.data));
-                    this.ngOnInit();
+                let errorMessages = this.lineLeadFormValidate();
+
+                if (errorMessages.length > 0) {
+                    this._notiService.error(errorMessages.join('<br/>'), 'ua-toast');
+                    return;
+                }
+
+                this._authServices.putData('/change-user/infor', this.userInforForm.value, '').subscribe((res) => {
+                    if (res.successed) {
+                        this._notiService.success(Notice.updateSuccessed, '', 'Thành công');
+                        this.visibleEdit = false;
+                        this.ngOnInit();
+                    } else {
+                        this._notiService.error(Notice.err);
+                    }
                 });
             } else {
-                this._notiService.error(Notice.err);
+                this._notiService.error(Notice.wrongPassword);
             }
         });
     }

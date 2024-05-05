@@ -9,4 +9,9 @@ namespace OS.Core.Application.Dtos
         [Required]
         public string? Password { get; set; }
     }
+
+    public class CheckPasswordDto
+    {
+        public string? Password { get; set; }
+    }
 }

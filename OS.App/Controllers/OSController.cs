@@ -5,7 +5,6 @@ using OS.Core.Application;
 using OS.Core.Application.Dtos;
 using OS.Core.Domain.OfficeSupplies;
 using OS.Core.Infrastructure.Database;
-using System.Linq;
 using System.Security.Claims;
 using UA.Core.Application.SeedWork;
 
@@ -108,7 +107,7 @@ namespace OS.App.Controllers
                 ResponseCode = StatusCodes.Status200OK,
             };
 
-            var query = _context.Products.Where(x => x.CategoryId == caterogyId).AsNoTracking();
+            var query = _context.Products.Where(x => x.CategoryId == caterogyId && x.QuantityInStock > 0).AsNoTracking();
             var sortedDatas = await query.OrderBy(post => post.ProductName).ToListAsync();
 
             res.TotalRows = sortedDatas.Count;
@@ -127,6 +126,24 @@ namespace OS.App.Controllers
             };
 
             var query = _context.Products.AsNoTracking();
+            var sortedDatas = await query.OrderBy(post => post.ProductName).ToListAsync();
+
+            res.TotalRows = sortedDatas.Count;
+            int skip = request.PageSize * (request.PageIndex - 1);
+            res.Data = sortedDatas.Skip(skip).Take(request.PageSize);
+            return Ok(res);
+        }
+
+        [HttpGet("products/user")]
+        public async Task<IActionResult> GetAllProductsUser([FromQuery] ApiRequest request)
+        {
+            var res = new ApiResult<IEnumerable<Product>>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var query = _context.Products.Where(x => x.QuantityInStock > 0);
             var sortedDatas = await query.OrderBy(post => post.ProductName).ToListAsync();
 
             res.TotalRows = sortedDatas.Count;
@@ -159,7 +176,7 @@ namespace OS.App.Controllers
                 ResponseCode = StatusCodes.Status200OK,
             };
 
-            var query = _context.Products.AsNoTracking();
+            var query = _context.Products.Where(x => x.QuantityInStock > 0);
             var sortedDatas = await query.OrderByDescending(post => post.CreatedDate).Take(4).ToListAsync();
 
             res.Data = sortedDatas;
@@ -193,7 +210,7 @@ namespace OS.App.Controllers
             };
 
             var query = _context.Products
-                .Where(x => x.ProductName!.Contains(name));
+                .Where(x => x.ProductName!.Contains(name) && x.QuantityInStock > 0);
 
             res.Data = await query.ToListAsync();
             return Ok(res);
@@ -318,6 +335,7 @@ namespace OS.App.Controllers
         }
 
         [HttpGet("order/status/statistics/{time}")]
+        [Authorize(Policy = "Admin")]
         public async Task<IActionResult> GetOrderStatusStatistics(string time)
         {
             var res = new ApiResult<IEnumerable<OrderStatusStatisticsDto>>
@@ -491,6 +509,7 @@ namespace OS.App.Controllers
         }
 
         [HttpGet("orders/{status}")]
+        [Authorize(Policy = "Employee")]
         public async Task<IActionResult> GetAllOrders(string status, [FromQuery] ApiRequest request)
         {
             var res = new ApiResult<IEnumerable<GetOrderDto>>
@@ -558,6 +577,23 @@ namespace OS.App.Controllers
             int skip = request.PageSize * (request.PageIndex - 1);
             res.Data = orderDtos.Skip(skip).Take(request.PageSize);
 
+            return Ok(res);
+        }
+
+        //Thử nghiệm
+        [HttpGet("users/role")]
+        [Authorize]
+        public async Task<IActionResult> GetRoles()
+        {
+            var res = new ApiResult<IEnumerable<AppRoles>>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var query = _context.AppRoles;
+
+            res.Data = await query.ToListAsync();
             return Ok(res);
         }
 

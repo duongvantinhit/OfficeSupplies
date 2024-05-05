@@ -149,7 +149,6 @@ namespace OS.App.Controllers
             return Ok(res);
         }
 
-
         [HttpPost("refreshtoken")]
         public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequestDto model)
         {
@@ -160,12 +159,21 @@ namespace OS.App.Controllers
             };
 
             string refreshToken = HttpContext.Request.Cookies["refresh_token"]!;
-            var tokenDto = await _accountRepo.RefreshTokenAsync(model.Email!, refreshToken!);
+            string email = HttpContext.Request.Cookies["email"]!;
+
+            if(email == null)
+            {
+                res.ResponseCode = StatusCodes.Status401Unauthorized;
+                return Ok(res);
+            }
+
+            var tokenDto = await _accountRepo.RefreshTokenAsync(email, refreshToken!);
 
             if (tokenDto == null)
             {
                 Response.Cookies.Delete("refresh_token");
                 Response.Cookies.Delete("access_token");
+                Response.Cookies.Delete("email");
                 res.ResponseCode = StatusCodes.Status401Unauthorized;
             }
             else
@@ -200,7 +208,37 @@ namespace OS.App.Controllers
             }
             else
             {
-                SetAuthCookies(result.AccessToken!, result.RefreshToken!);
+                SetAuthCookies(result.AccessToken!, result.RefreshToken!, signin.Email!);
+                res.Successed = true;
+            }
+            return Ok(res);
+        }
+
+        [HttpPost("check-password")]
+        public async Task<IActionResult> CheckPassword(CheckPasswordDto checkPassword)
+        {
+            var res = new ApiResult<string>
+            {
+                Successed = false,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            string email = HttpContext.Request.Cookies["email"]!;
+
+            if (email == null)
+            {
+                res.ResponseCode = StatusCodes.Status401Unauthorized;
+                return Ok(res);
+            }
+
+            var result = await _accountRepo.CheckPasswordAsync(email,checkPassword.Password!);
+
+            if (result == null)
+            {
+                res.ResponseCode = StatusCodes.Status401Unauthorized;
+            }
+            else
+            {
                 res.Successed = true;
             }
             return Ok(res);
@@ -341,9 +379,18 @@ namespace OS.App.Controllers
             return Ok(res);
         }
 
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            Response.Cookies.Delete("access_token");
+            Response.Cookies.Delete("refresh_token");
+            Response.Cookies.Delete("email");
+            return Ok();
+        }
+
         #endregion
 
-        private void SetAuthCookies(string accessToken, string refreshToken)
+        private void SetAuthCookies(string accessToken, string refreshToken, string email = null!)
         {
             var cookieOptions = new CookieOptions
             {
@@ -356,6 +403,10 @@ namespace OS.App.Controllers
 
             Response.Cookies.Append("access_token", accessToken, cookieOptions);
             Response.Cookies.Append("refresh_token", refreshToken, cookieOptions);
+            if (email != null)
+            {
+                Response.Cookies.Append("email", email, cookieOptions);
+            }
         }
     }
 }

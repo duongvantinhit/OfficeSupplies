@@ -14,7 +14,6 @@ export class AuthService extends BaseApiService {
     }
 
     private refreshTokenTimeout: any;
-    userStored = localStorage.getItem('OS_CURRENT_USER');
 
     postData(url: any, requestBody: any): Observable<any> {
         return this.post(url, requestBody);
@@ -36,31 +35,17 @@ export class AuthService extends BaseApiService {
         return this.get('/user/infor');
     }
 
-    currentUser() {
-        return JSON.parse(localStorage.getItem('OS_CURRENT_USER')!);
-    }
-
     putData(url: any, requestBody: any, id: any): Observable<any> {
         return this.put(`${url}/` + id, requestBody);
     }
 
     logout(): void {
-        localStorage.removeItem('OS_CURRENT_USER');
-    }
-
-    isLoggedIn(): boolean {
-        const token = localStorage.getItem('OS_CURRENT_USER');
-        return !!token;
+        this.postData('/logout', {}).subscribe((res) => {});
     }
 
     refreshToken() {
-        let email = this.currentUser().email;
-        const refreshTokenForm = {
-            email: email,
-        };
-
         return this.http
-            .post<any>('https://localhost:7072/api/Auth/refreshtoken', refreshTokenForm, {
+            .post<any>('https://localhost:7072/api/Auth/refreshtoken', {
                 withCredentials: true,
             })
             .pipe(

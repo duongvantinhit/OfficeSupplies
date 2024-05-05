@@ -111,7 +111,6 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("Admin", policy =>
     {
         policy.RequireAuthenticatedUser();
-        //policy.RequireRole("admin");
         policy.RequireAssertion(context =>
            context.User.HasClaim(c =>
                c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"

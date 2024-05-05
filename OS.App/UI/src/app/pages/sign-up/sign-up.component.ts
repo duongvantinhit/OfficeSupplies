@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AppMessages } from 'src/app/shared/const/messages.const';
 import { Notice } from 'src/app/shared/const/notice.const';
 import { NotificationService } from 'src/app/shared/services/notification.service';
@@ -15,9 +16,11 @@ export class SignUpComponent implements OnInit {
         private _fb: FormBuilder,
         private _notiService: NotificationService,
         private _authServices: AuthService,
+        private _router: Router,
     ) {}
 
     signUpForm: any;
+    currentPage: any;
 
     ngOnInit() {
         this.signUpForm = this._fb.group({
@@ -29,6 +32,11 @@ export class SignUpComponent implements OnInit {
             confirmPassword: ['', [Validators.required]],
             address: ['', [Validators.required]],
         });
+
+        console.log(this._router.routerState.snapshot.url);
+        if (this._router.routerState.snapshot.url.includes('admin')) {
+            this.currentPage = 'admin';
+        }
     }
 
     private formValidate(): any[] {

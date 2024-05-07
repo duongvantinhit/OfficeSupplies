@@ -4,25 +4,21 @@
             <div class="card">
                 <p-galleria
                     [value]="images"
-                    [autoPlay]="true"
-                    [circular]="true"
-                    [responsiveOptions]="responsiveOptions"
                     [numVisible]="5"
+                    [circular]="true"
+                    [showItemNavigators]="true"
+                    [showThumbnails]="false"
+                    [responsiveOptions]="responsiveOptions"
                     [containerStyle]="{ 'max-width': '640px' }"
                 >
                     <ng-template pTemplate="item" let-item>
-                        <img [src]="item.itemImageSrc" style="width: 100%" />
-                    </ng-template>
-                    <ng-template pTemplate="thumbnail" let-item>
-                        <div class="grid grid-nogutter justify-content-center">
-                            <img [src]="item.thumbnailImageSrc" />
-                        </div>
+                        <img [src]="item.itemImageSrc" style="width: 100%; display: block" />
                     </ng-template>
                 </p-galleria>
             </div>
         </div>
         <body>
-            <div class="outstanding">
+            <!-- <div class="outstanding">
                 <p-divider align="center">
                     <span class="p-tag">TOP danh mục nổi bật</span>
                 </p-divider>
@@ -36,9 +32,9 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
-            <div class="new-product">
+            <!-- <div class="new-product">
                 <div class="">
                     <p-fieldset>
                         <ng-template pTemplate="header">
@@ -62,10 +58,28 @@
                         </div>
                     </p-fieldset>
                 </div>
+            </div> -->
+
+            <div class="top-product">
+                <div class="col-2" (click)="productDetail(item.id)" *ngFor="let item of topProducts; let i = index">
+                    <div class="flex">
+                        <div class="top-product-left relative">
+                            <img src="{{ item.imageURL }}" alt="" />
+                            <div class="position"># HOT</div>
+                        </div>
+
+                        <div class="top-product-right">
+                            <p class="text-overflow">{{ item.productName }}</p>
+                            <b>Đã bán: {{ item.quantity }} sản phẩm</b>
+                            <b class="pb-4 text-red-600">{{ item.price | number : '1.0-3' }} VND</b>
+                            <span>{{ item.productDescription }}</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="content">
-                <div class="content-left">
+                <!-- <div class="content-left">
                     <p-fieldset>
                         <ng-template pTemplate="header">
                             <div class="flex text-primary">
@@ -73,6 +87,7 @@
                                 <span class="font-bold text-lg">Top sản phẩm bán chạy</span>
                             </div>
                         </ng-template>
+
                         <div class="top-product">
                             <div *ngFor="let item of topProducts; let i = index" class="top-product-content">
                                 <div
@@ -95,8 +110,8 @@
                             </div>
                         </div>
                     </p-fieldset>
-                </div>
-                <div class="content-right">
+                </div> -->
+                <!-- <div class="content-right">
                     <p-fieldset>
                         <ng-template pTemplate="header">
                             <div class="flex text-primary">
@@ -144,7 +159,7 @@
                             <li><i class="pi pi-truck text-orange-500"></i>Shoppe Express</li>
                         </ul>
                     </p-fieldset>
-                </div>
+                </div> -->
             </div>
             <div class="suggest">
                 <app-products></app-products>

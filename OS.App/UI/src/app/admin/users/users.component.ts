@@ -32,11 +32,6 @@ export class UsersComponent implements OnInit {
         this._authServices.getDataAll('/users').subscribe((res) => {
             this.users = res.data;
         });
-
-        //Thử nghiệm
-        this._apiServices.getDataAll('/users/role').subscribe((res) => {
-            console.log(res);
-        });
     }
 
     showDialog(user: any): void {

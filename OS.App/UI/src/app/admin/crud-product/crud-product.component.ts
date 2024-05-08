@@ -7,205 +7,206 @@ import { NotificationService } from 'src/app/shared/services/notification.servic
 import { Location } from '@angular/common';
 import { AdminService } from '../services/admin.service';
 import { Consts } from 'src/app/shared/const/consts';
+import { encode } from 'html-entities';
 
 @Component({
-    selector: 'app-add-product',
-    templateUrl: './crud-product.component.html',
-    styleUrls: ['./crud-product.component.scss'],
+  selector: 'app-add-product',
+  templateUrl: './crud-product.component.html',
+  styleUrls: ['./crud-product.component.scss'],
 })
 export class CrudProductComponent implements OnInit {
-    constructor(
-        private _fb: FormBuilder,
-        private _actRoute: ActivatedRoute,
-        private _notiService: NotificationService,
-        private _location: Location,
-        private _apiServices: AdminService,
-    ) {}
+  constructor(
+    private _fb: FormBuilder,
+    private _actRoute: ActivatedRoute,
+    private _notiService: NotificationService,
+    private _location: Location,
+    private _apiServices: AdminService,
+  ) { }
 
-    productForm: any;
-    pageType: any;
-    pageTilte: any;
-    uploadImg: any;
-    imgName: any;
-    productStatus = Consts.productStatus;
-    categorie: any;
-    productId: any;
-    pageNumber: any;
+  productForm: any;
+  pageType: any;
+  pageTilte: any;
+  uploadImg: any;
+  imgName: any;
+  productStatus = Consts.productStatus;
+  categorie: any;
+  productId: any;
+  pageNumber: any;
 
-    ngOnInit() {
-        let route = this._actRoute.snapshot.queryParams;
+  ngOnInit() {
+    let route = this._actRoute.snapshot.queryParams;
 
-        this.pageType = route['type'];
-        this.productId = route['id'];
-        this.pageNumber = route['page'];
-        this.pageType === 'edit' ? (this.pageTilte = 'Chỉnh sửa sản phẩm') : (this.pageTilte = 'Thêm sản phẩm');
+    this.pageType = route['type'];
+    this.productId = route['id'];
+    this.pageNumber = route['page'];
+    this.pageType === 'edit' ? (this.pageTilte = 'Chỉnh sửa sản phẩm') : (this.pageTilte = 'Thêm sản phẩm');
 
-        this._apiServices.getDataAll('/categories').subscribe((res) => {
-            this.categorie = res.data;
-        });
+    this._apiServices.getDataAll('/categories').subscribe((res) => {
+      this.categorie = res.data;
+    });
 
-        if (this.pageType) {
-            this._apiServices.getData('/product', this.productId).subscribe((res) => {
-                this.setValue(res.data);
-            });
-        }
-
-        this.productForm = this._fb.group({
-            productName: ['', [Validators.required]],
-            quantityInStock: [1, [Validators.required]],
-            categoryId: ['', [Validators.required]],
-            trademark: ['', [Validators.required]],
-            productDescription: ['', [Validators.required]],
-            price: [1, [Validators.required]],
-            status: ['', [Validators.required]],
-            countryOfOrigin: ['', [Validators.required]],
-            warranty: ['', [Validators.required]],
-            warrantyDescription: ['', [Validators.required]],
-        });
+    if (this.pageType) {
+      this._apiServices.getData('/product', this.productId).subscribe((res) => {
+        this.setValue(res.data);
+      });
     }
 
-    setValue(data: any): void {
-        this.productForm.patchValue({
-            productName: data.productName,
-            quantityInStock: data.quantityInStock,
-            categoryId: data.categoryId,
-            trademark: data.trademark,
-            productDescription: data.productDescription,
-            price: data.price,
-            status: data.status,
-            countryOfOrigin: data.countryOfOrigin,
-            warranty: data.warranty,
-            warrantyDescription: data.warrantyDescription,
-        });
-        this.imgName = data.imageURL;
+    this.productForm = this._fb.group({
+      productName: ['', [Validators.required]],
+      quantityInStock: [1, [Validators.required]],
+      categoryId: ['', [Validators.required]],
+      trademark: ['', [Validators.required]],
+      productDescription: ['', [Validators.required]],
+      price: [1, [Validators.required]],
+      status: ['', [Validators.required]],
+      countryOfOrigin: ['', [Validators.required]],
+      warranty: ['', [Validators.required]],
+      warrantyDescription: ['', [Validators.required]],
+    });
+  }
+
+  setValue(data: any): void {
+    this.productForm.patchValue({
+      productName: data.productName,
+      quantityInStock: data.quantityInStock,
+      categoryId: data.categoryId,
+      trademark: data.trademark,
+      productDescription: data.productDescription,
+      price: data.price,
+      status: data.status,
+      countryOfOrigin: data.countryOfOrigin,
+      warranty: data.warranty,
+      warrantyDescription: data.warrantyDescription,
+    });
+    this.imgName = data.imageURL;
+  }
+
+  private formValidate(): any[] {
+    const errorMessages = [];
+
+    if (!this.productForm.controls?.productName?.valid) {
+      errorMessages.push(AppMessages.PLEASE_ENTER('Tên sản phẩm', Notice.messageEnter));
     }
 
-    private formValidate(): any[] {
-        const errorMessages = [];
-
-        if (!this.productForm.controls?.productName?.valid) {
-            errorMessages.push(AppMessages.PLEASE_ENTER('Tên sản phẩm', Notice.messageEnter));
-        }
-
-        if (!this.productForm.controls?.quantityInStock?.valid) {
-            errorMessages.push(AppMessages.PLEASE_ENTER('Số lượng', Notice.messageEnter));
-        }
-
-        if (!this.productForm.controls?.categoryId?.valid) {
-            errorMessages.push(AppMessages.PLEASE_ENTER('Danh mục', Notice.messageChoose));
-        }
-
-        if (!this.productForm.controls?.trademark?.valid) {
-            errorMessages.push(AppMessages.PLEASE_ENTER('Thương hiệu', Notice.messageEnter));
-        }
-
-        if (!this.productForm.controls?.productDescription?.valid) {
-            errorMessages.push(AppMessages.PLEASE_ENTER('Mô tả sản phẩm', Notice.messageEnter));
-        }
-
-        if (!this.productForm.controls?.price?.valid) {
-            errorMessages.push(AppMessages.PLEASE_ENTER('Giá', Notice.messageEnter));
-        }
-
-        if (!this.productForm.controls?.status?.valid) {
-            errorMessages.push(AppMessages.PLEASE_ENTER('Trạng thái', Notice.messageChoose));
-        }
-
-        if (!this.productForm.controls?.countryOfOrigin?.valid) {
-            errorMessages.push(AppMessages.PLEASE_ENTER('Xuất xứ', Notice.messageEnter));
-        }
-
-        if (!this.productForm.controls?.warranty?.valid) {
-            errorMessages.push(AppMessages.PLEASE_ENTER('Thời gian bảo hành', Notice.messageEnter));
-        }
-
-        if (!this.productForm.controls?.warrantyDescription?.valid) {
-            errorMessages.push(AppMessages.PLEASE_ENTER('Mô tả bảo hành', Notice.messageEnter));
-        }
-
-        if (!this.uploadImg && this.pageType != 'edit') {
-            errorMessages.push(AppMessages.PLEASE_ENTER('Hình ảnh', Notice.messageChoose));
-        }
-
-        return errorMessages;
+    if (!this.productForm.controls?.quantityInStock?.valid) {
+      errorMessages.push(AppMessages.PLEASE_ENTER('Số lượng', Notice.messageEnter));
     }
 
-    onFileSelected(event: any): void {
-        this.uploadImg = event.originalEvent.target.files[0];
-        this.imgName = this.uploadImg.name;
+    if (!this.productForm.controls?.categoryId?.valid) {
+      errorMessages.push(AppMessages.PLEASE_ENTER('Danh mục', Notice.messageChoose));
     }
 
-    onUpload(event: any): void {}
-
-    goBack(): void {
-        this._location.back();
-        this._apiServices.sendPageInfor(this.pageNumber);
+    if (!this.productForm.controls?.trademark?.valid) {
+      errorMessages.push(AppMessages.PLEASE_ENTER('Thương hiệu', Notice.messageEnter));
     }
 
-    create(): void {
-        const formUploadImg: FormData = new FormData();
-        let errorMessages = this.formValidate();
-
-        if (errorMessages.length > 0) {
-            this._notiService.error(errorMessages.join('<br/>'), 'ua-toast');
-            return;
-        }
-
-        formUploadImg.append('file', this.uploadImg, this.uploadImg.name);
-        formUploadImg.append('ProductName', this.productForm.controls.productName.value);
-        formUploadImg.append('QuantityInStock', this.productForm.controls.quantityInStock.value);
-        formUploadImg.append('CategoryId', this.productForm.controls.categoryId.value);
-        formUploadImg.append('Trademark', this.productForm.controls.trademark.value);
-        formUploadImg.append('ProductDescription', this.productForm.controls.productDescription.value);
-        formUploadImg.append('Price', this.productForm.controls.price.value);
-        formUploadImg.append('Status', this.productForm.controls.status.value);
-        formUploadImg.append('CountryOfOrigin', this.productForm.controls.countryOfOrigin.value);
-        formUploadImg.append('Warranty', this.productForm.controls.warranty.value);
-        formUploadImg.append('WarrantyDescription', this.productForm.controls.warrantyDescription.value);
-        formUploadImg.append('CreatedDate', new Date().toISOString());
-
-        this._apiServices.postData('/product', formUploadImg).subscribe((res) => {
-            if (res.successed) {
-                this._notiService.success(Notice.addSuccessed, '', 'Thành công');
-                this.ngOnInit();
-            } else {
-                this._notiService.error(Notice.addFail);
-            }
-        });
+    if (!this.productForm.controls?.productDescription?.valid) {
+      errorMessages.push(AppMessages.PLEASE_ENTER('Mô tả sản phẩm', Notice.messageEnter));
     }
 
-    edit(): void {
-        const formUploadImg: FormData = new FormData();
-        let errorMessages = this.formValidate();
-
-        if (errorMessages.length > 0) {
-            this._notiService.error(errorMessages.join('<br/>'), 'ua-toast');
-            return;
-        }
-
-        if (this.uploadImg) {
-            formUploadImg.append('file', this.uploadImg, this.uploadImg.name);
-        }
-
-        formUploadImg.append('ProductName', this.productForm.controls.productName.value);
-        formUploadImg.append('QuantityInStock', this.productForm.controls.quantityInStock.value);
-        formUploadImg.append('CategoryId', this.productForm.controls.categoryId.value);
-        formUploadImg.append('Trademark', this.productForm.controls.trademark.value);
-        formUploadImg.append('ProductDescription', this.productForm.controls.productDescription.value);
-        formUploadImg.append('Price', this.productForm.controls.price.value);
-        formUploadImg.append('Status', this.productForm.controls.status.value);
-        formUploadImg.append('CountryOfOrigin', this.productForm.controls.countryOfOrigin.value);
-        formUploadImg.append('Warranty', this.productForm.controls.warranty.value);
-        formUploadImg.append('WarrantyDescription', this.productForm.controls.warrantyDescription.value);
-        formUploadImg.append('ModifiedDate', new Date().toISOString());
-
-        this._apiServices.putData('/product', formUploadImg, this.productId).subscribe((res) => {
-            if (res.successed) {
-                this._notiService.success(Notice.saveSuccessed, '', 'Thành công');
-                this.ngOnInit();
-            } else {
-                this._notiService.error(Notice.addFail);
-            }
-        });
+    if (!this.productForm.controls?.price?.valid) {
+      errorMessages.push(AppMessages.PLEASE_ENTER('Giá', Notice.messageEnter));
     }
+
+    if (!this.productForm.controls?.status?.valid) {
+      errorMessages.push(AppMessages.PLEASE_ENTER('Trạng thái', Notice.messageChoose));
+    }
+
+    if (!this.productForm.controls?.countryOfOrigin?.valid) {
+      errorMessages.push(AppMessages.PLEASE_ENTER('Xuất xứ', Notice.messageEnter));
+    }
+
+    if (!this.productForm.controls?.warranty?.valid) {
+      errorMessages.push(AppMessages.PLEASE_ENTER('Thời gian bảo hành', Notice.messageEnter));
+    }
+
+    if (!this.productForm.controls?.warrantyDescription?.valid) {
+      errorMessages.push(AppMessages.PLEASE_ENTER('Mô tả bảo hành', Notice.messageEnter));
+    }
+
+    if (!this.uploadImg && this.pageType != 'edit') {
+      errorMessages.push(AppMessages.PLEASE_ENTER('Hình ảnh', Notice.messageChoose));
+    }
+
+    return errorMessages;
+  }
+
+  onFileSelected(event: any): void {
+    this.uploadImg = event.originalEvent.target.files[0];
+    this.imgName = this.uploadImg.name;
+  }
+
+  onUpload(event: any): void { }
+
+  goBack(): void {
+    this._location.back();
+    this._apiServices.sendPageInfor(this.pageNumber);
+  }
+
+  create(): void {
+    const formUploadImg: FormData = new FormData();
+    let errorMessages = this.formValidate();
+
+    if (errorMessages.length > 0) {
+      this._notiService.error(errorMessages.join('<br/>'), 'ua-toast');
+      return;
+    }
+
+    formUploadImg.append('file', this.uploadImg, this.uploadImg.name);
+    formUploadImg.append('ProductName', this.productForm.controls.productName.value);
+    formUploadImg.append('QuantityInStock', this.productForm.controls.quantityInStock.value);
+    formUploadImg.append('CategoryId', this.productForm.controls.categoryId.value);
+    formUploadImg.append('Trademark', this.productForm.controls.trademark.value);
+    formUploadImg.append('ProductDescription',  this.productForm.controls.productDescription.value);
+    formUploadImg.append('Price', this.productForm.controls.price.value);
+    formUploadImg.append('Status', this.productForm.controls.status.value);
+    formUploadImg.append('CountryOfOrigin', this.productForm.controls.countryOfOrigin.value);
+    formUploadImg.append('Warranty', this.productForm.controls.warranty.value);
+    formUploadImg.append('WarrantyDescription', this.productForm.controls.warrantyDescription.value);
+    formUploadImg.append('CreatedDate', new Date().toISOString());
+
+    this._apiServices.postData('/product', formUploadImg).subscribe((res) => {
+      if (res.successed) {
+        this._notiService.success(Notice.addSuccessed, '', 'Thành công');
+        this.ngOnInit();
+      } else {
+        this._notiService.error(Notice.addFail);
+      }
+    });
+  }
+
+  edit(): void {
+    const formUploadImg: FormData = new FormData();
+    let errorMessages = this.formValidate();
+
+    if (errorMessages.length > 0) {
+      this._notiService.error(errorMessages.join('<br/>'), 'ua-toast');
+      return;
+    }
+
+    if (this.uploadImg) {
+      formUploadImg.append('file', this.uploadImg, this.uploadImg.name);
+    }
+
+    formUploadImg.append('ProductName', this.productForm.controls.productName.value);
+    formUploadImg.append('QuantityInStock', this.productForm.controls.quantityInStock.value);
+    formUploadImg.append('CategoryId', this.productForm.controls.categoryId.value);
+    formUploadImg.append('Trademark', this.productForm.controls.trademark.value);
+    formUploadImg.append('ProductDescription', encode(this.productForm.controls.productDescription.value));
+    formUploadImg.append('Price', this.productForm.controls.price.value);
+    formUploadImg.append('Status', this.productForm.controls.status.value);
+    formUploadImg.append('CountryOfOrigin', this.productForm.controls.countryOfOrigin.value);
+    formUploadImg.append('Warranty', this.productForm.controls.warranty.value);
+    formUploadImg.append('WarrantyDescription', this.productForm.controls.warrantyDescription.value);
+    formUploadImg.append('ModifiedDate', new Date().toISOString());
+
+    this._apiServices.putData('/product', formUploadImg, this.productId).subscribe((res) => {
+      if (res.successed) {
+        this._notiService.success(Notice.saveSuccessed, '', 'Thành công');
+        this.ngOnInit();
+      } else {
+        this._notiService.error(Notice.addFail);
+      }
+    });
+  }
 }

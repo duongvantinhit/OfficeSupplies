@@ -186,17 +186,35 @@ namespace OS.App.Controllers
         [HttpGet("product/{id}")]
         public async Task<IActionResult> GetProduct(string id)
         {
-            var res = new ApiResult<Product>
+            var res = new ApiResult<ProductDetailDto>
             {
                 Successed = true,
                 ResponseCode = StatusCodes.Status200OK,
             };
 
-            var query = _context.Products.AsNoTracking()
-                .Where(x => x.Id == id);
+            var product = await _context.Products
+                .Include(x=> x.category)
+                .FirstOrDefaultAsync(x => x.Id == id);
+            var productDto = new ProductDetailDto
+            {
+                Id = product!.Id,
+                ProductName = product.ProductName,
+                QuantityInStock = product.QuantityInStock,
+                Price = product.Price,
+                ImageURL = product.ImageURL,
+                CategoryId = product.CategoryId,
+                CategoryName = product!.category!.CategoryName,
+                ProductDescription = product.ProductDescription,
+                Status = product.Status,
+                CountryOfOrigin = product.CountryOfOrigin,
+                Warranty = product.Warranty,
+                WarrantyDescription = product.WarrantyDescription,
+                Trademark = product.Trademark
+            };
 
-            res.TotalRows = query.Count();
-            res.Data = await query.FirstOrDefaultAsync();
+
+            res.Data = productDto;
+
             return Ok(res);
         }
 

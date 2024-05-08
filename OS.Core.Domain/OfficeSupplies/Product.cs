@@ -1,4 +1,5 @@
-﻿using OS.Core.Domain.SeedWork;
+﻿using OS.Core.Application.Dtos;
+using OS.Core.Domain.SeedWork;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OS.Core.Domain.OfficeSupplies
@@ -22,5 +23,6 @@ namespace OS.Core.Domain.OfficeSupplies
         public DateTime? ModifiedDate { get; set; }
         public ICollection<CartDetail>? CartsDetail { get; set; }
         public ICollection<OrderDetail>? OrderDetail { get; set; }
+        public Categories? category { get; set; }
     }
 }

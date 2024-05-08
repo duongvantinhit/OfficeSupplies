@@ -25,6 +25,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { DialogModule } from 'primeng/dialog';
 import { ChartModule } from 'primeng/chart';
+import { EditorModule } from 'primeng/editor';
 
 const modules = [
     ButtonModule,
@@ -53,6 +54,7 @@ const modules = [
     ProgressSpinnerModule,
     DialogModule,
     ChartModule,
+    EditorModule
 ];
 
 @NgModule({

@@ -1,15 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OfficeSuppliesService } from '../services/office-supplies.service';
 import { Notice } from 'src/app/shared/const/notice.const';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { Location } from '@angular/common';
 import { AppMessages } from 'src/app/shared/const/messages.const';
+import { decode } from 'html-entities';
 
 @Component({
     selector: 'app-product-detail',
     templateUrl: './product-detail.component.html',
     styleUrls: ['./product-detail.component.scss'],
+    // encapsulation: ViewEncapsulation.None,
 })
 export class ProductDetailComponent implements OnInit {
     constructor(
@@ -23,6 +25,8 @@ export class ProductDetailComponent implements OnInit {
     productId: any;
     product: any;
     quantity: number = 1;
+    categoryName: string | undefined;
+    categoryId: string | undefined;
     currentRoute: any;
     fromProductPage: boolean | undefined;
     pageNumber: any;
@@ -34,6 +38,8 @@ export class ProductDetailComponent implements OnInit {
 
         this._apiServices.getData('/product', this.productId).subscribe((res) => {
             this.product = res.data;
+            this.product.productDescription = decode(this.product.productDescription);
+            console.log(this.product.productDescription);
         });
 
         this.currentRoute = this._router.routerState.snapshot.url;

@@ -210,13 +210,6 @@ del {
         }
     }
 
-    .product-detail {
-        .buy-product {
-            .p-inputtext {
-                width: 212px !important;
-            }
-        }
-    }
 
     .list-category {
         .field-checkbox {
@@ -224,6 +217,11 @@ del {
             padding-left: 30px;
             font-size: 15px;
         }
+    }
+    .quantity-input {
+      .p-inputtext {
+        width: 100px !important;
+      }
     }
 
     .carts {

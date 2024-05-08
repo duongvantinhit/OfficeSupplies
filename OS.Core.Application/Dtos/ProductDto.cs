@@ -4,6 +4,7 @@ namespace OS.Core.Application.Dtos
 {
     public class BaseProduct
     {
+        public string? Id { get; set; }
         public string? ProductName { get; set; }
         public int QuantityInStock { get; set; }
         public string? CategoryId { get; set; }
@@ -18,12 +19,16 @@ namespace OS.Core.Application.Dtos
         public IFormFile? File { get; set; }
     }
 
-    public class ProductDto: BaseProduct
+    public class ProductDetailDto : BaseProduct
+    {
+        public String? CategoryName { get; set; }
+    }
+
+    public class ProductDto : BaseProduct
     {
         public DateTime CreatedDate { get; set; }
     }
-
-    public class UpdateProductDto: BaseProduct
+    public class UpdateProductDto : BaseProduct
     {
         public DateTime? ModifiedDate { get; set; }
     }

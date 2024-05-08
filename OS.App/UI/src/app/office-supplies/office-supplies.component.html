@@ -2,21 +2,16 @@
     <div class="width">
         <div class="introduce">
             <div class="card">
-                <p-galleria
-                    [value]="images"
-                    [numVisible]="5"
-                    [circular]="true"
-                    [showItemNavigators]="true"
-                    [showThumbnails]="false"
-                    [responsiveOptions]="responsiveOptions"
-                    [containerStyle]="{ 'max-width': '640px' }"
-                >
+                <p-galleria [value]="images" [numVisible]="5" [circular]="true" [showItemNavigators]="true"
+                    [showThumbnails]="false" [responsiveOptions]="responsiveOptions"
+                    [containerStyle]="{ 'max-width': '640px' }">
                     <ng-template pTemplate="item" let-item>
-                        <img [src]="item.itemImageSrc" style="width: 100%; display: block" />
+                        <img [src]="item.itemImageSrc" style="width: 100%; display: block; border-radius: 12px;" />
                     </ng-template>
                 </p-galleria>
             </div>
         </div>
+
         <body>
             <!-- <div class="outstanding">
                 <p-divider align="center">
@@ -60,107 +55,28 @@
                 </div>
             </div> -->
 
-            <div class="top-product">
-                <div class="col-2" (click)="productDetail(item.id)" *ngFor="let item of topProducts; let i = index">
-                    <div class="flex">
-                        <div class="top-product-left relative">
-                            <img src="{{ item.imageURL }}" alt="" />
-                            <div class="position"># HOT</div>
-                        </div>
-
-                        <div class="top-product-right">
-                            <p class="text-overflow">{{ item.productName }}</p>
-                            <b>Đã bán: {{ item.quantity }} sản phẩm</b>
-                            <b class="pb-4 text-red-600">{{ item.price | number : '1.0-3' }} VND</b>
-                            <span>{{ item.productDescription }}</span>
+            <div id="hot-product" class="hot-product">
+                <div class="content">
+                    <div class="header">
+                        <h3 class="title">Sản phẩm bán chạy</h3>
+                    </div>
+                    <div class="list">
+                        <div class="item" (click)="productDetail(item.id)"
+                            *ngFor="let item of topProducts; let i = index">
+                            <div class="hot">HOT</div>
+                            <img src="{{ item.imageURL }}" alt="Ảnh sản phẩm" class="product-img" />
+                            <div class="body">
+                                <h4 class="line-clamp" style="--line-clamp: 2">
+                                    {{ item.productName }}</h4>
+                                <span class="price">
+                                    {{ item.price | number : '1.0-3' }} VND
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="content">
-                <!-- <div class="content-left">
-                    <p-fieldset>
-                        <ng-template pTemplate="header">
-                            <div class="flex text-primary">
-                                <span class="pi pi-hashtag mr-2"></span>
-                                <span class="font-bold text-lg">Top sản phẩm bán chạy</span>
-                            </div>
-                        </ng-template>
-
-                        <div class="top-product">
-                            <div *ngFor="let item of topProducts; let i = index" class="top-product-content">
-                                <div
-                                    class="flex p-2 top-product-content"
-                                    [ngClass]="{ 'border-400 border-bottom-1': i !== topProducts.length - 1 }"
-                                    (click)="productDetail(item.id)"
-                                >
-                                    <div class="top-product-left relative">
-                                        <img src="{{ item.imageURL }}" alt="" />
-                                        <div class="position">#{{ i + 1 }}</div>
-                                    </div>
-
-                                    <div class="top-product-right">
-                                        <p class="text-overflow">{{ item.productName }}</p>
-                                        <b>{{ item.price | number : '1.0-3' }} VND</b>
-                                        <span>{{ item.productDescription }}</span>
-                                        <b>Đã bán: {{ item.quantity }} sản phẩm</b>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </p-fieldset>
-                </div> -->
-                <!-- <div class="content-right">
-                    <p-fieldset>
-                        <ng-template pTemplate="header">
-                            <div class="flex text-primary">
-                                <span class="pi pi-whatsapp mr-2"></span>
-                                <span class="font-bold text-lg">Hỗ trợ trực tuyến</span>
-                            </div>
-                        </ng-template>
-                        <ul>
-                            <li>
-                                <i class="pi pi-mobile text-red-700"></i>Hotline:
-                                <a class="no-underline text-color" href="tel:0123456789">0989828527</a>
-                            </li>
-                            <li><i class="pi pi-facebook text-cyan-500"></i>Dương Văn Tính</li>
-                            <li><i class="pi pi-instagram text-purple-500"></i>Dương Văn Tính</li>
-                            <li><i class="pi pi-twitter text-blue-400"></i>Dương Văn Tính</li>
-                        </ul>
-                    </p-fieldset>
-
-                    <p-fieldset class="p-2">
-                        <ng-template pTemplate="header">
-                            <div class="flex text-primary">
-                                <span class="pi pi-check-circle mr-2"></span>
-                                <span class="font-bold text-lg">Chính sách hỗ trợ</span>
-                            </div>
-                        </ng-template>
-                        <ul>
-                            <li><i class="pi pi-car text-red-700"></i>Giao hàng miễn phí</li>
-                            <li><i class="pi pi-bolt text-primary-500"></i>Hỗ trợ 24/7</li>
-                            <li><i class="pi pi-clock text-primary-500"></i>Đổi trả vòng vòng 7 ngày</li>
-                            <li><i class="pi pi-check-circle text-yellow-500"></i>Đồng kiểm</li>
-                        </ul>
-                    </p-fieldset>
-
-                    <p-fieldset class="p-2">
-                        <ng-template pTemplate="header">
-                            <div class="flex text-primary">
-                                <span class="pi pi-briefcase mr-2"></span>
-                                <span class="font-bold text-lg">Đơn vị vận chuyển</span>
-                            </div>
-                        </ng-template>
-                        <ul>
-                            <li><i class="pi pi-truck text-orange-500"></i>Giao hàng tiết kiệm</li>
-                            <li><i class="pi pi-truck text-green-600"></i>Giao hàng nhanh</li>
-                            <li><i class="pi pi-truck text-yellow-500"></i>VN Post</li>
-                            <li><i class="pi pi-truck text-orange-500"></i>Shoppe Express</li>
-                        </ul>
-                    </p-fieldset>
-                </div> -->
-            </div>
             <div class="suggest">
                 <app-products></app-products>
             </div>

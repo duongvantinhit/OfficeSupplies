@@ -59,78 +59,13 @@
     }
 }
 
-.content {
-    display: flex;
-    padding: 10px 0;
-    justify-content: space-between !important;
-    .content-left {
-        flex: 3;
-        cursor: pointer;
-        box-sizing: border-box;
-        .top-product {
-            .top-product-left {
-                img {
-                    height: 170px;
-                    width: 190px;
-                    object-fit: cover;
-                    margin-right: 10px;
-                }
-                .position {
-                    position: absolute;
-                    background-color: #fd7e14;
-                    color: white;
-                    opacity: 0.8;
-                    top: 10px;
-                    left: 10px;
-                    display: flex;
-                    font-size: 20px;
-                    padding: 10px;
-                    border-radius: 10px;
-                }
-            }
-            .top-product-right {
-                line-height: 30px;
-                font-size: 14px;
-                font-size: 15px;
-                p {
-                    margin: 0;
-                    font-weight: bold;
-                    color: black !important;
-                    width: 520px;
-                    font-size: 16px;
-                    line-height: 40px;
-                    padding-bottom: 10px;
-                }
-                b {
-                    display: block;
-                }
-                span {
-                    display: inline-block;
-                    line-height: 22px;
-                }
-            }
-        }
-    }
-    .content-right {
-        flex: 1;
-        flex-direction: row;
-        height: 645px;
-        ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            li {
-                line-height: 32px;
-                font-size: 15px;
-                i {
-                    padding-right: 10px;
-                }
-            }
-        }
-    }
+/* ======= hot-product ====== */
+.product-view {
+    background: linear-gradient(90deg, #ffecd2 0%, #fcb69f 100%);
+    border-radius: 12px;
 }
 
 .suggest {
     padding-bottom: 20px;
-    height: 895px;
+    //height: 895px;
 }

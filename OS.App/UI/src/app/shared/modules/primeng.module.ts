@@ -26,6 +26,8 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { DialogModule } from 'primeng/dialog';
 import { ChartModule } from 'primeng/chart';
 import { EditorModule } from 'primeng/editor';
+import { SplitButtonModule } from 'primeng/splitbutton';
+import { ListboxModule } from 'primeng/listbox';
 
 const modules = [
     ButtonModule,
@@ -54,7 +56,9 @@ const modules = [
     ProgressSpinnerModule,
     DialogModule,
     ChartModule,
-    EditorModule
+    EditorModule,
+    SplitButtonModule,
+    ListboxModule,
 ];
 
 @NgModule({

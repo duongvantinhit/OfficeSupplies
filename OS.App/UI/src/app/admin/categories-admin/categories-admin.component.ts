@@ -32,7 +32,7 @@ export class CategoriesAdminComponent implements OnInit {
     loadCategories(event: any = null): void {
         let loadPageForm = {
             pageIndex: event ? event.first / event.rows + 1 : 1,
-            pageSize: event ? event.rows : 8,
+            pageSize: event ? event.rows : 10,
         };
 
         event ? (this.getPageNumber = event.first / event.rows + 1) : (this.first = 0);
@@ -44,13 +44,13 @@ export class CategoriesAdminComponent implements OnInit {
         if (!event && this.setPageNumber) {
             loadPageForm = {
                 pageIndex: this.setPageNumber,
-                pageSize: event ? event.rows : 8,
+                pageSize: event ? event.rows : 10,
             };
 
             this._apiServices.loadPages(loadPageForm, '/categories').subscribe((res) => {
                 this.totalRecords = res?.totalRows;
                 this.categories = res.data;
-                this.first = (this.setPageNumber - 1) * 8;
+                this.first = (this.setPageNumber - 1) * 10;
                 this.getPageNumber = this.setPageNumber;
             });
         } else {

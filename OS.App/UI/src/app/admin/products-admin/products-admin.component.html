@@ -5,7 +5,7 @@
                 <h2>Danh sách sản phẩm</h2>
             </div>
         </div>
-        <div class="products">
+        <!-- <div class="products">
             <div class="col-3" *ngFor="let item of products">
                 <div (click)="editProduct(item.id)">
                     <img src="{{ item.imageURL }}" alt="" />
@@ -20,14 +20,35 @@
                     </div>
                 </div>
             </div>
+        </div> -->
+
+        <div id="product-view" class="product-view">
+            <div class="content">
+                <div class="list">
+                    <div class="item" (click)="editProduct(item.id)" *ngFor="let item of products; let i = index">
+                        <img src="{{ item.imageURL }}" alt="Ảnh sản phẩm" class="product-img" />
+                        <div class="body">
+                            <h4 class="line-clamp" style="--line-clamp: 2">
+                                {{ item.productName }}
+                            </h4>
+                            <p-button
+                                (click)="deleteProduct(item.id, $event)"
+                                icon="pi pi-trash"
+                                styleClass="p-button-rounded p-button-danger p-button-text p-button-raised m-2"
+                            ></p-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
         <div class="card flex justify-content-center m-2">
             <p-paginator
                 (onPageChange)="loadProducts($event)"
                 [first]="first"
-                [rows]="8"
+                [rows]="10"
                 [totalRecords]="totalRecords"
-                [rowsPerPageOptions]="[8, 16, 24]"
+                [rowsPerPageOptions]="[10, 20, 30]"
             ></p-paginator>
         </div>
     </div>

@@ -1,8 +1,12 @@
 <div class="width">
     <div class="products">
         <div class="content">
-            <div *ngIf="pageType != 'products'" class="header">
+            <div *ngIf="pageType == null" class="header">
                 <h3 class="title">SẢN PHẨM MỚI VỀ</h3>
+            </div>
+
+            <div *ngIf="pageType == 'cart'" class="header">
+                <h3 class="title">SẢN PHẨM KHÁC</h3>
             </div>
             <div class="list">
                 <div class="item" (click)="productDetail(item.id)" *ngFor="let item of products; let i = index">

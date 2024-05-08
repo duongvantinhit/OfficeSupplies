@@ -7,16 +7,25 @@
                         <p class="uppercase">{{ categoryName }}</p>
                     </div>
 
-                    <div class="category-content">
-                        <div class="col-4" *ngFor="let item of products">
-                            <div (click)="productDetail(item.id)">
-                                <img src="{{ item.imageURL }}" alt="" />
-                                <div class="tilte">
-                                    <p class="text-overflow">{{ item.productName }}</p>
+                    <div id="category-product" class="category-product">
+                        <div class="content">
+                            <div class="header">
+                                <h3 class="title">Danh sách sản phẩm</h3>
+                            </div>
+                            <div class="list">
+                                <div
+                                    class="item"
+                                    (click)="productDetail(item.id)"
+                                    *ngFor="let item of products; let i = index"
+                                >
+                                    <img src="{{ item.imageURL }}" alt="Ảnh sản phẩm" class="product-img" />
+                                    <div class="body">
+                                        <h4 class="line-clamp" style="--line-clamp: 2">
+                                            {{ item.productName }}
+                                        </h4>
+                                        <span class="price"> {{ item.price | number : '1.0-3' }} VND </span>
+                                    </div>
                                 </div>
-                                <p>
-                                    <b>{{ item.price | number : '1.0-3' }} VND</b>
-                                </p>
                             </div>
                         </div>
                     </div>

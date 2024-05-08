@@ -37,6 +37,10 @@ export class ProductsComponent implements OnInit {
             this.pageType = 'products';
         }
 
+        if (this._router.routerState.snapshot.url.includes('cart')) {
+            this.pageType = 'cart';
+        }
+
         if (!event && this.setPageNumber) {
             loadPageForm = {
                 pageIndex: this.setPageNumber,

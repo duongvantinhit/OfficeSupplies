@@ -1,3 +1,27 @@
+.product-view .content {
+    padding-top: 10px;
+}
+
+.product-view .list {
+    margin-top: 0 !important;
+}
+
+.product-view .list .item {
+    width: 19%;
+    background: #ffffff;
+    border-radius: 6px;
+    position: relative;
+}
+
+.product-view .list .item .body {
+    padding: 10px;
+}
+
+.product-view {
+    background: linear-gradient(90deg, #ffecd2 0%, #b1d4f1 100%);
+    border-radius: 12px;
+}
+
 .categories-admin {
     .categories {
         display: flex;

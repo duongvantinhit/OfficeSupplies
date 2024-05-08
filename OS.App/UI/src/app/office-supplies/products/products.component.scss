@@ -6,64 +6,6 @@
     padding-bottom: 20px;
 }
 
-.products .content {
-    padding: 6px 10px 20px 10px;
-}
-
-.products .header .title {
-    font-weight: 600;
-    font-size: 24px;
-    line-height: 1;
-    color: #ffffff;
-}
-
-.products .list {
-    margin-top: 20px;
-    gap: 12px;
-    display: flex;
-    justify-content: center;
-    flex-direction: row;
-    flex-wrap: wrap;
-}
-
-.products .list .item {
-    width: 18%;
-    background: #ffffff;
-    border-radius: 6px;
-    position: relative;
-}
-
-.products .list .item .body {
-    padding: 17px 20px 23px;
-}
-
-.products .list .item .product-img {
-    height: 200px;
-    width: 100%;
-    object-fit: cover;
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
-}
-
-.products .item h4 {
-    margin-top: 10px;
-    font-weight: 600;
-    line-height: 1.4;
-    font-size: 14px;
-    height: 40px;
-    color: #000339;
-}
-
-.products .item .price {
-    margin-top: 11px;
-    font-weight: 600;
-    font-size: 1rem;
-    line-height: 1.5;
-    color: #d0021c;
-}
-
-.products .list .item:hover {
-    cursor: pointer;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-    transform: translate3d(0px, -2px, 0px);
+.product-view .header .title {
+    color: white;
 }

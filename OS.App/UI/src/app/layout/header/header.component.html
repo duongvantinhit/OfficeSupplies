@@ -1,4 +1,4 @@
-<!-- <div class="office-supplies">
+<div class="office-supplies">
     <header>
         <div class="header-top">
             <div class="width">
@@ -22,7 +22,7 @@
                 </ul>
             </div>
         </div>
-        <div class="header-center width">
+        <!-- <div class="header-center width">
             <div class="header-logo">
                 <img routerLink="" src="../../../assets/img/pen.png" alt="" />
                 <div routerLink="" class="header-slogan">
@@ -137,9 +137,9 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </header>
-</div> -->
+</div>
 
 <div class="office-supplies width">
     <div class="header flex">
@@ -273,24 +273,6 @@
                         (onChange)="onProductChange($event)"
                     ></p-listbox>
                 </div>
-                <!-- <div>
-                    <p-overlay
-                        [visible]="searchVisible"
-                        [responsive]="{
-                            contentStyleClass: 'h-20rem'
-                        }"
-                        contentStyleClass="surface-overlay shadow-2 border-round fadein animation-duration-300 animation-iteration-1"
-                    >
-                        <div class="search-content">
-                            <span *ngIf="!searchProduct">Không tìm thấy sản phẩm nào</span>
-                            <ul *ngFor="let item of searchProduct">
-                                <li class="search-content-item" (mousedown)="productDetail(item.id)">
-                                    <p>{{ item.productName }}</p>
-                                </li>
-                            </ul>
-                        </div>
-                    </p-overlay>
-                </div> -->
             </span>
         </div>
     </div>

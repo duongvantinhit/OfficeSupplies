@@ -43,6 +43,30 @@ export class HeaderComponent implements OnInit {
     selectedCity: any;
     isListboxVisible: boolean = false;
     isSearchResultVisible: boolean = false;
+    accountMenu = [
+        {
+            label: 'Đăng xuất',
+            icon: 'pi pi-sign-in',
+            command: () => {
+                this._confirmationService.confirm({
+                    message: AppMessages.C_M_21,
+                    header: 'Confirmation',
+                    icon: 'pi pi-exclamation-triangle',
+                    accept: () => {
+                        this._router.navigate(['/login']);
+                        this._authServices.logout();
+                        this._notiService.success(Notice.logoutSuccessed, '', 'Thành công');
+                    },
+                });
+            },
+        },
+        {
+            label: 'Thông tin tài khoản',
+            icon: 'pi pi-user-plus',
+            routerLink: 'user-infor',
+            command: () => {},
+        },
+    ];
 
     ngOnInit() {
         this._apiServices.getDataAll('/carts').subscribe((res) => {
@@ -112,6 +136,7 @@ export class HeaderComponent implements OnInit {
                 break;
             case 'search':
                 this.searchVisible = false;
+                this.isSearchResultVisible = false;
                 this.cdr.detectChanges();
                 break;
         }
@@ -138,6 +163,7 @@ export class HeaderComponent implements OnInit {
             this._apiServices.getData('/search/product', this.searchText).subscribe((res) => {
                 this.searchProduct = res.data;
                 this.searchVisible = true;
+                this.isSearchResultVisible = true;
                 console.log(res.data);
             });
         } else {

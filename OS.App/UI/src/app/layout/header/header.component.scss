@@ -326,30 +326,4 @@
     align-items: center;
     padding-left: 10px;
     border-left: 1px solid white;
-    .search-content {
-        max-height: 340px;
-        overflow-y: hidden;
-        padding: 10px 0;
-        color: var(--text-color);
-        span {
-            margin: 0;
-            padding: 0 10px;
-        }
-        ul {
-            padding: 0;
-            margin: 0;
-            li {
-                cursor: pointer;
-                padding: 0 20px;
-
-                p {
-                    margin: 0;
-                    color: var(--text-color);
-                }
-            }
-            li:hover {
-                background-color: #e9ecef !important;
-            }
-        }
-    }
 }

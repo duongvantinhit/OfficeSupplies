@@ -107,7 +107,7 @@ namespace OS.App.Controllers
                 ResponseCode = StatusCodes.Status200OK,
             };
 
-            var query = _context.Products.Where(x => x.CategoryId == caterogyId && x.QuantityInStock > 0).AsNoTracking();
+            var query = _context.Products.Where(x => x.CategoryId.ToLower() == caterogyId.ToLower() && x.QuantityInStock > 0).AsNoTracking();
             var sortedDatas = await query.OrderBy(post => post.ProductName).ToListAsync();
 
             res.TotalRows = sortedDatas.Count;
@@ -210,7 +210,7 @@ namespace OS.App.Controllers
             };
 
             var query = _context.Products
-                .Where(x => x.ProductName!.Contains(name) && x.QuantityInStock > 0);
+                .Where(x => x.ProductName.ToLower()!.Contains(name.ToLower()) && x.QuantityInStock > 0);
 
             res.Data = await query.ToListAsync();
             return Ok(res);

@@ -207,7 +207,7 @@
 
                 <ul>
                     <div
-                        *ngFor="let category of categories.slice(0, 4)"
+                        *ngFor="let category of categories.slice(0, 5)"
                         class="flex align-items-center justify-content-between"
                     >
                         <li (click)="product(category)">
@@ -215,16 +215,28 @@
                         </li>
                     </div>
 
-                    <li>
-                        <p-dropdown
-                            [options]="categoriesHeader"
-                            [(ngModel)]="selectedCategory"
-                            placeholder="XEM THÊM"
-                            [editable]="false"
-                            optionLabel="categoryName"
-                            styleClass="w-12rem"
-                            (ngModelChange)="onCategoryChange($event)"
-                        ></p-dropdown>
+                    <li (click)="toggleListbox()" class="relative">
+                        XEM THÊM
+                        <i class="pi pi-angle-down" style="font-size: 14px"></i>
+
+                        <div
+                            class="card flex justify-content-center absolute z-1 pt-2 shadow-2 border-round fadein animation-duration-300 animation-iteration-1"
+                            *ngIf="isListboxVisible"
+                            (mouseleave)="toggleListbox()"
+                        >
+                            <p-listbox
+                                [options]="categoriesHeader"
+                                [(ngModel)]="selectedCity"
+                                optionLabel="categoryName"
+                                [style]="{ width: '15rem' }"
+                                [listStyle]="{
+                                    'max-height': '300px',
+                                    'font-size': '14px',
+                                    'text-transform': 'uppercase'
+                                }"
+                                (onChange)="onCategoryChange($event)"
+                            ></p-listbox>
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -233,7 +245,7 @@
         <div class="search" (mouseleave)="onMouseLeave('search')">
             <span class="p-input-icon-right relative">
                 <input
-                    (click)="searchVisible = true"
+                    (click)="toggleListProductbox()"
                     type="text"
                     pInputText
                     placeholder="Tìm kiếm sản phẩm"
@@ -242,7 +254,26 @@
                 />
                 <i *ngIf="!searchProduct" class="pi pi-search cursor-pointer" (click)="search()"></i>
                 <i *ngIf="searchProduct" class="pi pi-times cursor-pointer" (click)="deleteSearch()"></i>
-                <div>
+
+                <div
+                    class="card flex justify-content-center absolute z-1 shadow-2 pt-2 border-round fadein animation-duration-300 animation-iteration-1"
+                    *ngIf="isSearchResultVisible"
+                    (mouseleave)="this.isSearchResultVisible = false"
+                >
+                    <p-listbox
+                        [options]="searchProduct"
+                        optionLabel="productName"
+                        [style]="{ width: '300px', height: '300px' }"
+                        class=""
+                        [listStyle]="{
+                            'max-height': '300px',
+                            'font-size': '14px',
+                            'text-transform': 'uppercase'
+                        }"
+                        (onChange)="onProductChange($event)"
+                    ></p-listbox>
+                </div>
+                <!-- <div>
                     <p-overlay
                         [visible]="searchVisible"
                         [responsive]="{
@@ -259,7 +290,7 @@
                             </ul>
                         </div>
                     </p-overlay>
-                </div>
+                </div> -->
             </span>
         </div>
     </div>

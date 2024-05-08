@@ -40,6 +40,9 @@ export class HeaderComponent implements OnInit {
     searchText = '';
     selectedCategory: any;
     categoriesHeader: any[] = [];
+    selectedCity: any;
+    isListboxVisible: boolean = false;
+    isSearchResultVisible: boolean = false;
 
     ngOnInit() {
         this._apiServices.getDataAll('/carts').subscribe((res) => {
@@ -64,9 +67,20 @@ export class HeaderComponent implements OnInit {
         });
     }
 
-    onCategoryChange(newValue: any) {
-        this.product(newValue);
-        console.log('Selected category:', newValue);
+    toggleListbox() {
+        this.isListboxVisible = !this.isListboxVisible;
+    }
+
+    toggleListProductbox() {
+        this.isSearchResultVisible = !this.isListboxVisible;
+    }
+
+    onCategoryChange(event: any) {
+        this.product(event.value);
+    }
+
+    onProductChange(event: any) {
+        this.productDetail(event.value.id);
     }
 
     onMouseEnter(type: any): void {
@@ -81,6 +95,7 @@ export class HeaderComponent implements OnInit {
                 break;
             case 'search':
                 this.searchVisible = true;
+                this.isSearchResultVisible = false;
                 this.cdr.detectChanges();
                 break;
         }

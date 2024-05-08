@@ -1,76 +1,47 @@
 <div class="office-supplies">
-    <div class="width">
-        <div class="introduce">
-            <div class="card">
-                <p-galleria [value]="images" [numVisible]="5" [circular]="true" [showItemNavigators]="true"
-                    [showThumbnails]="false" [responsiveOptions]="responsiveOptions"
-                    [containerStyle]="{ 'max-width': '640px' }">
-                    <ng-template pTemplate="item" let-item>
-                        <img [src]="item.itemImageSrc" style="width: 100%; display: block; border-radius: 12px;" />
-                    </ng-template>
-                </p-galleria>
+    <div class="">
+        <div class="width">
+            <div class="introduce">
+                <div class="card">
+                    <p-galleria
+                        [value]="images"
+                        [numVisible]="5"
+                        [circular]="true"
+                        [autoPlay]="true"
+                        [showItemNavigators]="true"
+                        [showThumbnails]="false"
+                        [responsiveOptions]="responsiveOptions"
+                        [containerStyle]="{ 'max-width': '640px' }"
+                    >
+                        <ng-template pTemplate="item" let-item>
+                            <img [src]="item.itemImageSrc" style="width: 100%; display: block; border-radius: 12px" />
+                        </ng-template>
+                    </p-galleria>
+                </div>
             </div>
         </div>
 
         <body>
-            <!-- <div class="outstanding">
-                <p-divider align="center">
-                    <span class="p-tag">TOP danh mục nổi bật</span>
-                </p-divider>
-                <div class="grid flex justify-content-between outstanding-content">
-                    <div class="col relative" *ngFor="let item of topCategories">
-                        <div (click)="product(item)">
-                            <img src="{{ item.imageURL }}" alt="" />
-                            <div class="tilte">
-                                <p>{{ item.categoryName }}</p>
-                            </div>
+            <div class="width">
+                <div id="hot-product" class="hot-product">
+                    <div class="content">
+                        <div class="header">
+                            <h3 class="title">Sản phẩm bán chạy</h3>
                         </div>
-                    </div>
-                </div>
-            </div> -->
-
-            <!-- <div class="new-product">
-                <div class="">
-                    <p-fieldset>
-                        <ng-template pTemplate="header">
-                            <div class="flex align-items-center text-primary">
-                                <span class="pi pi-hashtag mr-2"></span>
-                                <span class="font-bold text-lg">Top sản phẩm mới về</span>
-                            </div>
-                        </ng-template>
-                        <div class="grid flex justify-content-between">
-                            <div class="col relative" *ngFor="let item of topNewProducts">
-                                <div (click)="productDetail(item.id)">
-                                    <img src="{{ item.imageURL }}" alt="" />
-                                    <div class="tilte">
-                                        <p>{{ item.productName }}</p>
-                                        <p>
-                                            <b>{{ item.price | number : '1.0-3' }} VND</b>
-                                        </p>
-                                    </div>
+                        <div class="list">
+                            <div
+                                class="item"
+                                (click)="productDetail(item.id)"
+                                *ngFor="let item of topProducts; let i = index"
+                            >
+                                <div class="hot">HOT</div>
+                                <img src="{{ item.imageURL }}" alt="Ảnh sản phẩm" class="product-img" />
+                                <div class="body">
+                                    <h4 class="line-clamp" style="--line-clamp: 2">
+                                        {{ item.productName }}
+                                    </h4>
+                                    <span class="price"> {{ item.price | number : '1.0-3' }} VND </span>
                                 </div>
-                            </div>
-                        </div>
-                    </p-fieldset>
-                </div>
-            </div> -->
-
-            <div id="hot-product" class="hot-product">
-                <div class="content">
-                    <div class="header">
-                        <h3 class="title">Sản phẩm bán chạy</h3>
-                    </div>
-                    <div class="list">
-                        <div class="item" (click)="productDetail(item.id)"
-                            *ngFor="let item of topProducts; let i = index">
-                            <div class="hot">HOT</div>
-                            <img src="{{ item.imageURL }}" alt="Ảnh sản phẩm" class="product-img" />
-                            <div class="body">
-                                <h4 class="line-clamp" style="--line-clamp: 2">
-                                    {{ item.productName }}</h4>
-                                <span class="price">
-                                    {{ item.price | number : '1.0-3' }} VND
-                                </span>
                             </div>
                         </div>
                     </div>
@@ -81,7 +52,7 @@
                 <app-products></app-products>
             </div>
 
-            <div class="card flex justify-content-center pb-4">
+            <div class="card flex justify-content-center">
                 <button (click)="viewProducts()" pButton pRipple label="Xem thêm"></button>
             </div>
         </body>

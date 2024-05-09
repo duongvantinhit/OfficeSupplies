@@ -28,6 +28,7 @@ import { ChartModule } from 'primeng/chart';
 import { EditorModule } from 'primeng/editor';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { ListboxModule } from 'primeng/listbox';
+import { NgxEditorModule } from 'ngx-editor';
 
 const modules = [
     ButtonModule,
@@ -59,6 +60,7 @@ const modules = [
     EditorModule,
     SplitButtonModule,
     ListboxModule,
+    NgxEditorModule,
 ];
 
 @NgModule({

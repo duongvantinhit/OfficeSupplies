@@ -7,7 +7,8 @@ import { NotificationService } from 'src/app/shared/services/notification.servic
 import { Location } from '@angular/common';
 import { AdminService } from '../services/admin.service';
 import { Consts } from 'src/app/shared/const/consts';
-import { encode } from 'html-entities';
+import { decode, encode } from 'html-entities';
+import { Editor } from 'ngx-editor';
 
 @Component({
   selector: 'app-add-product',
@@ -22,7 +23,7 @@ export class CrudProductComponent implements OnInit {
     private _location: Location,
     private _apiServices: AdminService,
   ) { }
-
+  editor: any;
   productForm: any;
   pageType: any;
   pageTilte: any;
@@ -33,9 +34,11 @@ export class CrudProductComponent implements OnInit {
   productId: any;
   pageNumber: any;
 
+  test : any = "demo 1212121212"
+
   ngOnInit() {
     let route = this._actRoute.snapshot.queryParams;
-
+    this.editor = new Editor();
     this.pageType = route['type'];
     this.productId = route['id'];
     this.pageNumber = route['page'];
@@ -64,14 +67,18 @@ export class CrudProductComponent implements OnInit {
       warrantyDescription: ['', [Validators.required]],
     });
   }
+  ngOnDestroy(): void {
+    this.editor.destroy();
+  }
 
   setValue(data: any): void {
+    console.log(decode(data.productDescription));
     this.productForm.patchValue({
       productName: data.productName,
       quantityInStock: data.quantityInStock,
       categoryId: data.categoryId,
       trademark: data.trademark,
-      productDescription: data.productDescription,
+      productDescription: decode(data.productDescription),
       price: data.price,
       status: data.status,
       countryOfOrigin: data.countryOfOrigin,
@@ -157,7 +164,7 @@ export class CrudProductComponent implements OnInit {
     formUploadImg.append('QuantityInStock', this.productForm.controls.quantityInStock.value);
     formUploadImg.append('CategoryId', this.productForm.controls.categoryId.value);
     formUploadImg.append('Trademark', this.productForm.controls.trademark.value);
-    formUploadImg.append('ProductDescription',  this.productForm.controls.productDescription.value);
+    formUploadImg.append('ProductDescription', this.productForm.controls.productDescription.value);
     formUploadImg.append('Price', this.productForm.controls.price.value);
     formUploadImg.append('Status', this.productForm.controls.status.value);
     formUploadImg.append('CountryOfOrigin', this.productForm.controls.countryOfOrigin.value);

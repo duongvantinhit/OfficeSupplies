@@ -24,6 +24,7 @@
     "html-entities": "^2.5.2",
     "jsonwebtoken": "^9.0.1",
     "mkcert": "^1.5.1",
+    "ngx-editor": "^16.0.1",
     "primeflex": "^3.3.1",
     "primeicons": "^6.0.1",
     "primeng": "^16.0.2",

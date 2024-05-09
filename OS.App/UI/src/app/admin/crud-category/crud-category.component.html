@@ -1,64 +1,51 @@
 <div class="office-supplies-admin">
-    <div class="crud-category">
-        <div class="flex title">
-            <div class="tilte-left" (click)="goBack()" *ngIf="pageType === 'edit'">
-                <p-button icon="pi pi-arrow-left"></p-button>
-            </div>
-            <div class="tilte-right">
-                <h2>{{ pageTilte }}</h2>
-            </div>
-        </div>
-
-        <div class="category">
-            <form [formGroup]="categoryForm">
-                <div class="col-2">
-                    <span class="font-bold block mb-2">Tên danh mục</span>
-                    <input
-                        type="text"
-                        class="w-full"
-                        pInputText
-                        placeholder="Nhập tên danh mục"
-                        formControlName="categoryName"
-                    />
-                </div>
-
-                <div class="col-2">
-                    <div class="flex justify-content-center">
-                        <p-fileUpload
-                            chooseLabel="Chọn ảnh"
-                            accept="image/*"
-                            [showUploadButton]="false"
-                            [showCancelButton]="false"
-                            (onSelect)="onFileSelected($event)"
-                        >
-                            <ng-template pTemplate="file">
-                                <div class="img-name">{{ imgName }}</div>
-                            </ng-template>
-                        </p-fileUpload>
-                    </div>
-                </div>
-
-                <div class="col-2">
-                    <span class="font-bold block mb-2">Mô tả</span>
-                    <textarea
-                        rows="5"
-                        class="w-full"
-                        cols="30"
-                        pInputTextarea
-                        placeholder="Nhập mô tả danh mục"
-                        formControlName="categoryDescription"
-                        (keydown.enter)="create()"
-                    ></textarea>
-                </div>
-
-                <div class="card flex justify-content-center p-2" *ngIf="pageType != 'edit'">
-                    <p-button (onClick)="create()" label="Tạo"></p-button>
-                </div>
-
-                <div class="card flex justify-content-center p-2" *ngIf="pageType === 'edit'">
-                    <p-button (onClick)="edit()" label="Lưu"></p-button>
-                </div>
-            </form>
-        </div>
+  <div class="crud-category">
+    <div class="flex title">
+      <div class="tilte-left" (click)="goBack()" *ngIf="pageType === 'edit'">
+        <p-button icon="pi pi-arrow-left"></p-button>
+      </div>
+      <div class="tilte-right">
+        <h2>{{ pageTilte }}</h2>
+      </div>
     </div>
+
+    <div class="category">
+      <form [formGroup]="categoryForm">
+        <div class="col-2">
+          <span class="font-bold block mb-2">Tên danh mục</span>
+          <input type="text" class="w-full" pInputText placeholder="Nhập tên danh mục" formControlName="categoryName" />
+        </div>
+
+        <div class="col-2">
+          <div class="flex justify-content-center">
+            <p-fileUpload chooseLabel="Chọn ảnh" accept="image/*" [showUploadButton]="false" [showCancelButton]="false"
+              (onSelect)="onFileSelected($event)">
+              <ng-template pTemplate="file">
+                <div class="img-name">{{ imgName }}</div>
+              </ng-template>
+            </p-fileUpload>
+          </div>
+        </div>
+
+        <div class="col-2">
+          <span class="font-bold block mb-2">Mô tả</span>
+          <textarea rows="5" class="w-full" cols="30" pInputTextarea placeholder="Nhập mô tả danh mục"
+            formControlName="categoryDescription" (keydown.enter)="create()"></textarea>
+        </div>
+        <div class="col-2">
+          <span class="font-bold block mb-2">Danh mục cha</span>
+          <p-dropdown [options]="parentCategories" appendTo="body" placeholder="Chọn danh mục cha"
+            [virtualScrollItemSize]="38" styleClass="w-full" formControlName="parent"></p-dropdown>
+        </div>
+
+        <div class="card flex justify-content-center p-2" *ngIf="pageType != 'edit'">
+          <p-button (onClick)="create()" label="Tạo"></p-button>
+        </div>
+
+        <div class="card flex justify-content-center p-2" *ngIf="pageType === 'edit'">
+          <p-button (onClick)="edit()" label="Lưu"></p-button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>

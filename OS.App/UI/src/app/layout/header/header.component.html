@@ -1,28 +1,25 @@
 <div class="office-supplies">
-    <header>
-        <div class="header-top">
-            <div class="width">
-                <ul>
-                    <li routerLink="/purchase"><i class="pi pi-map" style="font-size: 0.8rem"></i>Theo dõi đơn hàng</li>
+  <header>
+    <div class="header-top">
+      <div class="width">
+        <ul>
+          <li routerLink="/purchase"><i class="pi pi-map" style="font-size: 0.8rem"></i>Theo dõi đơn hàng</li>
 
-                    <li class="relative" (mouseenter)="accountVisible = true" (mouseleave)="accountVisible = false">
-                        <i class="pi pi-user" style="font-size: 0.8rem"></i>Tài khoản
-                        <div class="menu-account">
-                            <p-overlay
-                                [(visible)]="accountVisible"
-                                [responsive]="{
+          <li class="relative" (mouseenter)="accountVisible = true" (mouseleave)="accountVisible = false">
+            <i class="pi pi-user" style="font-size: 0.8rem"></i>Tài khoản
+            <div class="menu-account">
+              <p-overlay [(visible)]="accountVisible" [responsive]="{
                                     contentStyleClass: 'h-20rem'
                                 }"
-                                contentStyleClass="fadein animation-duration-300 animation-iteration-1 shadow-2 border-round"
-                            >
-                                <p-menu [model]="accountMenu"></p-menu>
-                            </p-overlay>
-                        </div>
-                    </li>
-                </ul>
+                contentStyleClass="fadein animation-duration-300 animation-iteration-1 shadow-2 border-round">
+                <p-menu [model]="accountMenu"></p-menu>
+              </p-overlay>
             </div>
-        </div>
-        <!-- <div class="header-center width">
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- <div class="header-center width">
             <div class="header-logo">
                 <img routerLink="" src="../../../assets/img/pen.png" alt="" />
                 <div routerLink="" class="header-slogan">
@@ -138,68 +135,62 @@
                 </div>
             </div>
         </div> -->
-    </header>
+  </header>
 </div>
 
 <div class="office-supplies width">
-    <div class="header flex">
-        <div class="header-left flex-1 cursor-pointer">
-            <img routerLink="" src="https://nhatle.vn/admincp/gioi-thieu/logo/42118586.png" alt="" />
-        </div>
-
-        <div class="header-center flex-1 px-2">
-            <img
-                class="h-full text-center"
-                src="https://upload.wikimedia.org/wikipedia/commons/f/fd/Logo_SPT.png"
-                alt=""
-            />
-        </div>
-
-        <div class="header-right flex-1">
-            <div class="flex h-full">
-                <div class="contact flex-1 m-auto">
-                    <h3 class="text-sm text-blue-900 font-light">HOTLINE</h3>
-                    <span class="font-bold text-xl text-red-600">(+84) 99 99 999 999</span>
-                </div>
-                <div
-                    class="cart relative flex-1 align-items-center justify-content-end"
-                    (mouseenter)="onMouseEnter('cart')"
-                    (mouseleave)="onMouseLeave('cart')"
-                >
-                    <i class="pi pi-cart-plus" style="font-size: 2rem"></i>
-                    <p>{{ totalProducts }} Sản phẩm</p>
-
-                    <p-overlay
-                        [(visible)]="cartVisible"
-                        [responsive]="{
-                            contentStyleClass: 'h-20rem'
-                        }"
-                        contentStyleClass="p-3 surface-overlay shadow-2 border-round"
-                    >
-                        <p class="text-base">Sản phẩm mới thêm</p>
-                        <div class="cart-content">
-                            <ul *ngFor="let item of carts">
-                                <li (click)="productDetail(item.productId)">
-                                    <img class="border-img" src="{{ item.imageURL }}" alt="" />
-                                    <p>{{ item.productName }}</p>
-                                    <span>{{ item.price | number : '1.0-3' }} VND</span>
-                                </li>
-                            </ul>
-                        </div>
-                        <span class="hidden">
-                            <p>Còn 2 sản phẩm khác</p>
-                        </span>
-                        <div class="flex justify-content-end mt-3">
-                            <p-button (onClick)="goToCarts()" label="Xem giỏ hàng"></p-button>
-                        </div>
-                    </p-overlay>
-                </div>
-            </div>
-        </div>
+  <div class="header flex">
+    <div class="header-left flex-1 cursor-pointer">
+      <img routerLink="" src="https://nhatle.vn/admincp/gioi-thieu/logo/42118586.png" alt="" />
     </div>
 
-    <div class="header_category flex">
-        <div class="flex-1 flex align-items-center pr-3">
+    <div class="header-center flex-1 px-2">
+      <img class="h-full text-center" src="https://upload.wikimedia.org/wikipedia/commons/f/fd/Logo_SPT.png" alt="" />
+    </div>
+
+    <div class="header-right flex-1">
+      <div class="flex h-full">
+        <div class="contact flex-1 m-auto">
+          <h3 class="text-sm text-blue-900 font-light">HOTLINE</h3>
+          <span class="font-bold text-xl text-red-600">(+84) 99 99 999 999</span>
+        </div>
+        <div class="cart relative flex-1 align-items-center justify-content-end" (mouseenter)="onMouseEnter('cart')"
+          (mouseleave)="onMouseLeave('cart')">
+          <i class="pi pi-cart-plus" style="font-size: 2rem"></i>
+          <p>{{ totalProducts }} Sản phẩm</p>
+
+          <p-overlay [(visible)]="cartVisible" [responsive]="{
+                            contentStyleClass: 'h-20rem'
+                        }" contentStyleClass="p-3 surface-overlay shadow-2 border-round">
+            <p class="text-base">Sản phẩm mới thêm</p>
+            <div class="cart-content">
+              <ul *ngFor="let item of carts">
+                <li (click)="productDetail(item.productId)">
+                  <img class="border-img" src="{{ item.imageURL }}" alt="" />
+                  <p>{{ item.productName }}</p>
+                  <span>{{ item.price | number : '1.0-3' }} VND</span>
+                </li>
+              </ul>
+            </div>
+            <span class="hidden">
+              <p>Còn 2 sản phẩm khác</p>
+            </span>
+            <div class="flex justify-content-end mt-3">
+              <p-button (onClick)="goToCarts()" label="Xem giỏ hàng"></p-button>
+            </div>
+          </p-overlay>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p-menubar [model]="navItems">
+    <ng-template pTemplate="end">
+      <p-button [icon]="'pi pi-search'" />
+    </ng-template>
+  </p-menubar>
+
+  <!-- <div class="header_category flex"> -->
+  <!-- <div class="flex-1 flex align-items-center pr-3">
             <div class="flex-1 flex">
                 <div routerLink="" class="category-home">
                     <span>TRANG CHỦ</span>
@@ -240,40 +231,25 @@
                     </li>
                 </ul>
             </div>
-        </div>
+        </div> -->
+  <!-- <div class="search" (mouseleave)="onMouseLeave('search')">
+      <span class="p-input-icon-right relative">
+        <input (click)="toggleListProductbox()" type="text" pInputText placeholder="Tìm kiếm sản phẩm"
+          [(ngModel)]="searchText" (input)="search()" />
+        <i *ngIf="!searchProduct" class="pi pi-search cursor-pointer" (click)="search()"></i>
+        <i *ngIf="searchProduct" class="pi pi-times cursor-pointer" (click)="deleteSearch()"></i>
 
-        <div class="search" (mouseleave)="onMouseLeave('search')">
-            <span class="p-input-icon-right relative">
-                <input
-                    (click)="toggleListProductbox()"
-                    type="text"
-                    pInputText
-                    placeholder="Tìm kiếm sản phẩm"
-                    [(ngModel)]="searchText"
-                    (input)="search()"
-                />
-                <i *ngIf="!searchProduct" class="pi pi-search cursor-pointer" (click)="search()"></i>
-                <i *ngIf="searchProduct" class="pi pi-times cursor-pointer" (click)="deleteSearch()"></i>
-
-                <div
-                    class="card flex justify-content-center absolute z-1 shadow-2 pt-2 border-round fadein animation-duration-300 animation-iteration-1"
-                    *ngIf="isSearchResultVisible"
-                    (mouseleave)="this.isSearchResultVisible = false"
-                >
-                    <p-listbox
-                        [options]="searchProduct"
-                        optionLabel="productName"
-                        [style]="{ width: '300px', height: '300px' }"
-                        class=""
-                        [listStyle]="{
+        <div
+          class="card flex justify-content-center absolute z-1 shadow-2 pt-2 border-round fadein animation-duration-300 animation-iteration-1"
+          *ngIf="isSearchResultVisible" (mouseleave)="this.isSearchResultVisible = false">
+          <p-listbox [options]="searchProduct" optionLabel="productName" [style]="{ width: '300px', height: '300px' }"
+            class="" [listStyle]="{
                             'max-height': '300px',
                             'font-size': '14px',
                             'text-transform': 'uppercase'
-                        }"
-                        (onChange)="onProductChange($event)"
-                    ></p-listbox>
-                </div>
-            </span>
+                        }" (onChange)="onProductChange($event)"></p-listbox>
         </div>
-    </div>
+      </span>
+    </div> -->
+  <!-- </div> -->
 </div>

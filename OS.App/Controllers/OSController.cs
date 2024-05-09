@@ -74,7 +74,8 @@ namespace OS.App.Controllers
             var sortedDatas = await query.OrderBy(post => post.CategoryName).Select(data => new
             {
                 data.Id,
-                data.CategoryName
+                data.CategoryName,
+                data.Parent
             }).ToListAsync();
 
             res.Data = sortedDatas;
@@ -193,7 +194,7 @@ namespace OS.App.Controllers
             };
 
             var product = await _context.Products
-                .Include(x=> x.category)
+                .Include(x => x.category)
                 .FirstOrDefaultAsync(x => x.Id == id);
             var productDto = new ProductDetailDto
             {
@@ -652,6 +653,7 @@ namespace OS.App.Controllers
                         CategoryName = model.CategoryName,
                         ImageURL = imageUrl,
                         CategoryDescription = model.CategoryDescription,
+                        Parent = model.Parent,
                         CreatedByUserId = userId,
                         CreatedDate = model.CreatedDate.ToLocalTime(),
                     };
@@ -1129,6 +1131,7 @@ namespace OS.App.Controllers
             category.CategoryName = categoryDto.CategoryName;
             category.CategoryDescription = categoryDto.CategoryDescription;
             category.CreatedByUserId = userId;
+            category.Parent = categoryDto.Parent;
             category.ModifiedDate = DateTime.Parse(categoryDto.ModifiedDate.ToString()!).ToLocalTime();
 
             try

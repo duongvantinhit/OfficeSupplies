@@ -34,11 +34,26 @@ export class CrudProductComponent implements OnInit {
   productId: any;
   pageNumber: any;
 
-  test : any = "demo 1212121212"
+  toolbar: any = [
+    // default value
+    ['bold', 'italic'],
+    ['underline', 'strike'],
+    ['code', 'blockquote'],
+    ['ordered_list', 'bullet_list'],
+    [{ heading: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }],
+    ['link', 'image'],
+    // or, set options for link:
+    //[{ link: { showOpenInNewTab: false } }, 'image'],
+    ['text_color', 'background_color'],
+    ['align_left', 'align_center', 'align_right', 'align_justify'],
+    ['horizontal_rule', 'format_clear'],
+  ];
 
   ngOnInit() {
     let route = this._actRoute.snapshot.queryParams;
-    this.editor = new Editor();
+    this.editor = new Editor({
+
+    });
     this.pageType = route['type'];
     this.productId = route['id'];
     this.pageNumber = route['page'];

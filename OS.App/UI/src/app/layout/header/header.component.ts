@@ -8,6 +8,7 @@ import { NotificationService } from 'src/app/shared/services/notification.servic
 import { AuthService } from 'src/auth/services/auth.service';
 import { ParentCategoryEnum } from 'src/app/shared/const/parentCategory.const';
 
+
 interface City {
   name: string;
   code: string;
@@ -109,7 +110,7 @@ export class HeaderComponent implements OnInit {
         })
       }
       this.navItems = _navItems
-      console.log(this.navItems);
+      this.cdr.detectChanges();
     });
 
   }

@@ -25,44 +25,47 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { DialogModule } from 'primeng/dialog';
 import { ChartModule } from 'primeng/chart';
-import { EditorModule } from 'primeng/editor';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { ListboxModule } from 'primeng/listbox';
+import { NgxEditorModule } from 'ngx-editor';
+import { MenubarModule } from 'primeng/menubar';
+
 
 const modules = [
-    ButtonModule,
-    InputTextModule,
-    CheckboxModule,
-    RadioButtonModule,
-    GalleriaModule,
-    DividerModule,
-    FieldsetModule,
-    PaginatorModule,
-    MenuModule,
-    OverlayModule,
-    DropdownModule,
-    TableModule,
-    InputNumberModule,
-    TabViewModule,
-    InputTextareaModule,
-    PasswordModule,
-    InputMaskModule,
-    PanelMenuModule,
-    AvatarModule,
-    FileUploadModule,
-    CalendarModule,
-    ToastModule,
-    ConfirmDialogModule,
-    ProgressSpinnerModule,
-    DialogModule,
-    ChartModule,
-    EditorModule,
-    SplitButtonModule,
-    ListboxModule,
+  ButtonModule,
+  InputTextModule,
+  CheckboxModule,
+  RadioButtonModule,
+  GalleriaModule,
+  DividerModule,
+  FieldsetModule,
+  PaginatorModule,
+  MenuModule,
+  OverlayModule,
+  DropdownModule,
+  TableModule,
+  InputNumberModule,
+  TabViewModule,
+  InputTextareaModule,
+  PasswordModule,
+  InputMaskModule,
+  PanelMenuModule,
+  AvatarModule,
+  FileUploadModule,
+  CalendarModule,
+  ToastModule,
+  ConfirmDialogModule,
+  ProgressSpinnerModule,
+  DialogModule,
+  ChartModule,
+  SplitButtonModule,
+  ListboxModule,
+  NgxEditorModule,
+  MenubarModule,
 ];
 
 @NgModule({
-    imports: modules,
-    exports: modules,
+  imports: modules,
+  exports: modules,
 })
-export class PrimeNGModule {}
+export class PrimeNGModule { }

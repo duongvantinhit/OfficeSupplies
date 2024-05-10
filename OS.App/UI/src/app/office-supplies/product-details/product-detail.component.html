@@ -75,9 +75,12 @@
 
         <section class="product-description bg-white">
           <h2>Mô tả sản phẩm</h2>
-          <div [innerHTML]="product.productDescription">
+          <div [innerHTML]="product.productDescription | safeHtml" >
           </div>
         </section>
+        <div class="suggest">
+          <app-products></app-products>
+      </div>
       </div>
     </div>
   </div>

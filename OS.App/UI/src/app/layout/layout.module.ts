@@ -33,6 +33,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CheckoutComponent } from '../office-supplies/checkout/checkout.component';
 import { OrdersAdminComponent } from '../admin/orders-admin/orders-admin.component';
 import { StatisticsComponent } from '../admin/statistics/statistics.component';
+import { SafeHtmlPipe } from '../shared/pipe/safeHtml.pipe';
 
 @NgModule({
     declarations: [
@@ -65,6 +66,7 @@ import { StatisticsComponent } from '../admin/statistics/statistics.component';
         CheckoutComponent,
         OrdersAdminComponent,
         StatisticsComponent,
+        SafeHtmlPipe
     ],
 
     imports: [CommonModule, RouterModule, PrimeNGModule, FormsModule, ReactiveFormsModule],

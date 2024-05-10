@@ -25,11 +25,13 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { DialogModule } from 'primeng/dialog';
 import { ChartModule } from 'primeng/chart';
-import { EditorModule } from 'primeng/editor';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { ListboxModule } from 'primeng/listbox';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { SliderModule } from 'primeng/slider';
+import { NgxEditorModule } from 'ngx-editor';
+import { MenubarModule } from 'primeng/menubar';
+
 
 const modules = [
     ButtonModule,
@@ -66,7 +68,7 @@ const modules = [
 ];
 
 @NgModule({
-    imports: modules,
-    exports: modules,
+  imports: modules,
+  exports: modules,
 })
-export class PrimeNGModule {}
+export class PrimeNGModule { }

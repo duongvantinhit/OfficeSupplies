@@ -183,9 +183,27 @@
       </div>
     </div>
   </div>
-  <p-menubar [model]="navItems" [autoDisplay]="true">
+  <p-menubar [model]="navItems" class="header_nav" [autoDisplay]="true">
     <ng-template pTemplate="end">
-      <p-button [icon]="'pi pi-search'" />
+      <div class="search" (mouseleave)="onMouseLeave('search')">
+        <span class="p-input-icon-right relative">
+          <input (click)="toggleListProductbox()" type="text" pInputText placeholder="Tìm kiếm sản phẩm"
+            [(ngModel)]="searchText" (input)="search()" />
+          <i *ngIf="!searchProduct" class="pi pi-search cursor-pointer" (click)="search()"></i>
+          <i *ngIf="searchProduct" class="pi pi-times cursor-pointer" (click)="deleteSearch()"></i>
+
+          <div
+            class="card flex justify-content-center absolute z-1 shadow-2 pt-2 border-round fadein animation-duration-300 animation-iteration-1"
+            *ngIf="isSearchResultVisible" (mouseleave)="this.isSearchResultVisible = false">
+            <p-listbox [options]="searchProduct" optionLabel="productName" [style]="{ width: '300px', height: '300px' }"
+              class="" [listStyle]="{
+                              'max-height': '300px',
+                              'font-size': '14px',
+                              'text-transform': 'uppercase'
+                          }" (onChange)="onProductChange($event)"></p-listbox>
+          </div>
+        </span>
+      </div>
     </ng-template>
   </p-menubar>
 

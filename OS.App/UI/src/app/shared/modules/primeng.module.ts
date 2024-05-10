@@ -28,6 +28,8 @@ import { ChartModule } from 'primeng/chart';
 import { EditorModule } from 'primeng/editor';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { ListboxModule } from 'primeng/listbox';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { SliderModule } from 'primeng/slider';
 
 const modules = [
     ButtonModule,
@@ -59,6 +61,8 @@ const modules = [
     EditorModule,
     SplitButtonModule,
     ListboxModule,
+    OverlayPanelModule,
+    SliderModule,
 ];
 
 @NgModule({

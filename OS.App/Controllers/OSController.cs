@@ -6,7 +6,11 @@ using OS.Core.Application.Dtos;
 using OS.Core.Domain.OfficeSupplies;
 using OS.Core.Infrastructure.Database;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
+using System.Text;
 using UA.Core.Application.SeedWork;
+using static System.Net.Mime.MediaTypeNames;
+using System.Collections.Generic;
 
 namespace OS.App.Controllers
 {
@@ -228,10 +232,34 @@ namespace OS.App.Controllers
             };
 
             var query = _context.Products
-                .Where(x => x.ProductName.ToLower()!.Contains(name.ToLower()) && x.QuantityInStock > 0);
+                .Where(x => x.QuantityInStock > 0);
 
-            res.Data = await query.ToListAsync();
+            var result = await query.ToListAsync();
+
+            var productsFound = new List<Product>();
+
+            name = ConvertToUnSign3(name);
+
+            foreach (var product in result)
+            {
+                if (ConvertToUnSign3(product.ProductName!).Contains(name) || ConvertToUnSign3(product.Trademark!).Contains(name))
+                {
+                    productsFound.Add(product);
+                }
+            }
+
+            res.Data = productsFound;
+
             return Ok(res);
+        }
+
+
+        public static string ConvertToUnSign3(string s)
+        {
+            s = s.ToLower();
+            Regex regex = new Regex("\\p{IsCombiningDiacriticalMarks}+");
+            string temp = s.Normalize(NormalizationForm.FormD);
+            return regex.Replace(temp, String.Empty).Replace('\u0111', 'd').Replace('\u0110', 'D');
         }
 
 
@@ -503,6 +531,9 @@ namespace OS.App.Controllers
                 case "cancelled":
                     orders = orders
                        .Where(x => x.OrderStatus!.OrderStatusName == "Hủy").ToList(); break;
+                case "refund":
+                    orders = orders
+                   .Where(x => x.OrderStatus!.OrderStatusName == "Hoàn hàng").ToList(); break;
             }
 
             var orderDtos = orders.Select(cart => new GetOrderDto
@@ -566,6 +597,9 @@ namespace OS.App.Controllers
                 case "cancelled":
                     orders = orders
                        .Where(x => x.OrderStatus!.OrderStatusName == "Hủy").ToList(); break;
+                case "refund":
+                    orders = orders
+                   .Where(x => x.OrderStatus!.OrderStatusName == "Hoàn hàng").ToList(); break;
             }
 
             var orderDtos = orders.Select(cart => new GetOrderDto

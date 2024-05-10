@@ -137,6 +137,12 @@ export class OrdersAdminComponent implements OnInit {
                 this.currentTab = 5;
                 this.currentPage = 'cancelled';
                 break;
+            case 6:
+                this._apiServices.sendPurchaseStatus('refund');
+                this.loadData(null, 'refund');
+                this.currentTab = 6;
+                this.currentPage = 'refund';
+                break;
         }
     }
 

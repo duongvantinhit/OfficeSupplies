@@ -81,6 +81,10 @@ export class PurchaseComponent implements OnInit {
                 this._apiServices.sendPurchaseStatus('cancelled');
                 this.loadData('cancelled');
                 break;
+            case 6:
+                this._apiServices.sendPurchaseStatus('refund');
+                this.loadData('refund');
+                break;
         }
     }
 }

@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { OfficeSuppliesService } from '../services/office-supplies.service';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { min } from 'rxjs-compat/operator/min';
@@ -10,12 +10,13 @@ import { min } from 'rxjs-compat/operator/min';
     styleUrls: ['./products.component.scss'],
 })
 export class ProductsComponent implements OnInit {
-    constructor(private _apiServices: OfficeSuppliesService, private _router: Router) {}
-    // @ViewChild('op')
-    // op!: OverlayPanel;
-    // ngAfterViewInit() {
-    //     this.op.toggle(true);
-    // }
+    constructor(
+        private _apiServices: OfficeSuppliesService,
+        private _router: Router,
+        private _actRoute: ActivatedRoute,
+    ) {}
+    @ViewChild('op')
+    op!: OverlayPanel;
 
     first = 0;
     totalRecords: number = 0;
@@ -23,13 +24,63 @@ export class ProductsComponent implements OnInit {
     setPageNumber: any;
     products: any;
     pageType: any;
+    showPrice: any = false;
 
     priceMin: any = 100000;
     priceMax: any = 10000000;
     rangeValues: number[] = [this.priceMin, this.priceMax];
+    searchKeyValue: any;
+    currentRoute: any;
+    filter: any = false;
 
     ngOnInit() {
+        let route = this._actRoute.snapshot.queryParams;
+        this.searchKeyValue = route['search'];
         this.loadProducts();
+
+        this.currentRoute = this._router.routerState.snapshot.url;
+        this._actRoute.queryParams.subscribe((params) => {
+            let newRoute = this._router.routerState.snapshot.url;
+            if (newRoute != this.currentRoute) {
+                this.ngOnInit();
+                this.searchKeyValue = route['search'];
+                console.log('change');
+            }
+        });
+    }
+
+    searchKey() {
+        this._apiServices.getData('/search/product', this.searchKeyValue).subscribe((res) => {
+            this.products = res.data;
+            console.log(res.data);
+        });
+    }
+
+    onRemoveApply() {
+        this.op.toggle(true);
+        this.showPrice = false;
+        this.filter = false;
+        this.loadProducts();
+    }
+
+    onApplyPrice() {
+        this.showPrice = true;
+        this.filter = true;
+        this.op.toggle(true);
+
+        if (this.pageType == 'search') {
+            this._apiServices
+                .getData('/search/product', this.searchKeyValue + '/' + this.priceMin + '/' + this.priceMax)
+                .subscribe((res) => {
+                    this.products = res.data;
+                    console.log(res.data);
+                });
+        } else {
+            this._apiServices.getData('/search/product', this.priceMin + '/' + this.priceMax).subscribe((res) => {
+                this.products = res.data;
+                console.log(res.data);
+            });
+        }
     }
 
     onKeyDownHandler(event: KeyboardEvent): void {
@@ -74,6 +125,12 @@ export class ProductsComponent implements OnInit {
             this.pageType = 'cart';
         }
 
+        if (this._router.routerState.snapshot.url.includes('search')) {
+            this.pageType = 'search';
+            this.searchKey();
+            return;
+        }
+
         if (!event && this.setPageNumber) {
             loadPageForm = {
                 pageIndex: this.setPageNumber,
@@ -98,5 +155,9 @@ export class ProductsComponent implements OnInit {
         this._router.navigate(['/product/detail'], {
             queryParams: { id: productId, page: this.getPageNumber },
         });
+
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        //window.location.reload();
     }
 }

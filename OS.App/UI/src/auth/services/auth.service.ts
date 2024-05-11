@@ -52,7 +52,8 @@ export class AuthService extends BaseApiService {
                 tap((response) => {
                     if (!response.successed) {
                         this.logout();
-                        this._router.navigate(['/login']);
+                        const currentUrl = this._router.url;
+                        this._router.navigate(['/login'], { queryParams: { returnUrl: currentUrl } });
                         return;
                     }
 

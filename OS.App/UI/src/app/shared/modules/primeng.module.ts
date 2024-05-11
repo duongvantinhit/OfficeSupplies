@@ -32,7 +32,6 @@ import { SliderModule } from 'primeng/slider';
 import { NgxEditorModule } from 'ngx-editor';
 import { MenubarModule } from 'primeng/menubar';
 
-
 const modules = [
     ButtonModule,
     InputTextModule,
@@ -60,7 +59,8 @@ const modules = [
     ProgressSpinnerModule,
     DialogModule,
     ChartModule,
-    EditorModule,
+    NgxEditorModule,
+    MenubarModule,
     SplitButtonModule,
     ListboxModule,
     OverlayPanelModule,
@@ -68,7 +68,7 @@ const modules = [
 ];
 
 @NgModule({
-  imports: modules,
-  exports: modules,
+    imports: modules,
+    exports: modules,
 })
-export class PrimeNGModule { }
+export class PrimeNGModule {}

@@ -16,8 +16,7 @@ namespace OS.App.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
-
+   
     public class OSController : ControllerBase
     {
         private readonly OsDbContext _context;
@@ -255,6 +254,57 @@ namespace OS.App.Controllers
         }
 
 
+        [HttpGet("search/product/{name}/{priceMin}/{priceMax}")]
+        public async Task<IActionResult> SearchProduct(string name, int priceMin, int priceMax)
+        {
+            var res = new ApiResult<IEnumerable<Product>>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var query = _context.Products
+                .Where(x => x.QuantityInStock > 0);
+
+            var result = await query.ToListAsync();
+
+            var productsFound = new List<Product>();
+
+            name = ConvertToUnSign3(name);
+
+            foreach (var product in result)
+            {
+                if ((ConvertToUnSign3(product.ProductName!).Contains(name) || ConvertToUnSign3(product.Trademark!).Contains(name)) && product.Price >= priceMin && product.Price <= priceMax)
+                {
+                    productsFound.Add(product);
+                }
+            }
+
+            res.Data = productsFound;
+
+            return Ok(res);
+        }
+
+
+        [HttpGet("search/product/{priceMin}/{priceMax}")]
+        public async Task<IActionResult> SearchProduct(int priceMin, int priceMax)
+        {
+            var res = new ApiResult<IEnumerable<Product>>
+            {
+                Successed = true,
+                ResponseCode = StatusCodes.Status200OK,
+            };
+
+            var query = _context.Products
+                .Where(x => x.QuantityInStock > 0 && (x.Price >= priceMin && x.Price <= priceMax));
+
+
+            res.Data = await query.ToListAsync();
+
+            return Ok(res);
+        }
+
+
         public static string ConvertToUnSign3(string s)
         {
             s = s.ToLower();
@@ -316,6 +366,7 @@ namespace OS.App.Controllers
             return Ok(res);
         }
 
+        [Authorize]
         [HttpGet("carts")]
         public async Task<IActionResult> GetCarts()
         {
@@ -494,6 +545,7 @@ namespace OS.App.Controllers
             return Ok(res);
         }
 
+        [Authorize]
         [HttpGet("orders/user/{status}")]
         public async Task<IActionResult> GetAllOrdersUser(string status)
         {
@@ -653,6 +705,7 @@ namespace OS.App.Controllers
         #endregion httpGET
 
         #region httpPOST
+        [Authorize]
         [HttpPost("categories")]
         public async Task<IActionResult> CreateCategory([FromForm] CategoryDto model)
         {
@@ -710,6 +763,7 @@ namespace OS.App.Controllers
             return Ok(res);
         }
 
+        [Authorize]
         [HttpPost("product")]
         public async Task<IActionResult> CreateProduct([FromForm] ProductDto model)
         {
@@ -774,6 +828,7 @@ namespace OS.App.Controllers
             return Ok(res);
         }
 
+        [Authorize]
         [HttpPost("promotion")]
         public async Task<IActionResult> CreatePromotion(PromotionDto model)
         {
@@ -812,6 +867,7 @@ namespace OS.App.Controllers
             return Ok(res);
         }
 
+        [Authorize]
         [HttpPost("cart")]
         public async Task<IActionResult> CreateCart(CartDetail model)
         {
@@ -879,6 +935,7 @@ namespace OS.App.Controllers
             return Ok(res);
         }
 
+        [Authorize]
         [HttpPost("order")]
         public async Task<IActionResult> CreateOrder(OrderDto model)
         {
@@ -1115,6 +1172,7 @@ namespace OS.App.Controllers
         #endregion httpDELETE
 
         #region httpPUT
+        [Authorize]
         [HttpPut("categories/{id}")]
         public async Task<IActionResult> UpdateCategory([FromForm] UpdateCategoryDto categoryDto, string id)
         {
@@ -1184,7 +1242,7 @@ namespace OS.App.Controllers
             return Ok(res);
         }
 
-
+        [Authorize]
         [HttpPut("product/{id}")]
         public async Task<IActionResult> UpdateProduct([FromForm] UpdateProductDto productDto, string id)
         {
@@ -1261,6 +1319,7 @@ namespace OS.App.Controllers
             return Ok(res);
         }
 
+        [Authorize]
         [HttpPut("promotion/{id}")]
         public async Task<IActionResult> UpdatePromotion(UpdatePromotionDto promotionDto, string id)
         {
@@ -1304,6 +1363,7 @@ namespace OS.App.Controllers
             return Ok(res);
         }
 
+        [Authorize]
         [HttpPut("cart/{productId}")]
         public async Task<IActionResult> UpdateCart(UpdateCartDto cartDto, string productId)
         {

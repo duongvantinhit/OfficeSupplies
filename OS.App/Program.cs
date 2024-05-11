@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using OS.Core.Domain.OfficeSupplies;
 using OS.Core.Domain.Reponsitories;
@@ -26,6 +27,11 @@ builder.Services.AddCors(option => option.AddDefaultPolicy(policy =>
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(option =>
 {
+    option.Password.RequireDigit = false;
+    option.Password.RequiredLength = 8;
+    option.Password.RequireLowercase = false;
+    option.Password.RequireUppercase = false;
+    option.Password.RequireNonAlphanumeric = false;
     option.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
 }).AddEntityFrameworkStores<OsDbContext>().AddDefaultTokenProviders().AddRoles<IdentityRole>();
 

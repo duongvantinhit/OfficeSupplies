@@ -1,5 +1,5 @@
 <div class="width">
-    <div class="product-filter flex">
+    <div class="product-filter flex" *ngIf="pageType == 'products' || pageType == 'search'">
         <div class="card flex product-filter">
             <p-overlayPanel styleClass="product-filter-range" #op>
                 <h4>CHỌN GIÁ TRONG KHOẢNG:</h4>
@@ -36,14 +36,19 @@
                     ></p-slider>
                 </div>
 
-                <div class="card flex justify-content-center pt-6">
-                    <p-button (click)="op.toggle($event)" label="Áp dụng"></p-button>
+                <div class="card flex justify-content-center">
+                    <div class="card flex justify-content-center pt-6 pr-5">
+                        <p-button (click)="onRemoveApply()" label="Bỏ chọn"></p-button>
+                    </div>
+                    <div class="card flex justify-content-center pt-6">
+                        <p-button (click)="onApplyPrice()" label="Áp dụng"></p-button>
+                    </div>
                 </div>
             </p-overlayPanel>
             <p-button (click)="op.toggle($event)" icon="pi pi-angle-down" iconPos="right" label="GIÁ"></p-button>
         </div>
 
-        <div class="product-filter-show">
+        <div class="product-filter-show" *ngIf="showPrice">
             <h3>GIÁ ÁP DỤNG TỪ: {{ priceMin | number }} - {{ priceMax | number }} VND</h3>
         </div>
     </div>
@@ -70,7 +75,7 @@
             </div>
         </div>
 
-        <div class="card flex justify-content-center m-2" *ngIf="pageType">
+        <div class="card flex justify-content-center m-2" *ngIf="pageType == 'products' && filter == false">
             <p-paginator
                 (onPageChange)="loadProducts($event)"
                 [first]="first"

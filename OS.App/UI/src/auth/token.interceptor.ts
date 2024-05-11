@@ -33,7 +33,11 @@ export class TokenInterceptor implements HttpInterceptor {
                             catchError((error) => {
                                 this.isRefreshing = false;
                                 this._authService.logout();
-                                this._router.navigate(['/login']);
+
+                                const currentUrl = this._router.url;
+                                console.log(currentUrl);
+                                this._router.navigate(['/login'], { queryParams: { returnUrl: currentUrl } });
+
                                 return of(null).pipe(
                                     map(() => {
                                         throw new Error('Something went wrong');

@@ -1,4 +1,58 @@
 <div class="width">
+    <div class="product-filter flex" *ngIf="pageType == 'products' || pageType == 'search'">
+        <div class="card flex product-filter">
+            <p-overlayPanel styleClass="product-filter-range" #op>
+                <h4>CHỌN GIÁ TRONG KHOẢNG:</h4>
+
+                <div class="card flex justify-content-center mb-5 align-items-center">
+                    <p-inputNumber
+                        (onInput)="setFilterPrice()"
+                        [min]="0"
+                        [max]="10000000"
+                        (keydown)="onKeyDownHandler($event)"
+                        inputId="integeronly"
+                        [(ngModel)]="priceMin"
+                    >
+                    </p-inputNumber>
+                    ------------
+                    <p-inputNumber
+                        (onInput)="setFilterPrice()"
+                        [min]="0"
+                        [max]="10000000"
+                        (keydown)="onKeyDownHandler($event)"
+                        inputId="integeronly"
+                        [(ngModel)]="priceMax"
+                    >
+                    </p-inputNumber>
+                </div>
+                <div class="card flex">
+                    <p-slider
+                        class="w-full"
+                        [(ngModel)]="rangeValues"
+                        [min]="1000"
+                        [max]="10000000"
+                        [range]="true"
+                        (onChange)="setMinMaxFilter()"
+                    ></p-slider>
+                </div>
+
+                <div class="card flex justify-content-center">
+                    <div class="card flex justify-content-center pt-6 pr-5">
+                        <p-button (click)="onRemoveApply()" label="Bỏ chọn"></p-button>
+                    </div>
+                    <div class="card flex justify-content-center pt-6">
+                        <p-button (click)="onApplyPrice()" label="Áp dụng"></p-button>
+                    </div>
+                </div>
+            </p-overlayPanel>
+            <p-button (click)="op.toggle($event)" icon="pi pi-angle-down" iconPos="right" label="GIÁ"></p-button>
+        </div>
+
+        <div class="product-filter-show" *ngIf="showPrice">
+            <h3>GIÁ ÁP DỤNG TỪ: {{ priceMin | number }} - {{ priceMax | number }} VND</h3>
+        </div>
+    </div>
+
     <div class="products product-view">
         <div class="content">
             <div *ngIf="pageType == null" class="header">
@@ -21,7 +75,7 @@
             </div>
         </div>
 
-        <div class="card flex justify-content-center m-2" *ngIf="pageType">
+        <div class="card flex justify-content-center m-2" *ngIf="pageType == 'products' && filter == false">
             <p-paginator
                 (onPageChange)="loadProducts($event)"
                 [first]="first"

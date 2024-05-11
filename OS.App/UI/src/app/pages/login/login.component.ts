@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AppMessages } from 'src/app/shared/const/messages.const';
 import { Notice } from 'src/app/shared/const/notice.const';
 import { NotificationService } from 'src/app/shared/services/notification.service';
@@ -17,12 +17,18 @@ export class LoginComponent implements OnInit {
         private _authServices: AuthService,
         private _notiService: NotificationService,
         private _router: Router,
+        private _actRoute: ActivatedRoute,
     ) {}
 
     loginForm: any;
     loading = false;
+    prepage: any;
 
     ngOnInit() {
+        let route = this._actRoute.snapshot.queryParams;
+        this.prepage = route['returnUrl'];
+        console.log('urre' + this.prepage);
+
         this.loginForm = this._fb.group({
             email: ['', [Validators.required, Validators.email]],
             password: ['', [Validators.required]],
@@ -64,9 +70,22 @@ export class LoginComponent implements OnInit {
                         if (!user.data.roles) {
                             this._router.navigate(['']);
                         } else {
-                            if (user.data.roles.indexOf('admin') !== -1 || user.data.roles.indexOf('employee') !== -1) {
-                                this._router.navigate(['/admin']);
+                            const url = this.prepage;
+
+                            console.log(url);
+                            if (url == '/' || url == undefined) this._router.navigate(['']);
+
+                            const urlParts = url.split('?');
+                            const path = urlParts[0];
+                            const queryParams = urlParts[1].split('&');
+                            const idParam = queryParams.find((param: any) => param.startsWith('id='));
+                            const idValue = idParam.split('=')[1];
+                            if (url.includes('product/detail')) {
+                                this._router.navigate([path], {
+                                    queryParams: { id: idValue },
+                                });
                             } else {
+                                console.log('navigate');
                                 this._router.navigate(['']);
                             }
                         }

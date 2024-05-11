@@ -36,6 +36,7 @@ export class ProductsComponent implements OnInit {
     ngOnInit() {
         let route = this._actRoute.snapshot.queryParams;
         this.searchKeyValue = route['search'];
+
         this.loadProducts();
 
         this.currentRoute = this._router.routerState.snapshot.url;

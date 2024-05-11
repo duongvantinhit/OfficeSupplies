@@ -148,7 +148,7 @@ namespace OS.App.Controllers
             };
 
             var query = _context.Products.Where(x => x.QuantityInStock > 0);
-            var sortedDatas = await query.OrderBy(post => post.ProductName).ToListAsync();
+            var sortedDatas = await query.OrderByDescending(post => post.CreatedDate).ToListAsync();
 
             res.TotalRows = sortedDatas.Count;
             int skip = request.PageSize * (request.PageIndex - 1);

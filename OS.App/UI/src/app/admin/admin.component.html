@@ -2,18 +2,14 @@
     <div class="admin flex">
         <div class="nav">
             <div>
-                <h3 class="cursor-pointer" routerLink="/admin">Office Supplies Admin</h3>
+                <h3 class="cursor-pointer" routerLink="/admin">Minh Anh Admin</h3>
                 <p-panelMenu [model]="function" [style]="{ width: '300px' }"></p-panelMenu>
             </div>
         </div>
         <div class="admin-right">
             <header class="flex">
                 <div class="header-left flex" routerLink="/admin">
-                    <img class="cursor-pointer" src="../../assets/img/pen.png" alt="" />
-                    <div class="cursor-pointer">
-                        <h2>OFFICE SUPPLIES</h2>
-                        <h4>Thiết bị văn phòng</h4>
-                    </div>
+                  <img style="height: 110px" routerLink="" src="../../../assets/logoMinhAnh.png" alt="" />
                 </div>
                 <div class="user" routerLink="/admin/user-infor">
                     <div class="user-infor" *ngIf="currentUser">

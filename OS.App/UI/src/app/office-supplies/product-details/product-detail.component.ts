@@ -13,7 +13,6 @@ import { mergeMap, of } from 'rxjs';
     selector: 'app-product-detail',
     templateUrl: './product-detail.component.html',
     styleUrls: ['./product-detail.component.scss'],
-    // encapsulation: ViewEncapsulation.None,
 })
 export class ProductDetailComponent implements OnInit {
     constructor(

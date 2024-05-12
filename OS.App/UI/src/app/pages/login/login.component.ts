@@ -71,22 +71,19 @@ export class LoginComponent implements OnInit {
                             this._router.navigate(['']);
                         } else {
                             const url = this.prepage;
-
-                            console.log(url);
                             if (url == '/' || url == undefined) this._router.navigate(['']);
 
-                            const urlParts = url.split('?');
-                            const path = urlParts[0];
-                            const queryParams = urlParts[1].split('&');
-                            const idParam = queryParams.find((param: any) => param.startsWith('id='));
-                            const idValue = idParam.split('=')[1];
                             if (url.includes('product/detail')) {
+                                const urlParts = url.split('?');
+                                const path = urlParts[0];
+                                const queryParams = urlParts[1].split('&');
+                                const idParam = queryParams.find((param: any) => param.startsWith('id='));
+                                const idValue = idParam.split('=')[1];
                                 this._router.navigate([path], {
                                     queryParams: { id: idValue },
                                 });
                             } else {
-                                console.log('navigate');
-                                this._router.navigate(['']);
+                                this._router.navigate([url]);
                             }
                         }
                     });

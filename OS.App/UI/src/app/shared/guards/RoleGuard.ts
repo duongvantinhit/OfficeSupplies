@@ -13,14 +13,16 @@ export class RoleGuard {
         return this._authServices.getUserInfor().pipe(
             mergeMap((res) => {
                 if (!res.data.roles) {
-                    this._router.navigate(['']);
+                    const currentUrl = '/admin';
+                    this._router.navigate(['/login'], { queryParams: { returnUrl: currentUrl } });
                     return of(false);
                 }
 
                 if (res.data.roles.indexOf('admin') !== -1 || res.data.roles.indexOf('employee') !== -1) {
                     return of(true);
                 } else {
-                    this._router.navigate(['']);
+                    const currentUrl = '/admin';
+                    this._router.navigate(['/login'], { queryParams: { returnUrl: currentUrl } });
                     return of(false);
                 }
             }),

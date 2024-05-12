@@ -159,6 +159,5 @@ export class ProductsComponent implements OnInit {
 
         document.documentElement.scrollTop = 0;
         document.body.scrollTop = 0;
-        //window.location.reload();
     }
 }

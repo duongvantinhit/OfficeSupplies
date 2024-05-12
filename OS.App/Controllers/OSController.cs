@@ -148,7 +148,7 @@ namespace OS.App.Controllers
             };
 
             var query = _context.Products.Where(x => x.QuantityInStock > 0);
-            var sortedDatas = await query.OrderByDescending(post => post.CreatedDate).ToListAsync();
+            var sortedDatas = await query.OrderBy(post => post.CreatedDate).ToListAsync();
 
             res.TotalRows = sortedDatas.Count;
             int skip = request.PageSize * (request.PageIndex - 1);
@@ -432,8 +432,8 @@ namespace OS.App.Controllers
             return Ok(res);
         }
 
+        [Authorize]
         [HttpGet("order/status/statistics/{time}")]
-        [Authorize(Policy = "Admin")]
         public async Task<IActionResult> GetOrderStatusStatistics(string time)
         {
             var res = new ApiResult<IEnumerable<OrderStatusStatisticsDto>>
@@ -475,8 +475,8 @@ namespace OS.App.Controllers
             return Ok(res);
         }
 
+        [Authorize]
         [HttpGet("statistics/{month}")]
-        [Authorize(Policy = "Admin")]
         public async Task<IActionResult> GetAllOrderOfYear(int month)
         {
             var res = new ApiResult<IEnumerable<StatisticsDto>>
@@ -502,8 +502,8 @@ namespace OS.App.Controllers
             return Ok(res);
         }
 
+        [Authorize]
         [HttpGet("statistics/today")]
-        [Authorize(Policy = "Admin")]
         public async Task<ActionResult> GetAllOrderOfDay()
         {
             var res = new ApiResult<OrderStatisticsDto>
@@ -519,7 +519,7 @@ namespace OS.App.Controllers
         }
 
         [HttpGet("statistics")]
-        [Authorize(Policy = "Admin")]
+        [Authorize]
         public async Task<IActionResult> GetOrderRevenue()
         {
             var res = new ApiResult<IEnumerable<StatisticsDto>>
@@ -611,7 +611,7 @@ namespace OS.App.Controllers
         }
 
         [HttpGet("orders/{status}")]
-        [Authorize(Policy = "Employee")]
+        [Authorize]
         public async Task<IActionResult> GetAllOrders(string status, [FromQuery] ApiRequest request)
         {
             var res = new ApiResult<IEnumerable<GetOrderDto>>
@@ -1046,7 +1046,7 @@ namespace OS.App.Controllers
 
         #region httpDELETE
         [HttpDelete("categories/{id}")]
-        [Authorize(Policy = "Employee")]
+        [Authorize]
         public async Task<IActionResult> DeleteCategory(string id)
         {
             var res = new ApiResult<IEnumerable<Categories>>
@@ -1081,7 +1081,7 @@ namespace OS.App.Controllers
         }
 
         [HttpDelete("product/{id}")]
-        [Authorize(Policy = "Employee")]
+        [Authorize]
         public async Task<IActionResult> DeleteProduct(string id)
         {
             var res = new ApiResult<IEnumerable<Product>>
@@ -1116,7 +1116,7 @@ namespace OS.App.Controllers
         }
 
         [HttpDelete("promotion/{id}")]
-        [Authorize(Policy = "Employee")]
+        [Authorize]
         public async Task<IActionResult> DeletePromotion(string id)
         {
             var res = new ApiResult<IEnumerable<Promotion>>
@@ -1142,7 +1142,7 @@ namespace OS.App.Controllers
         }
 
         [HttpDelete("cart/{productId}")]
-        [Authorize(Policy = "Employee")]
+        [Authorize]
         public async Task<IActionResult> DeleteCart(string productId)
         {
             var res = new ApiResult<IEnumerable<Cart>>
